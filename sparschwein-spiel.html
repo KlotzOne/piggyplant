@@ -34,6 +34,51 @@
     overflow-x: hidden;
   }
 
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    border: 2px solid rgba(255,107,157,0.4);
+    color: var(--pink);
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    z-index: 10;
+    line-height: 1;
+  }
+  .close-btn:hover { background: rgba(255,107,157,0.2); transform: scale(1.1); }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(91,191,122,0.4);
+    transition: all 0.2s;
+    margin: 24px auto 32px;
+    display: flex;
+    width: fit-content;
+  }
+  .back-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(91,191,122,0.5); }
+
   .header {
     text-align: center;
     padding: 32px 20px 16px;
@@ -467,7 +512,8 @@
 </head>
 <body>
 
-<div class="header">
+<div class="header" style="position:relative;">
+  <a class="close-btn" href="sparschwein.html" title="Zurück">✕</a>
   <div class="floating-coins" id="floatingCoins"></div>
   <h1 class="header-title">Füttere das Schweinchen!</h1>
   <p class="header-sub">Wirf Münzen ins Sparschwein und erreiche dein Ziel!</p>
@@ -774,5 +820,7 @@ buildCoins();
 lastGoalIndex = 0;
 setGoal(0);
 </script>
+<a class="back-btn" href="sparschwein.html">← Zurück zum Sparschwein</a>
+
 </body>
 </html>
