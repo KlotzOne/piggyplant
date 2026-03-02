@@ -24,6 +24,57 @@
     --shadow: 0 6px 24px rgba(61,158,95,0.12);
   }
 
+  body.dark {
+    --bg: #0F1A14;
+    --text: #E8F5EE;
+    --text-light: #8FBFA0;
+    --surface: #1A2E20;
+    --surface2: #1E3525;
+    --border: #2A4A35;
+    --shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+
+  body.dark .header {
+    background: linear-gradient(135deg, #2A0D18, #3A1A28);
+    border-bottom-color: #5A2A3A;
+  }
+
+  body.dark .goal-card {
+    border-color: #5A2A3A;
+  }
+
+  body.dark .progress-wrap {
+    background: #3A1A28;
+  }
+
+  body.dark .pig-drop-zone {
+    background: linear-gradient(135deg, #2A1520, #351A25);
+    border-color: #5A2A3A;
+  }
+
+  body.dark .pig-drop-zone.drag-over {
+    background: linear-gradient(135deg, #3A1A28, #451A30);
+  }
+
+  body.dark .coin-item:hover {
+    background: #2A2810;
+    border-color: #B8960A;
+  }
+
+  body.dark .coin-item.selected {
+    background: #2A0D18;
+    border-color: var(--pink);
+  }
+
+  body.dark .total-strip {
+    background: linear-gradient(135deg, #1A1A08, #252510);
+    border-color: #8B7020;
+  }
+
+  body.dark .close-btn {
+    background: rgba(0,0,0,0.4);
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -819,6 +870,11 @@ buildFloatingCoins();
 buildCoins();
 lastGoalIndex = 0;
 setGoal(0);
+
+// Dark Mode automatisch anwenden (aus localStorage der Hauptseite)
+if (localStorage.getItem('piggyplant-dark') === 'true') {
+  document.body.classList.add('dark');
+}
 </script>
 <a class="back-btn" href="sparschwein.html">← Zurück zum Sparschwein</a>
 
