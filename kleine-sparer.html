@@ -47,7 +47,12 @@
   .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
   .nav-logo img { width:36px; height:36px; object-fit:contain; }
   .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .nav-right { display:flex; gap:8px; align-items:center; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  @media (max-width:480px) {
+    .nav-logo span { font-size:16px; }
+    .lang-btn { font-size:11px; padding:5px 10px; }
+    #dark-label { display:none; }
+  }
   .nav-back { background:var(--green-light); color:var(--green-dark); border:none; font-family:var(--font-body); font-weight:800; font-size:13px; padding:7px 16px; border-radius:50px; cursor:pointer; text-decoration:none; transition:all 0.2s; display:inline-flex; align-items:center; gap:4px; }
   .nav-back:hover { background:var(--green); color:white; transform:scale(1.05); }
   .lang-btn {
@@ -89,7 +94,7 @@
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
   .footer-divider { color:var(--text-light); font-size:13px; }
-  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:flex-start; } }
+  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
 
 </style>
 
@@ -386,10 +391,15 @@
       <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
-      <a href="piggyplant.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
+      <a href="index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
       <a href="impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
       <span class="footer-divider">·</span>
       <a href="datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
       <span class="footer-divider">·</span>
-      <a href="/cdn-cgi/l/email-protection#f3989c9d87929887b3839a94948a839f929d87dd9796"><span class
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
