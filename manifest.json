@@ -2,26 +2,23 @@
   "name": "Piggyplant – Finanzwissen für die Familie",
   "short_name": "Piggyplant",
   "description": "Finanzbildung für Kinder, Jugendliche und Eltern",
-  "start_url": "/piggyplant.html",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F0FAF5",
+  "background_color": "#ffffff",
   "theme_color": "#5BBF7A",
   "lang": "de",
-  "categories": [
-    "education",
-    "finance"
-  ],
+  "categories": ["education", "finance"],
   "icons": [
     {
-      "src": "Piggytree_schwein.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "Piggytree_schwein.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

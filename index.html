@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#5BBF7A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Piggyplant">
@@ -657,7 +661,9 @@
   .impressum-text p { margin-bottom: 12px; }
   .impressum-note { color: var(--orange); font-weight: 700; font-size: 12px; }
   @media (max-width: 600px) {
-    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+    .footer-logo { align-items: center; }
+    .footer-links { justify-content: center; }
   }
 
   /* ── ANIMATIONS ── */
@@ -1068,7 +1074,7 @@
       <span class="footer-divider">·</span>
       <a href="datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
       <span class="footer-divider">·</span>
-      <a href="/cdn-cgi/l/email-protection#573c383923363c2317273e30302e273b363923793332" data-de="Kontakt" data-en="Contact"><span class="__cf_email__" data-cfemail="365d595842575d4276465f51514f465a575842185253">[email&#160;protected]</span></a>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>
