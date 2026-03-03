@@ -131,6 +131,8 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
   .question-num { font-size: 12px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .imgs-gallery { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:0 auto 16px; max-width:360px; }
+  .imgs-gallery img { height:38px; border-radius:6px; object-fit:contain; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
   .question-img {
     width: 100%; max-width: 240px; margin: 0 auto 16px;
     display: block; border-radius: 12px; object-fit: contain;
@@ -373,9 +375,10 @@ const allQuestions = [
     img: BASE + '200Euro.webp'
   },
   {
-    de: { q: 'Wie viele verschiedene Euro-Scheine gibt es?\n💵 5€ 10€ 20€ 50€ 100€ 200€ 500€', answers: ['5','6','7','8'], correct: 2 },
-    en: { q: 'How many different Euro banknotes are there?\n💵 5€ 10€ 20€ 50€ 100€ 200€ 500€', answers: ['5','6','7','8'], correct: 2 },
-    img: BASE + '200Euro.webp'
+    de: { q: 'Wie viele verschiedene Euro-Scheine gibt es?', answers: ['5','6','7','8'], correct: 2 },
+    en: { q: 'How many different Euro banknotes are there?', answers: ['5','6','7','8'], correct: 2 },
+    img: null,
+    imgs: ['5Euro.webp','10Euro.webp','20Euro.webp','50Euro.webp','100Euro.webp','200Euro.webp','500Euro.webp']
   },
   {
     de: { q: 'Welche Farbe hat der 20-Euro-Schein?', answers: ['Grün','Rot','Blau','Orange'], correct: 2 },
@@ -462,7 +465,23 @@ function showQuestion() {
   document.getElementById('questionText').textContent = data.q;
 
   const img = document.getElementById('questionImg');
-  if (q.img) {
+  // Bildergalerie entfernen falls vorhanden
+  const oldGallery = document.getElementById('imgsGallery');
+  if (oldGallery) oldGallery.remove();
+
+  if (q.imgs) {
+    img.style.display = 'none';
+    const gallery = document.createElement('div');
+    gallery.id = 'imgsGallery';
+    gallery.className = 'imgs-gallery';
+    q.imgs.forEach(name => {
+      const i = document.createElement('img');
+      i.src = BASE + name;
+      i.alt = name.replace('.webp','');
+      gallery.appendChild(i);
+    });
+    document.getElementById('questionText').after(gallery);
+  } else if (q.img) {
     img.src = q.img;
     img.style.display = 'block';
   } else {
