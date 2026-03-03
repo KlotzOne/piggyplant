@@ -706,6 +706,64 @@ function buildCoins() {
       div.classList.add('selected');
       draggingValue = coin.value;
     });
+
+    // Touch-Support: sofort reagieren ohne Wartezeit
+    div.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      draggingValue = coin.value;
+      document.querySelectorAll('.coin-item').forEach(c => c.classList.remove('selected'));
+      div.classList.add('selected');
+
+      const touch = e.touches[0];
+      const clone = div.cloneNode(true);
+      clone.id = 'touch-drag-clone';
+      clone.style.position = 'fixed';
+      clone.style.width = div.offsetWidth + 'px';
+      clone.style.opacity = '0.85';
+      clone.style.pointerEvents = 'none';
+      clone.style.zIndex = '9999';
+      clone.style.left = (touch.clientX - div.offsetWidth/2) + 'px';
+      clone.style.top = (touch.clientY - div.offsetHeight/2) + 'px';
+      clone.style.transform = 'scale(1.15)';
+      clone.style.transition = 'none';
+      document.body.appendChild(clone);
+    }, { passive: false });
+
+    div.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const clone = document.getElementById('touch-drag-clone');
+      if (clone) {
+        clone.style.left = (touch.clientX - clone.offsetWidth/2) + 'px';
+        clone.style.top  = (touch.clientY - clone.offsetHeight/2) + 'px';
+      }
+      // Schwein hervorheben wenn Finger drüber
+      const zone = document.getElementById('pigDropZone');
+      const rect = zone.getBoundingClientRect();
+      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+          touch.clientY >= rect.top  && touch.clientY <= rect.bottom) {
+        zone.classList.add('drag-over');
+      } else {
+        zone.classList.remove('drag-over');
+      }
+    }, { passive: false });
+
+    div.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      const clone = document.getElementById('touch-drag-clone');
+      if (clone) clone.remove();
+      const zone = document.getElementById('pigDropZone');
+      zone.classList.remove('drag-over');
+
+      const touch = e.changedTouches[0];
+      const rect = zone.getBoundingClientRect();
+      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+          touch.clientY >= rect.top  && touch.clientY <= rect.bottom) {
+        addCoin(coin.value);
+        document.querySelectorAll('.coin-item').forEach(c => c.classList.remove('selected'));
+        draggingValue = null;
+      }
+    }, { passive: false });
     tray.appendChild(div);
   });
 }
@@ -738,19 +796,65 @@ function updateMood(pct) {
   else msg.textContent = 'Ich bin voll! Du hast es geschafft! 🎉';
 }
 
+// Einmaliger AudioContext – wird wiederverwendet statt neu erstellt
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
 function playSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.2);
+    const ctx = getAudioCtx();
+    const t = ctx.currentTime;
+    [1040, 1320, 1760, 2200].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t + i*0.03);
+      osc.frequency.exponentialRampToValueAtTime(freq*0.6, t + i*0.03 + 0.12);
+      g.gain.setValueAtTime(0.18, t + i*0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t + i*0.03 + 0.18);
+      osc.start(t + i*0.03); osc.stop(t + i*0.03 + 0.22);
+    });
+    const bufSize = Math.floor(ctx.sampleRate * 0.15);
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i=0;i<bufSize;i++) d[i]=(Math.random()*2-1)*0.08;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buf;
+    const ng = ctx.createGain();
+    const f = ctx.createBiquadFilter();
+    f.type='bandpass'; f.frequency.value=4000; f.Q.value=0.8;
+    noise.connect(f); f.connect(ng); ng.connect(ctx.destination);
+    ng.gain.setValueAtTime(0.25, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+    noise.start(t); noise.stop(t+0.15);
+  } catch(e) {}
+}
+
+function playCelebrationSound() {
+  try {
+    const ctx = getAudioCtx();
+    const t = ctx.currentTime;
+    for (let c=0;c<5;c++) {
+      const delay = c*0.18;
+      const bufSize = Math.floor(ctx.sampleRate*0.08);
+      const buf = ctx.createBuffer(1,bufSize,ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i=0;i<bufSize;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(bufSize*0.3));
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      const g = ctx.createGain();
+      const f = ctx.createBiquadFilter();
+      f.type='bandpass'; f.frequency.value=1200; f.Q.value=0.5;
+      src.connect(f); f.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(1.2, t+delay);
+      g.gain.exponentialRampToValueAtTime(0.001, t+delay+0.12);
+      src.start(t+delay); src.stop(t+delay+0.15);
+    }
   } catch(e) {}
 }
 
@@ -825,6 +929,7 @@ function celebrate() {
   document.getElementById('celebText').textContent = `Du hast ${fmt(g.price)} für ${g.name} gespart!`;
   document.getElementById('celebrationOverlay').classList.add('show');
   launchConfetti();
+  playCelebrationSound();
 }
 
 function launchConfetti() {
