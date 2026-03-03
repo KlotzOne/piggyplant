@@ -182,9 +182,32 @@
     .coin1 img { width: 32px; height: 32px; }
     .coin2 img { width: 52px; height: 28px; }
     .coin3 img { width: 28px; height: 28px; }
-    .coin4 img { width: 48px; height: 26px; }
+    .coin4 img { width: 48px; height: 26px; }\n  }\n  .info-box { border-left-color:#FFD166; }\n  @keyframes wiggle { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+  .game-cta-box {
+    background: linear-gradient(135deg, #FFF9E0, #FFF3CC);
+    border: 2.5px dashed var(--yellow);
+    border-radius: 24px;
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s 0.3s both;
   }
-  .info-box { border-left-color:#FFD166; }
+  body.dark .game-cta-box { background: linear-gradient(135deg, #221A08, #2C2210); border-color: #8B7020; }
+  .game-cta-box .cta-emoji { font-size: 52px; display: block; margin-bottom: 8px; animation: wiggle 2s ease-in-out infinite; }
+  .game-cta-box h3 { font-family: var(--font-display); font-size: 22px; color: #8B6200; margin-bottom: 6px; }
+  body.dark .game-cta-box h3 { color: var(--yellow); }
+  .game-cta-box p { font-size: 14px; font-weight: 600; color: var(--text-light); margin-bottom: 18px; line-height: 1.5; }
+  .game-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white; border: none; font-family: var(--font-body);
+    font-weight: 900; font-size: 17px; padding: 16px 36px;
+    border-radius: 50px; cursor: pointer; text-decoration: none;
+    box-shadow: 0 8px 24px rgba(74,172,219,0.45);
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .game-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(74,172,219,0.55); }
+  .game-btn:active { transform: translateY(0) scale(0.98); }
 </style>
 </head>
 <body>
@@ -343,6 +366,15 @@
       <p style="margin-top:8px" data-de="💡 Sehen: Halte den Schein gegen das Licht – dann siehst du das Wasserzeichen und den eingewebten Sicherheitsfaden." data-en="💡 Look: Hold the note up to the light – you'll see the watermark and the embedded security thread.">💡 <strong>Sehen:</strong> Halte den Schein gegen das Licht – dann siehst du das Wasserzeichen und den eingewebten Sicherheitsfaden.</p>
       <p style="margin-top:8px" data-de="↕️ Kippen: Wenn du den Schein kippst, wechselt die Farbe der Zahl oder des Hologramms – das können Fälscher nicht nachmachen!" data-en="↕️ Tilt: When you tilt the note, the colour of the number or hologram changes – counterfeiters can't replicate this!">↕️ <strong>Kippen:</strong> Wenn du den Schein kippst, wechselt die Farbe der Zahl oder des Hologramms – das können Fälscher nicht nachmachen!</p>
     </div>
+  </div>
+
+  <div class="game-cta-box">
+    <span class="cta-emoji">🎯</span>
+    <h3 data-de="Jetzt dein Wissen testen!" data-en="Test your knowledge now!">Jetzt dein Wissen testen!</h3>
+    <p data-de="Weißt du welche Münze welchen Wert hat? Teste dein Wissen über Euro-Münzen und Scheine im Quiz!" data-en="Do you know which coin has which value? Test your knowledge about Euro coins and banknotes in the quiz!">Weißt du welche Münze welchen Wert hat? Teste dein Wissen über Euro-Münzen und Scheine im Quiz!</p>
+    <a class="game-btn" href="muenzen-quiz.html">
+      🎮 <span data-de="Quiz starten!" data-en="Start the quiz!">Quiz starten!</span>
+    </a>
   </div>
 
   <a class="back-btn" href="kleine-sparer.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
