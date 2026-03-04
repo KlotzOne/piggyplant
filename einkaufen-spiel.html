@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Einkaufen-Spiel 🛒 – Piggyplant</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+  --blue:#4AACDB; --blue-dark:#2A85B0; --blue-light:#E6F6FF;
+  --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+  --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+  --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+  --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.10);
+  --font-body:'Nunito',sans-serif; --font-display:'Fredoka One',cursive;
+}
+body.dark {
+  --bg:#0F1A14; --text:#E8F5EE; --text-light:#8EAAA0;
+  --surface:#1A2E22; --surface2:#243B2C; --border:#2A4035;
+  --green-light:#1C3528; --blue-light:#172838;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.3s; }
+
+
+
+/* HEADER */
+.game-header { text-align:center; padding:24px 20px 16px; background:linear-gradient(135deg,#E8F7FF,#D0F0E8); border-bottom:2px solid var(--blue-light); position:relative; overflow:hidden; }
+body.dark .game-header { background:linear-gradient(135deg,#0A1F30,#0F2820); border-bottom-color:#172838; }
+.game-header h1 { font-family:var(--font-display); font-size:clamp(22px,5vw,36px); background:linear-gradient(135deg,#3a9b65,#328ea6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.game-header p { font-size:14px; color:var(--text-light); font-weight:600; margin-top:4px; }
+.float-icon { position:absolute; font-size:22px; animation:float 3s ease-in-out infinite; pointer-events:none; user-select:none; opacity:0.7; }
+.fi1 { top:18%; left:6%;  animation-delay:0s; }
+.fi2 { top:25%; right:8%; animation-delay:0.6s; }
+.fi3 { bottom:18%; left:12%; animation-delay:1.2s; font-size:18px; }
+.fi4 { bottom:22%; right:5%; animation-delay:0.3s; font-size:20px; }
+.fi5 { top:12%; left:38%; animation-delay:0.9s; font-size:16px; }
+.close-btn { position:absolute; top:14px; right:14px; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(255,107,157,0.4); color:var(--pink); font-size:18px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.2s; }
+.close-btn:hover { background:rgba(255,107,157,0.2); transform:scale(1.1); }
+
+/* ROUND BADGE */
+.info-popup-btn { width:20px; height:20px; border-radius:50%; background:var(--blue); color:white; border:none; font-family:var(--font-display); font-size:12px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; margin-left:4px; flex-shrink:0; transition:transform 0.2s; line-height:1; padding:0; }
+.info-popup-btn:hover { transform:scale(1.15); }
+.info-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; align-items:center; justify-content:center; padding:20px; }
+.info-overlay.open { display:flex; }
+.info-card { background:var(--surface); border-radius:var(--radius); padding:24px; max-width:340px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,0.2); animation:bounceIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.info-card h3 { font-family:var(--font-display); font-size:20px; margin-bottom:14px; text-align:center; }
+.score-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-radius:12px; margin-bottom:8px; font-weight:700; font-size:14px; }
+.score-row .pts { font-family:var(--font-display); font-size:20px; }
+.score-row.gold { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border:2px solid var(--yellow); }
+.score-row.silver { background:linear-gradient(135deg,var(--green-light),#D0F0E8); border:2px solid var(--green); }
+.score-row.bronze { background:linear-gradient(135deg,var(--blue-light),#D0E8F5); border:2px solid var(--blue); }
+.score-row.base { background:var(--surface2); border:2px solid var(--border); }
+.info-close-btn { width:100%; margin-top:14px; padding:12px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-display); font-size:16px; border-radius:50px; cursor:pointer; }
+.round-badge { display:flex; justify-content:center; gap:12px; padding:10px 20px; background:var(--surface); border-bottom:2px solid var(--border); flex-wrap:wrap; }
+.badge { font-weight:800; font-size:13px; color:var(--text-light); display:flex; align-items:center; gap:4px; }
+.badge span { font-family:var(--font-display); font-size:17px; }
+.badge.rnd span { color:var(--blue); }
+.badge.score span { color:var(--green); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes bounceIn { 0%{transform:scale(0.8)} 60%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wiggle { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+@keyframes strikethrough { from{width:0} to{width:100%} }
+@keyframes coinDrop { 0%{transform:translateY(-20px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+@keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+/* MAIN LAYOUT */
+.game-wrap { max-width:900px; margin:0 auto; padding:16px; }
+
+/* PHASE 1: SHOP */
+#phase-shop { animation:fadeUp 0.4s ease; }
+.shop-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:640px){ .shop-layout { grid-template-columns:1fr; } }
+
+/* SHOPPING LIST */
+.list-panel { background:var(--surface); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:2px solid var(--border); }
+.panel-title { font-family:var(--font-display); font-size:18px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.list-items { display:flex; flex-direction:column; gap:8px; }
+.list-item { display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--surface2); border-radius:12px; border:2px solid var(--border); transition:all 0.3s; position:relative; overflow:hidden; }
+.list-item.checked { opacity:0.5; }
+.list-item.checked .item-name { text-decoration:line-through; color:var(--text-light); }
+.list-item .item-emoji { font-size:22px; flex-shrink:0; }
+.list-item .item-name { font-weight:700; font-size:14px; flex:1; }
+.list-item .item-price { font-family:var(--font-display); font-size:14px; color:var(--green-dark); }
+body.dark .list-item .item-price { color:var(--green); }
+.checkmark { width:22px; height:22px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; transition:all 0.3s; }
+.list-item.checked .checkmark { background:var(--green); border-color:var(--green); color:white; }
+
+/* SHOP SHELF */
+.shelf-panel { background:var(--surface); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:2px solid var(--border); }
+.shelf-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.product-card { border-radius:14px; padding:10px; text-align:center; cursor:pointer; transition:all 0.2s; border:2px solid var(--border); background:var(--surface2); user-select:none; position:relative; }
+.product-card:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(91,191,122,0.2); border-color:var(--green); }
+.product-card:active { transform:scale(0.96); }
+.product-card.in-cart { opacity:0.45; cursor:default; pointer-events:none; }
+.product-card .prod-emoji { font-size:28px; display:block; margin-bottom:4px; }
+.product-card .prod-name { font-weight:800; font-size:12px; line-height:1.3; margin-bottom:2px; }
+.product-card .prod-price { font-family:var(--font-display); font-size:14px; color:var(--green-dark); }
+body.dark .product-card .prod-price { color:var(--green); }
+.product-card .noname-badge { position:absolute; top:6px; right:6px; background:var(--orange); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
+.product-card .brand-badge { position:absolute; top:6px; right:6px; background:var(--purple); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
+
+/* CART BAR */
+.cart-bar { background:linear-gradient(135deg,var(--green-light),var(--blue-light)); border:2px solid var(--green); border-radius:16px; padding:12px 16px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+body.dark .cart-bar { background:linear-gradient(135deg,#1C3528,#172838); border-color:var(--blue); }
+.cart-info { font-weight:800; font-size:14px; }
+.cart-count { font-family:var(--font-display); font-size:18px; color:var(--green-dark); }
+body.dark .cart-count { color:var(--green); }
+.cart-btn { background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-display); font-size:16px; padding:12px 24px; border-radius:50px; cursor:pointer; box-shadow:0 4px 16px rgba(50,142,166,0.4); transition:all 0.2s; }
+.cart-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(50,142,166,0.5); }
+.cart-btn:disabled { opacity:0.4; cursor:default; transform:none; }
+
+/* PHASE 2: KASSE */
+#phase-kasse { display:none; animation:fadeUp 0.4s ease; }
+.kasse-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:640px){ .kasse-layout { grid-template-columns:1fr; } }
+
+/* RECEIPT */
+.receipt { background:white; border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:2px solid var(--border); }
+body.dark .receipt { background:var(--surface); }
+.receipt-title { font-family:var(--font-display); font-size:18px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.receipt-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border); font-size:13px; font-weight:700; }
+.receipt-row:last-child { border-bottom:none; }
+.receipt-total { display:flex; justify-content:space-between; padding:10px 0 0; font-family:var(--font-display); font-size:20px; color:var(--green-dark); margin-top:6px; border-top:2px solid var(--green); }
+body.dark .receipt-total { color:var(--green); }
+
+/* PAYMENT PANEL */
+.payment-panel { background:var(--surface); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); border:2px solid var(--border); }
+.payment-title { font-family:var(--font-display); font-size:18px; margin-bottom:6px; }
+.payment-hint { font-size:13px; color:var(--text-light); font-weight:600; margin-bottom:12px; }
+
+/* MONEY WALLET */
+.wallet-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.money-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; user-select:none; -webkit-user-drag:none; touch-action:manipulation; transition:all 0.2s; }
+.money-item:active { cursor:grabbing; transform:scale(1.1); }
+.money-item img { width:48px; height:48px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15)); pointer-events:none; -webkit-user-drag:none; }
+.money-item .money-label { font-family:var(--font-display); font-size:11px; color:var(--text-light); }
+.money-item .money-count { font-size:10px; font-weight:800; color:var(--green-dark); }
+body.dark .money-item .money-count { color:var(--green); }
+
+/* PAYMENT TRAY */
+.tray-area { border:2.5px dashed var(--green); border-radius:16px; min-height:90px; padding:12px; background:linear-gradient(135deg,var(--green-light),var(--blue-light)); display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; transition:all 0.2s; position:relative; margin-bottom:10px; }
+body.dark .tray-area { background:linear-gradient(135deg,#1C3528,#172838); border-color:var(--blue); }
+.tray-area.drag-over { border-style:solid; box-shadow:0 0 0 3px rgba(91,191,122,0.3); transform:scale(1.01); }
+.tray-area .tray-hint { color:var(--text-light); font-size:13px; font-weight:700; pointer-events:none; }
+.tray-coin { display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; animation:coinDrop 0.3s ease; }
+.tray-coin img { width:40px; height:40px; object-fit:contain; }
+.tray-coin .tray-label { font-family:var(--font-display); font-size:10px; color:var(--text-light); }
+.tray-coin:hover img { transform:scale(1.1); }
+
+/* TRAY TOTAL */
+.tray-total { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--surface2); border-radius:12px; font-weight:800; margin-bottom:10px; }
+.tray-total-label { font-size:14px; color:var(--text-light); }
+.tray-total-amount { font-family:var(--font-display); font-size:20px; color:var(--green-dark); }
+body.dark .tray-total-amount { color:var(--green); }
+
+/* PAY BTN */
+.pay-btn { width:100%; padding:14px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-display); font-size:18px; border-radius:50px; cursor:pointer; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; }
+.pay-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
+.pay-btn:disabled { opacity:0.4; cursor:default; transform:none; }
+.pay-btn.shake { animation:shake 0.4s ease; }
+
+/* PHASE 3: RESULT */
+#phase-result { display:none; animation:fadeUp 0.5s ease; }
+.result-card { background:var(--surface); border-radius:var(--radius); padding:32px 24px; box-shadow:var(--shadow); border:2px solid var(--border); text-align:center; max-width:480px; margin:0 auto; }
+.result-emoji { font-size:72px; display:block; margin-bottom:12px; animation:bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.result-title { font-family:var(--font-display); font-size:28px; margin-bottom:8px; }
+.result-change { background:linear-gradient(135deg,var(--green-light),var(--blue-light)); border:2px solid var(--green); border-radius:16px; padding:16px; margin:16px 0; }
+body.dark .result-change { background:linear-gradient(135deg,#1C3528,#172838); border-color:var(--blue); }
+.result-change-label { font-size:14px; font-weight:700; color:var(--text-light); margin-bottom:4px; }
+.result-change-amount { font-family:var(--font-display); font-size:36px; color:var(--green-dark); }
+body.dark .result-change-amount { color:var(--green); }
+.result-savings { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border:2px solid var(--yellow); border-radius:16px; padding:12px 16px; margin:10px 0 20px; font-size:13px; font-weight:700; color:#8B6200; }
+body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; color:var(--yellow); }
+.next-btn { background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-display); font-size:18px; padding:14px 36px; border-radius:50px; cursor:pointer; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; }
+.next-btn:hover { transform:translateY(-2px) scale(1.03); }
+.back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin-top:12px; }
+.back-btn:hover { transform:translateY(-2px); }
+
+/* TOO LITTLE overlay */
+.too-little { color:var(--pink); font-size:12px; font-weight:800; text-align:center; margin-top:4px; min-height:18px; }
+
+/* TOUCH helper */
+.dragging-clone { position:fixed; pointer-events:none; z-index:9999; opacity:0.85; transform:scale(1.15); }
+</style>
+</head>
+<body>
+
+
+<div class="game-header">
+  <span class="float-icon fi1">🪙</span>
+  <span class="float-icon fi2">🏷️</span>
+  <span class="float-icon fi3">🧺</span>
+  <span class="float-icon fi4">💶</span>
+  <span class="float-icon fi5">🧾</span>
+  <a class="close-btn" href="einkaufen.html">✕</a>
+  <h1>Einkaufen-Spiel</h1>
+  <p id="headerSub">Pack deinen Einkaufswagen und bezahl an der Kasse!</p>
+</div>
+
+<div class="round-badge">
+  <div class="badge rnd">🎯 Runde <span id="roundNum">1</span></div>
+  <div class="badge score" style="display:flex;align-items:center;gap:4px;">⭐ Punkte: <span id="scoreNum">0</span><button class="info-popup-btn" onclick="document.getElementById('scoreInfoOverlay').classList.add('open')" title="Punkteverteilung">?</button></div>
+  <div class="badge">💰 Gespart: <span id="savedNum" style="font-family:var(--font-display);font-size:17px;color:var(--orange)">0,00 €</span></div>
+</div>
+
+<div class="info-overlay" id="scoreInfoOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="info-card">
+    <h3>⭐ Punkteverteilung</h3>
+    <div class="score-row gold"><span>🎯 Exakt bezahlt</span><span class="pts">15 Pkt</span></div>
+    <div class="score-row silver"><span>✅ Wechselgeld bis 50ct</span><span class="pts">13 Pkt</span></div>
+    <div class="score-row bronze"><span>👍 Wechselgeld bis 2,00€</span><span class="pts">11 Pkt</span></div>
+    <div class="score-row base"><span>🙂 Wechselgeld über 2,00€</span><span class="pts">10 Pkt</span></div>
+    <p style="font-size:12px;color:var(--text-light);font-weight:600;text-align:center;margin-top:10px;">Maximum: 75 Punkte (5 Runden)</p>
+    <button class="info-close-btn" onclick="document.getElementById('scoreInfoOverlay').classList.remove('open')">Verstanden! 👍</button>
+  </div>
+</div>
+<div class="game-wrap">
+
+  <!-- PHASE 1: EINKAUFEN -->
+  <div id="phase-shop">
+    <div class="shop-layout">
+
+      <!-- EINKAUFSLISTE -->
+      <div class="list-panel">
+        <div class="panel-title">📋 Deine Einkaufsliste</div>
+        <div class="list-items" id="shoppingList"></div>
+      </div>
+
+      <!-- REGAL -->
+      <div class="shelf-panel">
+        <div class="panel-title">🏪 Supermarkt-Regal</div>
+        <div class="shelf-grid" id="shelfGrid"></div>
+      </div>
+
+    </div>
+
+    <!-- WARENKORB BAR -->
+    <div class="cart-bar">
+      <div>
+        <div style="font-size:13px;color:var(--text-light);font-weight:700">🛒 Einkaufswagen</div>
+        <div class="cart-count"><span id="cartCount">0</span> / <span id="cartTarget">0</span> Produkte</div>
+      </div>
+      <button class="cart-btn" id="checkoutBtn" onclick="goToKasse()" disabled>
+        🛒 Zur Kasse →
+      </button>
+    </div>
+  </div>
+
+  <!-- PHASE 2: KASSE -->
+  <div id="phase-kasse">
+    <div class="kasse-layout">
+
+      <!-- BON -->
+      <div class="receipt">
+        <div class="receipt-title">🧾 Kassenbon</div>
+        <div id="receiptRows"></div>
+        <div class="receipt-total">
+          <span>Gesamt</span>
+          <span id="receiptTotal">0,00 €</span>
+        </div>
+      </div>
+
+      <!-- ZAHLUNG -->
+      <div class="payment-panel">
+        <div class="payment-title">💶 Bezahlen</div>
+        <div class="payment-hint">Zieh Münzen & Scheine auf den Kassenteller!</div>
+
+        <div class="wallet-grid" id="walletGrid"></div>
+
+        <div class="tray-area" id="payTray">
+          <span class="tray-hint" id="trayHint">Hierher ziehen 👆</span>
+        </div>
+
+        <div class="tray-total">
+          <span class="tray-total-label">Auf dem Teller:</span>
+          <span class="tray-total-amount" id="trayTotal">0,00 €</span>
+        </div>
+        <div class="too-little" id="tooLittleMsg"></div>
+
+        <button class="pay-btn" id="payBtn" onclick="pay()">🪙 Bezahlen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: ERGEBNIS -->
+  <div id="phase-result">
+    <div class="result-card">
+      <span class="result-emoji" id="resultEmoji">🎉</span>
+      <div class="result-title" id="resultTitle">Super gemacht!</div>
+      <div id="resultMsg" style="font-size:14px;color:var(--text-light);font-weight:600;margin-bottom:12px;"></div>
+      <div class="result-change">
+        <div class="result-change-label">🪙 Wechselgeld zurück</div>
+        <div class="result-change-amount" id="resultChange">0,00 €</div>
+      </div>
+      <div class="result-savings" id="resultSavings" style="display:none"></div>
+      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()">➡️ Nächste Runde</button>
+      <br>
+      <a class="back-btn" href="einkaufen.html">← Zurück zur Übersicht</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
+
+// ── DARK MODE ──────────────────────────────────────────────
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const d = document.body.classList.contains('dark');
+  localStorage.setItem('dark', d);
+}
+if (localStorage.getItem('dark') === 'true') {
+  document.body.classList.add('dark');
+}
+
+// ── MONEY ──────────────────────────────────────────────────
+const MONEY = [
+  { value:1,    label:'1ct',  file:'1Cent.webp' },
+  { value:2,    label:'2ct',  file:'2Cent.webp' },
+  { value:5,    label:'5ct',  file:'5Cent.webp' },
+  { value:10,   label:'10ct', file:'10Cent.webp' },
+  { value:20,   label:'20ct', file:'20Cent.webp' },
+  { value:50,   label:'50ct', file:'50Cent.webp' },
+  { value:100,  label:'1 €',  file:'1Euro.webp' },
+  { value:200,  label:'2 €',  file:'2Euro.webp' },
+  { value:500,  label:'5 €',  file:'5Euro.webp' },
+  { value:1000, label:'10 €', file:'10Euro.webp' },
+  { value:2000, label:'20 €', file:'20Euro.webp' },
+];
+
+// ── PRODUCTS ───────────────────────────────────────────────
+// pairs: [brand, noname] or single item
+const ALL_PRODUCTS = [
+  // Grundnahrung (single)
+  { emoji:'🍞', name:'Toastbrot',        price:149, single:true },
+  { emoji:'🥛', name:'Milch 1L',         price:119, single:true },
+  { emoji:'🧈', name:'Butter',           price:229, single:true },
+  { emoji:'🥚', name:'Eier (6 Stück)',   price:189, single:true },
+  { emoji:'🍚', name:'Reis 1kg',         price:139, single:true },
+  { emoji:'🍝', name:'Nudeln 500g',      price:99,  single:true },
+  { emoji:'🥕', name:'Karotten 500g',    price:89,  single:true },
+  { emoji:'🍎', name:'Äpfel 1kg',        price:199, single:true },
+  { emoji:'🍌', name:'Bananen 1kg',      price:149, single:true },
+  { emoji:'🧅', name:'Zwiebeln 1kg',     price:99,  single:true },
+  { emoji:'🥔', name:'Kartoffeln 1kg',   price:119, single:true },
+  { emoji:'🍋', name:'Zitronen 3er',     price:99,  single:true },
+  { emoji:'🫐', name:'Heidelbeeren',     price:249, single:true },
+  { emoji:'🥖', name:'Baguette',         price:89,  single:true },
+  { emoji:'🧆', name:'Hummus',           price:179, single:true },
+
+  // Marke vs NoName Paare
+  { emoji:'🥤', name:'Apfelsaft 1L',     brandPrice:249, noNamePrice:89,  brand:'Marken-Saft',    noName:'Spar-Saft' },
+  { emoji:'🧴', name:'Shampoo',          brandPrice:399, noNamePrice:149, brand:'Marken-Shampoo', noName:'Spar-Shampoo' },
+  { emoji:'🍫', name:'Schokolade',       brandPrice:199, noNamePrice:79,  brand:'Ritter Sport',   noName:'Choco-Spar' },
+  { emoji:'🧃', name:'Multivitamin',     brandPrice:179, noNamePrice:69,  brand:'Granini',        noName:'Spar-Vit' },
+  { emoji:'🥣', name:'Cornflakes',       brandPrice:329, noNamePrice:119, brand:'Kelloggs',     noName:'Knusper-Spar' },
+  { emoji:'🧻', name:'Klopapier 4er',    brandPrice:299, noNamePrice:149, brand:'Zewa',           noName:'Spar-Rolle' },
+  { emoji:'🫙', name:'Marmelade',        brandPrice:249, noNamePrice:99,  brand:'Schwartau',      noName:'Spar-Marmelade' },
+  { emoji:'🥫', name:'Tomatensoße',      brandPrice:189, noNamePrice:79,  brand:'Barilla',        noName:'Spar-Soße' },
+  { emoji:'🧀', name:'Gouda',            brandPrice:259, noNamePrice:149, brand:'Leerdammer',     noName:'Spar-Käse' },
+  { emoji:'🥩', name:'Hackfleisch',      brandPrice:349, noNamePrice:249, brand:'Bio-Hack',       noName:'Hack 400g' },
+  { emoji:'🍕', name:'TK-Pizza',         brandPrice:369, noNamePrice:199, brand:'Dr. Oetker',     noName:'Spar-Pizza' },
+  { emoji:'🫒', name:'Olivenöl',         brandPrice:599, noNamePrice:279, brand:'Bertolli',       noName:'Spar-Öl' },
+  { emoji:'☕', name:'Kaffee 250g',      brandPrice:499, noNamePrice:299, brand:'Jacobs',         noName:'Spar-Kaffee' },
+  { emoji:'🍯', name:'Honig',            brandPrice:399, noNamePrice:199, brand:'Langnese',       noName:'Spar-Honig' },
+  { emoji:'🧆', name:'Chips 150g',       brandPrice:249, noNamePrice:99,  brand:'Pringles',       noName:'Spar-Chips' },
+  { emoji:'🥤', name:'Cola 1,5L',        brandPrice:199, noNamePrice:79,  brand:'Coca-Cola',      noName:'Spar-Cola' },
+  { emoji:'🍬', name:'Gummibären',       brandPrice:149, noNamePrice:69,  brand:'Haribo',         noName:'Spar-Bären' },
+  { emoji:'🧇', name:'Tiefkühl-Pommes',  brandPrice:299, noNamePrice:149, brand:'McCain',         noName:'Spar-Pommes' },
+  { emoji:'🥜', name:'Erdnussbutter',    brandPrice:349, noNamePrice:179, brand:'Skippy',         noName:'Spar-Nuss' },
+  { emoji:'🫙', name:'Ketchup',          brandPrice:199, noNamePrice:89,  brand:'Heinz',          noName:'Spar-Ketchup' },
+  { emoji:'🧂', name:'Senf',             brandPrice:159, noNamePrice:69,  brand:'Thomy',          noName:'Spar-Senf' },
+  { emoji:'🍵', name:'Tee 20er',         brandPrice:249, noNamePrice:99,  brand:'Teekanne',       noName:'Spar-Tee' },
+  { emoji:'🥗', name:'Salatdressing',    brandPrice:199, noNamePrice:89,  brand:'Knorr',          noName:'Spar-Dressing' },
+  { emoji:'🧴', name:'Duschgel',         brandPrice:299, noNamePrice:119, brand:'Nivea',          noName:'Spar-Dusche' },
+  { emoji:'🪥', name:'Zahnpasta',        brandPrice:279, noNamePrice:99,  brand:'Colgate',        noName:'Spar-Zahn' },
+  { emoji:'🥛', name:'Joghurt 4er',      brandPrice:229, noNamePrice:99,  brand:'Müller',         noName:'Spar-Joghurt' },
+  { emoji:'🧁', name:'Müsliriegel',      brandPrice:299, noNamePrice:129, brand:'Corny',          noName:'Spar-Riegel' },
+  { emoji:'🫗', name:'Mineralwasser 1L', brandPrice:99,  noNamePrice:29,  brand:'Volvic',         noName:'Spar-Wasser' },
+];
+
+// ── GAME STATE ─────────────────────────────────────────────
+let round = 1;
+let totalScore = 0;
+let totalSaved = 0; // in Cent gespart durch NoName-Wahl
+let shoppingList = [];   // { emoji, name, price, brandPrice?, noNamePrice?, chosenIsNoName? }
+let cartItems = [];
+let trayItems = []; // {value, label, file}
+let draggingMoney = null;
+
+// ── HELPERS ────────────────────────────────────────────────
+function fmt(cent) {
+  if (cent % 100 === 0) return (cent/100) + ',00 €';
+  const e = Math.floor(cent/100);
+  const c = Math.abs(cent % 100).toString().padStart(2,'0');
+  return `${e},${c} €`;
+}
+
+function shuffle(arr) { return [...arr].sort(()=>Math.random()-0.5); }
+
+function getListSize() {
+  if (round <= 2) return 4;
+  if (round <= 4) return 6;
+  return 8;
+}
+
+// ── BUILD ROUND ────────────────────────────────────────────
+function buildRound() {
+  cartItems = [];
+  trayItems = [];
+  const size = getListSize();
+
+  // Pick products: mix singles and pairs
+  const pairs = shuffle(ALL_PRODUCTS.filter(p => !p.single));
+  const singles = shuffle(ALL_PRODUCTS.filter(p => p.single));
+
+  // Decide how many pairs (more in later rounds)
+  const pairCount = round <= 2 ? 1 : round <= 4 ? 2 : 3;
+  const singleCount = size - pairCount;
+
+  shoppingList = [];
+
+  pairs.slice(0, pairCount).forEach(p => {
+    shoppingList.push({ ...p, type:'pair', chosen: null });
+  });
+  singles.slice(0, singleCount).forEach(p => {
+    shoppingList.push({ ...p, type:'single', chosen: true });
+  });
+
+  shoppingList = shuffle(shoppingList);
+
+  document.getElementById('roundNum').textContent = round;
+  document.getElementById('cartCount').textContent = '0';
+  document.getElementById('cartTarget').textContent = shoppingList.length;
+  document.getElementById('checkoutBtn').disabled = true;
+
+  renderShoppingList();
+  renderShelf();
+
+  document.getElementById('phase-shop').style.display = 'block';
+  document.getElementById('phase-kasse').style.display = 'none';
+  document.getElementById('phase-result').style.display = 'none';
+}
+
+// ── RENDER LIST ────────────────────────────────────────────
+function renderShoppingList() {
+  const el = document.getElementById('shoppingList');
+  el.innerHTML = '';
+  shoppingList.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'list-item' + (cartItems.includes(i) ? ' checked' : '');
+    div.id = 'list-' + i;
+    const priceStr = item.type === 'pair'
+      ? (item.chosen !== null ? fmt(item.chosen === 'brand' ? item.brandPrice : item.noNamePrice) : '?')
+      : fmt(item.price);
+    div.innerHTML = `
+      <div class="checkmark">${cartItems.includes(i) ? '✓' : ''}</div>
+      <span class="item-emoji">${item.emoji}</span>
+      <span class="item-name">${item.name}</span>
+      <span class="item-price">${priceStr}</span>
+    `;
+    el.appendChild(div);
+  });
+}
+
+// ── RENDER SHELF ───────────────────────────────────────────
+function renderShelf() {
+  const grid = document.getElementById('shelfGrid');
+  grid.innerHTML = '';
+
+  shoppingList.forEach((item, i) => {
+    if (item.type === 'single') {
+      const card = makeProductCard(item.emoji, item.name, item.price, null, i, 'single');
+      grid.appendChild(card);
+    } else {
+      // Brand card
+      const brandCard = makeProductCard(item.emoji, item.brand, item.brandPrice, 'brand', i, 'brand');
+      // NoName card
+      const noNameCard = makeProductCard(item.emoji, item.noName, item.noNamePrice, 'noname', i, 'noname');
+      grid.appendChild(brandCard);
+      grid.appendChild(noNameCard);
+    }
+  });
+}
+
+function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  const badge = badgeType === 'brand'
+    ? `<div class="brand-badge">Marke</div>`
+    : badgeType === 'noname'
+    ? `<div class="noname-badge">NoName</div>`
+    : '';
+  card.innerHTML = `
+    ${badge}
+    <span class="prod-emoji">${emoji}</span>
+    <div class="prod-name">${name}</div>
+    <div class="prod-price">${fmt(price)}</div>
+  `;
+  card.onclick = () => addToCart(listIdx, variant, price);
+  return card;
+}
+
+// ── ADD TO CART ────────────────────────────────────────────
+function addToCart(listIdx, variant, price) {
+  if (cartItems.includes(listIdx)) return;
+  const item = shoppingList[listIdx];
+
+  if (item.type === 'pair') {
+    item.chosen = variant;
+    item.chosenPrice = price;
+    if (variant === 'noname') {
+      totalSaved += item.brandPrice - item.noNamePrice;
+      document.getElementById('savedNum').textContent = fmt(totalSaved);
+    }
+  }
+
+  cartItems.push(listIdx);
+
+  // Mark shelf cards as in-cart
+  const allCards = document.querySelectorAll('.product-card');
+  // rebuild shelf to reflect chosen state
+  renderShelf();
+  // disable both variants for this pair
+  rebuildShelfCartState();
+
+  renderShoppingList();
+
+  const count = cartItems.length;
+  document.getElementById('cartCount').textContent = count;
+
+  if (count === shoppingList.length) {
+    document.getElementById('checkoutBtn').disabled = false;
+    document.getElementById('checkoutBtn').textContent = '🛒 Zur Kasse →';
+  }
+}
+
+function rebuildShelfCartState() {
+  const cards = document.querySelectorAll('.product-card');
+  let cardIdx = 0;
+  shoppingList.forEach((item, i) => {
+    if (item.type === 'single') {
+      if (cardIdx < cards.length) {
+        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
+        cardIdx++;
+      }
+    } else {
+      // brand + noname
+      if (cardIdx < cards.length) {
+        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
+        cardIdx++;
+      }
+      if (cardIdx < cards.length) {
+        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
+        cardIdx++;
+      }
+    }
+  });
+}
+
+// ── GO TO KASSE ────────────────────────────────────────────
+function goToKasse() {
+  document.getElementById('phase-shop').style.display = 'none';
+  document.getElementById('phase-kasse').style.display = 'block';
+
+  // Build receipt
+  const rows = document.getElementById('receiptRows');
+  rows.innerHTML = '';
+  let total = 0;
+  shoppingList.forEach((item, i) => {
+    const price = item.type === 'single' ? item.price : item.chosenPrice;
+    total += price;
+    const row = document.createElement('div');
+    row.className = 'receipt-row';
+    const name = item.type === 'single' ? item.name : (item.chosen === 'brand' ? item.brand : item.noName);
+    row.innerHTML = `<span>${item.emoji} ${name}</span><span>${fmt(price)}</span>`;
+    rows.appendChild(row);
+  });
+  document.getElementById('receiptTotal').textContent = fmt(total);
+
+  // Build wallet – give enough money for the round
+  buildWallet(total);
+
+  trayItems = [];
+  renderTray();
+  document.getElementById('tooLittleMsg').textContent = '';
+}
+
+function getCartTotal() {
+  return shoppingList.reduce((sum, item, i) => {
+    if (!cartItems.includes(i)) return sum;
+    return sum + (item.type === 'single' ? item.price : item.chosenPrice);
+  }, 0);
+}
+
+// ── WALLET ─────────────────────────────────────────────────
+function buildWallet(totalCent) {
+  // Give player enough bills/coins with a bit extra
+  const grid = document.getElementById('walletGrid');
+  grid.innerHTML = '';
+
+  // Determine which denominations to include based on round
+  let availMoney;
+  if (round <= 2) {
+    availMoney = MONEY.filter(m => m.value <= 200); // up to 2€
+  } else if (round <= 4) {
+    availMoney = MONEY.filter(m => m.value <= 1000); // up to 10€
+  } else {
+    availMoney = MONEY; // all
+  }
+
+  availMoney.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'money-item';
+    div.dataset.value = m.value;
+    div.innerHTML = `
+      <img src="${BASE}${m.file}" alt="${m.label}">
+      <span class="money-label">${m.label}</span>
+    `;
+    initDrag(div, m);
+    grid.appendChild(div);
+  });
+}
+
+// ── CUSTOM DRAG (Touch + Mouse ohne Delay) ─────────────────
+function initDrag(el, m) {
+  let ghost = null;
+
+  function startDrag(clientX, clientY) {
+    draggingMoney = m;
+    ghost = document.createElement('div');
+    ghost.style.cssText = `
+      position:fixed; z-index:9999; pointer-events:none;
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+      transform:translate(-50%,-50%) scale(1.2);
+      opacity:0.9; transition:none;
+    `;
+    ghost.innerHTML = `<img src="${BASE}${m.file}" style="width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+      <span style="font-family:var(--font-display);font-size:11px;color:var(--text)">${m.label}</span>`;
+    ghost.style.left = clientX + 'px';
+    ghost.style.top = clientY + 'px';
+    document.body.appendChild(ghost);
+    document.getElementById('payTray').classList.add('drag-over');
+  }
+
+  function moveDrag(clientX, clientY) {
+    if (!ghost) return;
+    ghost.style.left = clientX + 'px';
+    ghost.style.top = clientY + 'px';
+    const tray = document.getElementById('payTray');
+    const r = tray.getBoundingClientRect();
+    if (clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) {
+      tray.classList.add('drag-over');
+    } else {
+      tray.classList.remove('drag-over');
+    }
+  }
+
+  function endDrag(clientX, clientY) {
+    if (ghost) { ghost.remove(); ghost = null; }
+    const tray = document.getElementById('payTray');
+    tray.classList.remove('drag-over');
+    const r = tray.getBoundingClientRect();
+    if (clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) {
+      addToTray(m);
+    }
+    draggingMoney = null;
+  }
+
+  // TOUCH
+  el.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, {passive:false});
+
+  el.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    moveDrag(t.clientX, t.clientY);
+  }, {passive:false});
+
+  el.addEventListener('touchend', e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    endDrag(t.clientX, t.clientY);
+  }, {passive:false});
+
+  // MOUSE
+  el.addEventListener('mousedown', e => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+    const onMove = ev => moveDrag(ev.clientX, ev.clientY);
+    const onUp = ev => { endDrag(ev.clientX, ev.clientY); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+}
+
+// ── TRAY ───────────────────────────────────────────────────
+function handleTrayDrop(e) {
+  e.preventDefault();
+}
+
+function addToTray(m) {
+  const total = getCartTotal();
+  const alreadyPaid = trayItems.reduce((s,x) => s+x.value, 0);
+  if (alreadyPaid >= total) {
+    const msg = document.getElementById('tooLittleMsg');
+    msg.style.color = 'var(--orange)';
+    msg.textContent = '✋ Das reicht schon! Du kannst jetzt bezahlen.';
+    setTimeout(() => { if (msg.textContent.includes('reicht')) msg.textContent = ''; }, 2500);
+    return;
+  }
+  trayItems.push(m);
+  renderTray();
+  // Prüfen ob genau genug
+  const newTotal = trayItems.reduce((s,x) => s+x.value, 0);
+  if (newTotal >= total) {
+    const msg = document.getElementById('tooLittleMsg');
+    msg.style.color = 'var(--green-dark)';
+    msg.textContent = newTotal === total ? '🎯 Genau der richtige Betrag!' : '✅ Genug! Du kannst jetzt bezahlen.';
+  }
+}
+
+function removeFromTray(idx) {
+  trayItems.splice(idx, 1);
+  renderTray();
+}
+
+function renderTray() {
+  const tray = document.getElementById('payTray');
+  const hint = document.getElementById('trayHint');
+  const total = trayItems.reduce((s,m) => s + m.value, 0);
+
+  tray.innerHTML = '';
+  if (trayItems.length === 0) {
+    tray.appendChild(Object.assign(document.createElement('span'), {
+      className:'tray-hint', textContent:'Hierher ziehen 👆'
+    }));
+  } else {
+    trayItems.forEach((m, i) => {
+      const div = document.createElement('div');
+      div.className = 'tray-coin';
+      div.innerHTML = `<img src="${BASE}${m.file}" alt="${m.label}"><span class="tray-label">${m.label}</span>`;
+      div.onclick = () => removeFromTray(i);
+      div.addEventListener('touchstart', e => { e.preventDefault(); removeFromTray(i); }, {passive:false});
+      div.title = 'Antippen zum Entfernen';
+      tray.appendChild(div);
+    });
+  }
+
+  document.getElementById('trayTotal').textContent = fmt(total);
+  const _msg = document.getElementById('tooLittleMsg'); if (!_msg.textContent.includes('reicht') && !_msg.textContent.includes('Genug') && !_msg.textContent.includes('Genau')) _msg.textContent = '';
+}
+
+// ── PAY ────────────────────────────────────────────────────
+function pay() {
+  const total = getCartTotal();
+  const paid = trayItems.reduce((s,m) => s+m.value, 0);
+
+  if (paid < total) {
+    document.getElementById('tooLittleMsg').textContent = `Zu wenig! Du brauchst noch ${fmt(total - paid)} mehr.`;
+    const btn = document.getElementById('payBtn');
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 500);
+    return;
+  }
+
+  const change = paid - total;
+
+  // Score: more points for exact/close payment
+  let roundScore = 10;
+  if (change === 0) roundScore = 15;
+  else if (change <= 50) roundScore = 13;
+  else if (change <= 200) roundScore = 11;
+  totalScore += roundScore;
+  document.getElementById('scoreNum').textContent = totalScore;
+
+  showResult(total, paid, change, roundScore);
+}
+
+// ── RESULT ─────────────────────────────────────────────────
+function showResult(total, paid, change, roundScore) {
+  document.getElementById('phase-kasse').style.display = 'none';
+  document.getElementById('phase-result').style.display = 'block';
+
+  document.getElementById('resultChange').textContent = fmt(change);
+
+  let emoji, title, msg;
+  if (change === 0) {
+    emoji = '🏆'; title = 'Perfekt bezahlt!';
+    msg = 'Kein Wechselgeld – du hast den genauen Betrag gegeben! Das ist Profi-Level! 🌟';
+  } else if (change <= 50) {
+    emoji = '🥇'; title = 'Super gemacht!';
+    msg = `Du bekommst ${fmt(change)} Wechselgeld zurück. Fast perfekt!`;
+  } else {
+    emoji = '🎉'; title = 'Gut gemacht!';
+    msg = `Du bekommst ${fmt(change)} Wechselgeld zurück. Beim nächsten Mal kannst du versuchen, genauer zu zahlen!`;
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+
+  const savings = document.getElementById('resultSavings');
+  if (totalSaved > 0) {
+    savings.style.display = 'block';
+    savings.textContent = `💡 Du hast durch NoName-Produkte insgesamt ${fmt(totalSaved)} gespart!`;
+  }
+
+  const nextBtn = document.getElementById('nextRoundBtn');
+  nextBtn.textContent = round >= 5 ? '🏁 Zum Abschluss' : `➡️ Runde ${round + 1}`;
+}
+
+function nextRound() {
+  if (round >= 5) {
+    showFinalResult();
+    return;
+  }
+  round++;
+  buildRound();
+}
+
+function showFinalResult() {
+  document.getElementById('phase-result').innerHTML = `
+    <div class="result-card">
+      <span class="result-emoji">🏆</span>
+      <div class="result-title">Alle 5 Runden geschafft!</div>
+      <div style="font-size:14px;color:var(--text-light);font-weight:600;margin:8px 0 16px">Du bist jetzt ein echter Einkaufs-Profi!</div>
+      <div class="result-change">
+        <div class="result-change-label">⭐ Gesamtpunkte</div>
+        <div class="result-change-amount">${totalScore}</div>
+      </div>
+      <div class="result-savings" style="display:block">
+        💡 Durch NoName-Produkte hast du insgesamt <strong>${fmt(totalSaved)}</strong> gespart!
+      </div>
+      <button class="next-btn" onclick="restartGame()" style="margin-top:16px">🔄 Nochmal spielen</button>
+      <br>
+      <a class="back-btn" href="einkaufen.html">← Zurück zur Übersicht</a>
+    </div>
+  `;
+}
+
+function restartGame() {
+  round = 1;
+  totalScore = 0;
+  totalSaved = 0;
+  document.getElementById('scoreNum').textContent = '0';
+  document.getElementById('savedNum').textContent = '0,00 €';
+  document.getElementById('phase-result').innerHTML = `
+    <div class="result-card">
+      <span class="result-emoji" id="resultEmoji">🎉</span>
+      <div class="result-title" id="resultTitle">Super gemacht!</div>
+      <div id="resultMsg" style="font-size:14px;color:var(--text-light);font-weight:600;margin-bottom:12px;"></div>
+      <div class="result-change">
+        <div class="result-change-label">🪙 Wechselgeld zurück</div>
+        <div class="result-change-amount" id="resultChange">0,00 €</div>
+      </div>
+      <div class="result-savings" id="resultSavings" style="display:none"></div>
+      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()">➡️ Nächste Runde</button>
+      <br>
+      <a class="back-btn" href="einkaufen.html">← Zurück zur Übersicht</a>
+    </div>
+  `;
+  buildRound();
+}
+
+// ── START ──────────────────────────────────────────────────
+buildRound();
+</script>
+</body>
+</html>
