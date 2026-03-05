@@ -103,6 +103,12 @@ body.dark .list-item .item-price { color:var(--green); }
 body.dark .product-card .prod-price { color:var(--green); }
 .product-card .noname-badge { position:absolute; top:6px; right:6px; background:var(--orange); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
 .product-card .brand-badge { position:absolute; top:6px; right:6px; background:var(--purple); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
+/* NoName-Toast */
+.noname-toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:var(--font-display); font-size:16px; padding:12px 24px; border-radius:50px; box-shadow:0 6px 20px rgba(91,191,122,0.4); opacity:0; pointer-events:none; z-index:999; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; }
+.noname-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+/* Distraction shake */
+@keyframes distract-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+.product-card.wrong-shake { animation:distract-shake 0.4s ease; border-color:var(--pink) !important; }
 
 /* CART BAR */
 .cart-bar { background:linear-gradient(135deg,var(--green-light),var(--blue-light)); border:2px solid var(--green); border-radius:16px; padding:12px 16px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
@@ -219,6 +225,9 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
     <button class="info-close-btn" onclick="document.getElementById('scoreInfoOverlay').classList.remove('open')">Verstanden! 👍</button>
   </div>
 </div>
+<!-- NoName Toast -->
+<div class="noname-toast" id="nonameToast"></div>
+
 <div class="game-wrap">
 
   <!-- PHASE 1: EINKAUFEN -->
@@ -355,34 +364,50 @@ const ALL_PRODUCTS = [
   { emoji:'🧆', name:'Hummus',           price:179, single:true },
 
   // Marke vs NoName Paare
-  { emoji:'🥤', name:'Apfelsaft 1L',     brandPrice:249, noNamePrice:89,  brand:'Marken-Saft',    noName:'Spar-Saft' },
-  { emoji:'🧴', name:'Shampoo',          brandPrice:399, noNamePrice:149, brand:'Marken-Shampoo', noName:'Spar-Shampoo' },
-  { emoji:'🍫', name:'Schokolade',       brandPrice:199, noNamePrice:79,  brand:'Ritter Sport',   noName:'Choco-Spar' },
-  { emoji:'🧃', name:'Multivitamin',     brandPrice:179, noNamePrice:69,  brand:'Granini',        noName:'Spar-Vit' },
-  { emoji:'🥣', name:'Cornflakes',       brandPrice:329, noNamePrice:119, brand:'Kelloggs',     noName:'Knusper-Spar' },
-  { emoji:'🧻', name:'Klopapier 4er',    brandPrice:299, noNamePrice:149, brand:'Zewa',           noName:'Spar-Rolle' },
-  { emoji:'🫙', name:'Marmelade',        brandPrice:249, noNamePrice:99,  brand:'Schwartau',      noName:'Spar-Marmelade' },
-  { emoji:'🥫', name:'Tomatensoße',      brandPrice:189, noNamePrice:79,  brand:'Barilla',        noName:'Spar-Soße' },
-  { emoji:'🧀', name:'Gouda',            brandPrice:259, noNamePrice:149, brand:'Leerdammer',     noName:'Spar-Käse' },
-  { emoji:'🥩', name:'Hackfleisch',      brandPrice:349, noNamePrice:249, brand:'Bio-Hack',       noName:'Hack 400g' },
-  { emoji:'🍕', name:'TK-Pizza',         brandPrice:369, noNamePrice:199, brand:'Dr. Oetker',     noName:'Spar-Pizza' },
-  { emoji:'🫒', name:'Olivenöl',         brandPrice:599, noNamePrice:279, brand:'Bertolli',       noName:'Spar-Öl' },
-  { emoji:'☕', name:'Kaffee 250g',      brandPrice:499, noNamePrice:299, brand:'Jacobs',         noName:'Spar-Kaffee' },
-  { emoji:'🍯', name:'Honig',            brandPrice:399, noNamePrice:199, brand:'Langnese',       noName:'Spar-Honig' },
-  { emoji:'🧆', name:'Chips 150g',       brandPrice:249, noNamePrice:99,  brand:'Pringles',       noName:'Spar-Chips' },
-  { emoji:'🥤', name:'Cola 1,5L',        brandPrice:199, noNamePrice:79,  brand:'Coca-Cola',      noName:'Spar-Cola' },
-  { emoji:'🍬', name:'Gummibären',       brandPrice:149, noNamePrice:69,  brand:'Haribo',         noName:'Spar-Bären' },
-  { emoji:'🧇', name:'Tiefkühl-Pommes',  brandPrice:299, noNamePrice:149, brand:'McCain',         noName:'Spar-Pommes' },
-  { emoji:'🥜', name:'Erdnussbutter',    brandPrice:349, noNamePrice:179, brand:'Skippy',         noName:'Spar-Nuss' },
-  { emoji:'🫙', name:'Ketchup',          brandPrice:199, noNamePrice:89,  brand:'Heinz',          noName:'Spar-Ketchup' },
-  { emoji:'🧂', name:'Senf',             brandPrice:159, noNamePrice:69,  brand:'Thomy',          noName:'Spar-Senf' },
-  { emoji:'🍵', name:'Tee 20er',         brandPrice:249, noNamePrice:99,  brand:'Teekanne',       noName:'Spar-Tee' },
-  { emoji:'🥗', name:'Salatdressing',    brandPrice:199, noNamePrice:89,  brand:'Knorr',          noName:'Spar-Dressing' },
-  { emoji:'🧴', name:'Duschgel',         brandPrice:299, noNamePrice:119, brand:'Nivea',          noName:'Spar-Dusche' },
-  { emoji:'🪥', name:'Zahnpasta',        brandPrice:279, noNamePrice:99,  brand:'Colgate',        noName:'Spar-Zahn' },
-  { emoji:'🥛', name:'Joghurt 4er',      brandPrice:229, noNamePrice:99,  brand:'Müller',         noName:'Spar-Joghurt' },
-  { emoji:'🧁', name:'Müsliriegel',      brandPrice:299, noNamePrice:129, brand:'Corny',          noName:'Spar-Riegel' },
-  { emoji:'🫗', name:'Mineralwasser 1L', brandPrice:99,  noNamePrice:29,  brand:'Volvic',         noName:'Spar-Wasser' },
+  { emoji:'🥤', name:'Apfelsaft 1L',     brandPrice:249, noNamePrice:89,  brand:'Apfelsaft Hohes C',      noName:'Apfelsaft' },
+  { emoji:'🧴', name:'Shampoo',          brandPrice:399, noNamePrice:149, brand:'Shampoo Nivea',           noName:'Shampoo' },
+  { emoji:'🍫', name:'Schokolade',       brandPrice:199, noNamePrice:79,  brand:'Schokolade Milka',        noName:'Schokolade' },
+  { emoji:'🧃', name:'Multivitamin',     brandPrice:179, noNamePrice:69,  brand:'Vitaminsaft Granini',     noName:'Vitaminsaft' },
+  { emoji:'🥣', name:'Cornflakes',       brandPrice:329, noNamePrice:119, brand:'Cornflakes Kelloggs',     noName:'Cornflakes' },
+  { emoji:'🧻', name:'Klopapier 4er',    brandPrice:299, noNamePrice:149, brand:'Klopapier Zewa',          noName:'Klopapier' },
+  { emoji:'🫙', name:'Marmelade',        brandPrice:249, noNamePrice:99,  brand:'Marmelade Schwartau',     noName:'Marmelade' },
+  { emoji:'🥫', name:'Tomatensoße',      brandPrice:189, noNamePrice:79,  brand:'Tomatensoße Barilla',     noName:'Tomatensoße' },
+  { emoji:'🧀', name:'Gouda',            brandPrice:259, noNamePrice:149, brand:'Gouda Leerdammer',        noName:'Gouda' },
+  { emoji:'🧈', name:'Butter 250g',      brandPrice:249, noNamePrice:149, brand:'Butter Kerrygold',        noName:'Butter' },
+  { emoji:'🍕', name:'TK-Pizza',         brandPrice:369, noNamePrice:199, brand:'Pizza Dr. Oetker',        noName:'TK-Pizza' },
+  { emoji:'🫒', name:'Olivenöl',         brandPrice:599, noNamePrice:279, brand:'Olivenöl Bertolli',       noName:'Olivenöl' },
+  { emoji:'☕', name:'Kaffee 250g',      brandPrice:499, noNamePrice:299, brand:'Kaffee Jacobs',           noName:'Kaffee' },
+  { emoji:'🍯', name:'Honig',            brandPrice:399, noNamePrice:199, brand:'Honig Langnese',          noName:'Honig' },
+  { emoji:'🧆', name:'Chips 150g',       brandPrice:249, noNamePrice:99,  brand:'Chips Pringles',          noName:'Chips' },
+  { emoji:'🥤', name:'Cola 1,5L',        brandPrice:199, noNamePrice:79,  brand:'Cola Coca-Cola',          noName:'Cola' },
+  { emoji:'🍬', name:'Gummibären',       brandPrice:149, noNamePrice:69,  brand:'Gummibären Haribo',       noName:'Gummibären' },
+  { emoji:'🧇', name:'Tiefkühl-Pommes',  brandPrice:299, noNamePrice:149, brand:'Pommes McCain',           noName:'TK-Pommes' },
+  { emoji:'🥜', name:'Erdnussbutter',    brandPrice:349, noNamePrice:179, brand:'Erdnussbutter Skippy',    noName:'Erdnussbutter' },
+  { emoji:'🫙', name:'Ketchup',          brandPrice:199, noNamePrice:89,  brand:'Ketchup Heinz',           noName:'Ketchup' },
+  { emoji:'🧂', name:'Senf',             brandPrice:159, noNamePrice:69,  brand:'Senf Thomy',              noName:'Senf' },
+  { emoji:'🍵', name:'Tee 20er',         brandPrice:249, noNamePrice:99,  brand:'Tee Teekanne',            noName:'Tee' },
+  { emoji:'🥗', name:'Salatdressing',    brandPrice:199, noNamePrice:89,  brand:'Dressing Knorr',          noName:'Salatdressing' },
+  { emoji:'🧴', name:'Duschgel',         brandPrice:299, noNamePrice:119, brand:'Duschgel Dove',           noName:'Duschgel' },
+  { emoji:'🪥', name:'Zahnpasta',        brandPrice:279, noNamePrice:99,  brand:'Zahnpasta Colgate',       noName:'Zahnpasta' },
+  { emoji:'🥛', name:'Joghurt 4er',      brandPrice:229, noNamePrice:99,  brand:'Joghurt Müller',          noName:'Joghurt' },
+  { emoji:'🧁', name:'Müsliriegel',      brandPrice:299, noNamePrice:129, brand:'Müsliriegel Corny',       noName:'Müsliriegel' },
+  { emoji:'🫗', name:'Mineralwasser 1L', brandPrice:99,  noNamePrice:29,  brand:'Wasser Volvic',           noName:'Mineralwasser' },
+];
+
+// ── ABLENKUNGSPRODUKTE (nicht auf der Liste) ────────────────
+const DISTRACTION_PRODUCTS = [
+  { emoji:'🍭', name:'Lutscher',       price:49  },
+  { emoji:'🍪', name:'Kekse 200g',     price:129 },
+  { emoji:'🍿', name:'Popcorn',        price:99  },
+  { emoji:'🧃', name:'Capri-Sonne',    price:79  },
+  { emoji:'🍦', name:'Eis am Stiel',   price:149 },
+  { emoji:'🎮', name:'Spielzeug-Auto', price:599 },
+  { emoji:'🍩', name:'Donut',          price:89  },
+  { emoji:'🧸', name:'Kuscheltier',    price:799 },
+  { emoji:'🍫', name:'Schoko-Riegel',  price:79  },
+  { emoji:'🥨', name:'Brezeln',        price:99  },
+  { emoji:'🎈', name:'Luftballon',     price:49  },
+  { emoji:'🍬', name:'Bonbons',        price:59  },
 ];
 
 // ── GAME STATE ─────────────────────────────────────────────
@@ -420,9 +445,11 @@ function buildRound() {
   const pairs = shuffle(ALL_PRODUCTS.filter(p => !p.single));
   const singles = shuffle(ALL_PRODUCTS.filter(p => p.single));
 
-  // Decide how many pairs (more in later rounds)
-  const pairCount = round <= 2 ? 1 : round <= 4 ? 2 : 3;
-  const singleCount = size - pairCount;
+  // Immer genau 1 Marke-vs-NoName-Paar pro Runde
+  const pairCount = 1;
+  // Ab Runde 2 manchmal ein Spaßprodukt auf der Liste (ca. 50% Chance)
+  const funOnList = round >= 2 && Math.random() < 0.5 ? 1 : 0;
+  const singleCount = size - pairCount - funOnList;
 
   shoppingList = [];
 
@@ -432,6 +459,12 @@ function buildRound() {
   singles.slice(0, singleCount).forEach(p => {
     shoppingList.push({ ...p, type:'single', chosen: true });
   });
+
+  // Gelegentlich ein Spaßprodukt auf die Liste
+  if (funOnList) {
+    const fun = shuffle(DISTRACTION_PRODUCTS)[0];
+    shoppingList.push({ ...fun, type:'single', chosen: true, isFun: true });
+  }
 
   shoppingList = shuffle(shoppingList);
 
@@ -474,24 +507,34 @@ function renderShelf() {
   const grid = document.getElementById('shelfGrid');
   grid.innerHTML = '';
 
+  // Spaßprodukte die bereits auf der Liste stehen nicht nochmal als Ablenkung zeigen
+  const funOnListNames = shoppingList.filter(i => i.isFun).map(i => i.name);
+  const distractCount = round <= 2 ? 2 : round <= 4 ? 3 : 4;
+  const distractPool = shuffle(DISTRACTION_PRODUCTS.filter(p => !funOnListNames.includes(p.name))).slice(0, distractCount);
+
+  // Alle Shelf-Karten sammeln (Liste + Ablenkung) und mischen
+  const listCards = [];
   shoppingList.forEach((item, i) => {
     if (item.type === 'single') {
-      const card = makeProductCard(item.emoji, item.name, item.price, null, i, 'single');
-      grid.appendChild(card);
+      listCards.push({ card: makeProductCard(item.emoji, item.name, item.price, null, i, 'single'), isDistract: false });
     } else {
-      // Brand card
-      const brandCard = makeProductCard(item.emoji, item.brand, item.brandPrice, 'brand', i, 'brand');
-      // NoName card
-      const noNameCard = makeProductCard(item.emoji, item.noName, item.noNamePrice, 'noname', i, 'noname');
-      grid.appendChild(brandCard);
-      grid.appendChild(noNameCard);
+      listCards.push({ card: makeProductCard(item.emoji, item.brand, item.brandPrice, 'brand', i, 'brand'), isDistract: false });
+      listCards.push({ card: makeProductCard(item.emoji, item.noName, item.noNamePrice, 'noname', i, 'noname'), isDistract: false });
     }
   });
+
+  distractPool.forEach(p => {
+    listCards.push({ card: makeDistractCard(p), isDistract: true });
+  });
+
+  shuffle(listCards).forEach(({ card }) => grid.appendChild(card));
 }
 
 function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
   const card = document.createElement('div');
   card.className = 'product-card';
+  card.dataset.listIdx = listIdx;
+  card.dataset.variant = variant;
   const badge = badgeType === 'brand'
     ? `<div class="brand-badge">Marke</div>`
     : badgeType === 'noname'
@@ -507,6 +550,38 @@ function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
   return card;
 }
 
+function makeDistractCard(product) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.dataset.listIdx = 'distract';
+  card.style.opacity = '0.85';
+  card.innerHTML = `
+    <span class="prod-emoji">${product.emoji}</span>
+    <div class="prod-name">${product.name}</div>
+    <div class="prod-price">${fmt(product.price)}</div>
+  `;
+  card.onclick = () => {
+    card.classList.add('wrong-shake');
+    card.addEventListener('animationend', () => card.classList.remove('wrong-shake'), { once: true });
+    showToast('❌ Das steht nicht auf deiner Liste!', '#e05');
+  };
+  return card;
+}
+
+let toastTimer = null;
+function showNonameToast(savedCent) {
+  showToast(`💰 Du hast ${fmt(savedCent)} gespart! 🎉`, null);
+}
+function showToast(msg, color) {
+  const toast = document.getElementById('nonameToast');
+  toast.textContent = msg;
+  if (color) toast.style.background = `linear-gradient(135deg, ${color}, #c0003a)`;
+  else toast.style.background = 'linear-gradient(135deg,var(--green),var(--blue))';
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
 // ── ADD TO CART ────────────────────────────────────────────
 function addToCart(listIdx, variant, price) {
   if (cartItems.includes(listIdx)) return;
@@ -518,18 +593,14 @@ function addToCart(listIdx, variant, price) {
     if (variant === 'noname') {
       totalSaved += item.brandPrice - item.noNamePrice;
       document.getElementById('savedNum').textContent = fmt(totalSaved);
+      showNonameToast(item.brandPrice - item.noNamePrice);
     }
   }
 
   cartItems.push(listIdx);
 
-  // Mark shelf cards as in-cart
-  const allCards = document.querySelectorAll('.product-card');
-  // rebuild shelf to reflect chosen state
-  renderShelf();
-  // disable both variants for this pair
+  // Nur Zustand aktualisieren, nicht neu rendern
   rebuildShelfCartState();
-
   renderShoppingList();
 
   const count = cartItems.length;
@@ -542,25 +613,10 @@ function addToCart(listIdx, variant, price) {
 }
 
 function rebuildShelfCartState() {
-  const cards = document.querySelectorAll('.product-card');
-  let cardIdx = 0;
-  shoppingList.forEach((item, i) => {
-    if (item.type === 'single') {
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
-    } else {
-      // brand + noname
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
-    }
+  document.querySelectorAll('.product-card').forEach(card => {
+    const idx = card.dataset.listIdx;
+    if (idx === 'distract') return; // Ablenkungsprodukte nie ausgrauen
+    card.classList.toggle('in-cart', cartItems.includes(Number(idx)));
   });
 }
 
@@ -607,13 +663,7 @@ function buildWallet(totalCent) {
 
   // Determine which denominations to include based on round
   let availMoney;
-  if (round <= 2) {
-    availMoney = MONEY.filter(m => m.value <= 200); // up to 2€
-  } else if (round <= 4) {
-    availMoney = MONEY.filter(m => m.value <= 1000); // up to 10€
-  } else {
-    availMoney = MONEY; // all
-  }
+  availMoney = MONEY.filter(m => m.value <= 500); // max 5€-Schein
 
   availMoney.forEach(m => {
     const div = document.createElement('div');
@@ -812,7 +862,13 @@ function showResult(total, paid, change, roundScore) {
   const savings = document.getElementById('resultSavings');
   if (totalSaved > 0) {
     savings.style.display = 'block';
-    savings.textContent = `💡 Du hast durch NoName-Produkte insgesamt ${fmt(totalSaved)} gespart!`;
+    const savingsMsg = totalSaved >= 100
+      ? `🌟 Clever eingekauft! Du hast durch NoName ${fmt(totalSaved)} gespart!`
+      : `💡 Du hast durch NoName ${fmt(totalSaved)} gespart!`;
+    savings.innerHTML = `${savingsMsg}<br><span style="font-size:11px;font-weight:600;opacity:0.8">Das Geld kannst du für etwas Schönes verwenden 🐷</span>`;
+  } else {
+    savings.style.display = 'block';
+    savings.innerHTML = `💡 Tipp: Beim nächsten Mal einfach mal das NoName-Produkt probieren – oft genauso gut, aber günstiger!`;
   }
 
   const nextBtn = document.getElementById('nextRoundBtn');

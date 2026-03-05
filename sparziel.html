@@ -6,27 +6,35 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#5BBF7A">
-<title>Datenschutz – Piggyplant</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Sparziel setzen – Piggyplant</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green:#5BBF7A; --green-dark:#3D9E5F; --blue:#4AACDB; --blue-dark:#2A85B0;
-    --yellow:#FFD166; --orange:#FF9A3C;
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-dark:#2A85B0; --blue-light:#E6F6FF;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
     --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
     --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
-    --radius:20px; --shadow:0 6px 24px rgba(0,0,0,0.09);
+    --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.10);
     --font-body:'Nunito',sans-serif; --font-display:'Fredoka One',cursive;
   }
   body.dark {
     --bg:#0F1A14; --text:#E8F5EE; --text-light:#8EAAA0;
     --surface:#1A2E22; --surface2:#243B2C; --border:#2A4035;
+    --green-light:#1C3528; --blue-light:#172838;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:var(--font-body); background:var(--bg); color:var(--text); transition:background 0.4s,color 0.4s; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+  /* NAV */
   nav { background:var(--surface); border-bottom:2px solid var(--border); padding:10px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:background 0.4s; }
   .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
   .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .nav-right { display:flex; gap:8px; align-items:center; }
+  .nav-back { background:var(--green-light); color:var(--green-dark); border:none; font-family:var(--font-body); font-weight:800; font-size:13px; padding:7px 16px; border-radius:50px; cursor:pointer; text-decoration:none; transition:all 0.2s; display:inline-flex; align-items:center; gap:4px; }
+  .nav-back:hover { background:var(--green); color:white; transform:scale(1.05); }
   .lang-btn { border:2px solid var(--green); background:transparent; color:var(--green-dark); font-family:var(--font-body); font-weight:800; font-size:14px; padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1; }
   body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
   .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
@@ -34,22 +42,80 @@
   .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
   .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
   body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
-  .page-content { max-width:700px; margin:0 auto; padding:48px 24px 64px; }
-  .page-title { font-family:var(--font-display); font-size:36px; color:var(--text); margin-bottom:8px; }
-  .page-emoji { font-size:48px; display:block; margin-bottom:16px; }
-  .page-body { font-size:14px; line-height:1.8; color:var(--text); }
-  .page-body p { margin-bottom:16px; }
-  .page-body strong { color:var(--text); }
-  .page-body a { color:var(--green-dark); }
-  .note { background:var(--surface2); border-left:4px solid var(--orange); padding:12px 16px; border-radius:8px; font-size:13px; font-weight:700; color:var(--orange); margin-top:24px; }
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  /* HERO */
+  .page-hero { text-align:center; padding:40px 20px 30px; transition:background 0.4s; position:relative; overflow:hidden; }
+  .page-hero-emoji { font-size:64px; display:block; animation:bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+  .page-hero-title { font-family:var(--font-display); font-size:36px; margin:10px 0 6px; animation:fadeUp 0.5s 0.1s both; }
+  .page-hero-sub { font-size:15px; color:var(--text-light); font-weight:600; animation:fadeUp 0.5s 0.2s both; }
+  /* CONTENT */
+  .content { max-width:800px; margin:0 auto; padding:30px 20px 60px; }
+  .info-box { background:var(--surface); border-radius:20px; padding:24px; margin-bottom:20px; box-shadow:var(--shadow); border-left:5px solid var(--green); animation:fadeUp 0.5s both; transition:background 0.4s; }
+  .info-box h3 { font-family:var(--font-display); font-size:22px; margin-bottom:10px; color:var(--text); }
+  .info-box p { font-size:15px; color:var(--text-light); font-weight:600; line-height:1.6; }
+  .fun-fact { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border-radius:20px; padding:20px; margin-bottom:20px; box-shadow:var(--shadow); animation:fadeUp 0.5s 0.2s both; border:2px solid var(--yellow); }
+  body.dark .fun-fact { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; }
+  .fun-fact h3 { font-family:var(--font-display); font-size:18px; color:#8B6200; margin-bottom:8px; }
+  body.dark .fun-fact h3 { color:var(--yellow); }
+  .fun-fact p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.6; }
+  .steps { display:flex; flex-direction:column; gap:16px; margin-bottom:24px; }
+  .step { display:flex; gap:16px; align-items:flex-start; background:var(--surface); border-radius:16px; padding:18px; box-shadow:var(--shadow); animation:fadeUp 0.5s both; transition:background 0.4s; }
+  .step-num { color:white; font-family:var(--font-display); font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text h4 { font-family:var(--font-display); font-size:18px; margin-bottom:4px; }
+  .step-text p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.5; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(91,191,122,0.4); transition:all 0.2s; margin-top:10px; }
+  .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(91,191,122,0.5); }
+  /* VORLESEN */
+  .read-bar { background:linear-gradient(135deg,#FFF0F5,#FFE4EE); border-radius:20px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; border:2px solid #FFB3CC; animation:fadeUp 0.5s both; }
+  body.dark .read-bar { background:linear-gradient(135deg,#2A0D18,#3A1A28); border-color:#8B4060; }
+  .read-btn { background:linear-gradient(135deg,#FF6B9D,#FF9A3C); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:16px; padding:12px 22px; border-radius:50px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 16px rgba(255,107,157,0.4); transition:all 0.2s; flex-shrink:0; }
+  .read-btn:hover { transform:scale(1.05); }
+  .read-btn.playing { animation:pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 4px 16px rgba(255,107,157,0.4)} 50%{box-shadow:0 4px 28px rgba(255,107,157,0.8)} }
+  .read-label { font-size:14px; font-weight:700; color:var(--text-light); }
+  .speed-btns { display:flex; gap:6px; }
+  .speed-btn { background:var(--surface); border:2px solid var(--border); color:var(--text); font-family:var(--font-body); font-weight:800; font-size:12px; padding:6px 12px; border-radius:50px; cursor:pointer; transition:all 0.2s; }
+  .speed-btn.active { background:var(--pink); border-color:var(--pink); color:white; }
+  .reading-highlight { background:#FFE4EE; border-radius:4px; transition:background 0.3s; }
+  body.dark .reading-highlight { background:#3A1A28; }
+  /* FOOTER */
   .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
   .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
   .footer-divider { color:var(--text-light); font-size:13px; }
+</style>
+<style>
+  .page-hero { background:linear-gradient(135deg,#E6F6FF,#CCE9FF); }
+  body.dark .page-hero { background:linear-gradient(135deg,#0A1A28,#142038); }
+
+  /* FLOATING COINS */
+  .floating-coins {
+    position: absolute;
+    font-size: 24px;
+    animation: float 3s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.75;
+  }
+  .coin1 { top: 20%; left: 8%; animation-delay: 0s; }
+  .coin2 { top: 30%; right: 10%; animation-delay: 0.7s; }
+  .coin3 { top: 60%; left: 5%; animation-delay: 1.4s; font-size: 20px; }
+  .coin4 { bottom: 20%; right: 6%; animation-delay: 0.3s; font-size: 22px; }
+  @media (max-width: 600px) {
+    .coin1 { top: 18%; left: 6%; font-size: 18px; }
+    .coin2 { top: 18%; right: 6%; font-size: 18px; }
+    .coin3 { bottom: 18%; left: 6%; font-size: 16px; }
+    .coin4 { bottom: 18%; right: 6%; font-size: 16px; }
+  }
+  .info-box { border-left-color:#4AACDB; }
 </style>
 </head>
 <body>
@@ -59,47 +125,59 @@
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
+    <a class="nav-back" href="kleine-sparer.html" data-de="← Kleine Sparer" data-en="← Little Savers">← Kleine Sparer</a>
     <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
     <button class="dark-toggle" onclick="toggleDark()"></button>
     <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
   </div>
 </nav>
-<div class="page-content">
-  <span class="page-emoji">🔒</span>
-  <h1 class="page-title" data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h1>
-  <div class="page-body">
-    <p><strong data-de="1. Verantwortlicher" data-en="1. Controller">1. Verantwortlicher</strong><br>
-    Vorname Nachname, Musterstraße 1, 12345 Musterstadt<br>
-    E-Mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a1115140e1b110e3a0a131d1d030a161b140e541e1f">[email&#160;protected]</a></p>
-
-    <p><strong data-de="2. Lokale Speicherung (localStorage)" data-en="2. Local storage">2. Lokale Speicherung (localStorage)</strong><br>
-    <span data-de="Diese Website verwendet ausschließlich den lokalen Speicher Ihres Browsers (localStorage) für technisch notwendige Einstellungen wie Sprachauswahl und Dark Mode. Es werden keine personenbezogenen Daten gespeichert oder an Dritte übertragen." data-en="This website uses only your browser's local storage for technically necessary settings such as language selection and dark mode. No personal data is stored or transmitted to third parties.">Diese Website verwendet ausschließlich den lokalen Speicher Ihres Browsers (localStorage) für technisch notwendige Einstellungen wie Sprachauswahl und Dark Mode. Es werden keine personenbezogenen Daten gespeichert oder an Dritte übertragen.</span></p>
-
-    <p><strong data-de="3. Newsletter" data-en="3. Newsletter">3. Newsletter</strong><br>
-    <span data-de="Wenn Sie unseren Newsletter abonnieren, speichern wir Ihre E-Mail-Adresse zur Zusendung von Informationen über neue Inhalte und Funktionen. Rechtsgrundlage ist Ihre ausdrückliche Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Sie können den Newsletter jederzeit abbestellen. Ihre Daten werden nicht an Dritte weitergegeben." data-en="If you subscribe to our newsletter, we store your email address to send you information about new content and features. The legal basis is your explicit consent (Art. 6 para. 1 lit. a GDPR). You can unsubscribe at any time. Your data will not be shared with third parties.">Wenn Sie unseren Newsletter abonnieren, speichern wir Ihre E-Mail-Adresse zur Zusendung von Informationen über neue Inhalte und Funktionen. Rechtsgrundlage ist Ihre ausdrückliche Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Sie können den Newsletter jederzeit abbestellen. Ihre Daten werden nicht an Dritte weitergegeben.</span></p>
-
-    <p><strong data-de="4. Affiliate-Links" data-en="4. Affiliate links">4. Affiliate-Links</strong><br>
-    <span data-de="Diese Website enthält Affiliate-Links zu externen Shops oder Anbietern. Wenn Sie über einen solchen Link einen Kauf tätigen, erhalten wir eine kleine Provision – für Sie entstehen dabei keine Mehrkosten. Affiliate-Links sind entsprechend gekennzeichnet. Wir empfehlen ausschließlich Produkte, von denen wir überzeugt sind." data-en="This website contains affiliate links to external shops or providers. If you make a purchase via such a link, we receive a small commission – at no extra cost to you. Affiliate links are clearly marked. We only recommend products we believe in.">Diese Website enthält Affiliate-Links zu externen Shops oder Anbietern. Wenn Sie über einen solchen Link einen Kauf tätigen, erhalten wir eine kleine Provision – für Sie entstehen dabei keine Mehrkosten. Affiliate-Links sind entsprechend gekennzeichnet. Wir empfehlen ausschließlich Produkte, von denen wir überzeugt sind.</span></p>
-
-    <p><strong data-de="5. Hosting" data-en="5. Hosting">5. Hosting</strong><br>
-    <span data-de="Diese Website wird gehostet bei Vercel Inc., 340 Pine Street, San Francisco, CA 94104, USA. Beim Aufruf der Website werden automatisch Verbindungsdaten (IP-Adresse, Zeitpunkt, aufgerufene Seite) an Vercel übertragen." data-en="This website is hosted by Vercel Inc., 340 Pine Street, San Francisco, CA 94104, USA. When you access the website, connection data is automatically transmitted to Vercel.">Diese Website wird gehostet bei Vercel Inc., 340 Pine Street, San Francisco, CA 94104, USA. Beim Aufruf der Website werden automatisch Verbindungsdaten (IP-Adresse, Zeitpunkt, aufgerufene Seite) an Vercel übertragen.</span>
-    Weitere Informationen: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></p>
-
-    <p><strong data-de="6. Externe Links" data-en="6. External links">6. Externe Links</strong><br>
-    <span data-de="Diese Website enthält Links zu externen Websites Dritter. Auf deren Inhalte haben wir keinen Einfluss und übernehmen keine Haftung." data-en="This website contains links to external third-party websites. We have no influence over their content and assume no liability.">Diese Website enthält Links zu externen Websites Dritter. Auf deren Inhalte haben wir keinen Einfluss und übernehmen keine Haftung.</span></p>
-
-    <p><strong data-de="7. Ihre Rechte" data-en="7. Your rights">7. Ihre Rechte</strong><br>
-    <span data-de="Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer Daten sowie das Recht auf Datenübertragbarkeit. Wenden Sie sich dazu an: kontakt@piggyplant.de" data-en="You have the right to access, correct, delete and restrict the processing of your data, as well as the right to data portability. Contact: kontakt@piggyplant.de">Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer Daten sowie das Recht auf Datenübertragbarkeit. Wenden Sie sich dazu an: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8b3b7b6acb9b3ac98a8b1bfbfa1a8b4b9b6acf6bcbd">[email&#160;protected]</a></span></p>
-
-    <div class="note" data-de="⚠️ Platzhalter – vor Veröffentlichung bitte rechtlich prüfen lassen." data-en="⚠️ Placeholder – please have this reviewed legally before publishing.">⚠️ Platzhalter – vor Veröffentlichung bitte rechtlich prüfen lassen.</div>
+<section class="page-hero">
+  <span class="floating-coins coin1">🎯</span>
+  <span class="floating-coins coin2">⭐</span>
+  <span class="floating-coins coin3">🪙</span>
+  <span class="floating-coins coin4">🚀</span>
+  <span class="page-hero-emoji">🎯</span>
+  <h1 class="page-hero-title" data-de="Sparziel setzen" data-en="Set a savings goal">Sparziel setzen</h1>
+  <p class="page-hero-sub" data-de="Mit einem Ziel sparst du schneller! 🚀" data-en="With a goal you save faster! 🚀">Mit einem Ziel sparst du schneller! 🚀</p>
+</section>
+<div class="content">
+  <!-- VORLESEN BAR -->
+  <div class="read-bar">
+    <button class="read-btn" id="readBtn" onclick="toggleRead()">
+      <span id="readIcon">🔊</span>
+      <span id="readBtnText" data-de="Vorlesen" data-en="Read aloud">Vorlesen</span>
+    </button>
+    <span class="read-label" data-de="Geschwindigkeit:" data-en="Speed:">Geschwindigkeit:</span>
+    <div class="speed-btns">
+      <button class="speed-btn" onclick="setSpeed(0.7,this)" data-de="🐢 Langsam" data-en="🐢 Slow">🐢 Langsam</button>
+      <button class="speed-btn active" onclick="setSpeed(1.0,this)" data-de="🐇 Normal" data-en="🐇 Normal">🐇 Normal</button>
+      <button class="speed-btn" onclick="setSpeed(1.4,this)" data-de="🚀 Schnell" data-en="🚀 Fast">🚀 Schnell</button>
+    </div>
   </div>
+  <div class="info-box" id="readable-1">
+    <h3 data-de="🎯 Was ist ein Sparziel?" data-en="🎯 What is a savings goal?">🎯 Was ist ein Sparziel?</h3>
+    <p data-de="Ein Sparziel ist etwas das du dir kaufen möchtest – zum Beispiel ein Spielzeug, ein Buch oder ein Ausflug. Wenn du weißt wofür du sparst, ist es viel leichter dranzubleiben!" data-en="A savings goal is something you want to buy – for example a toy, a book or a trip. When you know what you're saving for, it's much easier to stick with it!">Ein Sparziel ist etwas das du dir kaufen möchtest – zum Beispiel ein Spielzeug, ein Buch oder ein Ausflug. Wenn du weißt wofür du sparst, ist es viel leichter dranzubleiben!</p>
+  </div>
+  <div class="fun-fact" id="readable-2">
+    <h3 data-de="💡 Der Trick mit dem Plan!" data-en="💡 The trick with a plan!">💡 Der Trick mit dem Plan!</h3>
+    <p data-de="Wenn ein Spielzeug 15 Euro kostet und du jede Woche 2 Euro sparst – wann hast du genug? 15 ÷ 2 = 7,5 Wochen. Also nach etwa 8 Wochen! Das klingt lange, aber die Zeit geht schnell vorbei." data-en="If a toy costs 15 Euro and you save 2 Euro every week – when do you have enough? 15 ÷ 2 = 7.5 weeks. So after about 8 weeks! That sounds long, but time passes quickly.">Wenn ein Spielzeug 15 Euro kostet und du jede Woche 2 Euro sparst – wann hast du genug? 15 ÷ 2 = 7,5 Wochen. Also nach etwa 8 Wochen! Das klingt lange, aber die Zeit geht schnell vorbei.</p>
+  </div>
+  <div class="steps" id="readable-3">
+    <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:4px" data-de="🚀 Dein Sparziel in 4 Schritten:" data-en="🚀 Your savings goal in 4 steps:">🚀 Dein Sparziel in 4 Schritten:</h3>
+    <div class="step"><div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-dark))">1</div><div class="step-text"><h4 data-de="Wunsch aufschreiben" data-en="Write down your wish">Wunsch aufschreiben</h4><p data-de="Was möchtest du? Schreib es auf oder mal ein Bild davon!" data-en="What do you want? Write it down or draw a picture of it!">Was möchtest du? Schreib es auf oder mal ein Bild davon!</p></div></div>
+    <div class="step"><div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-dark))">2</div><div class="step-text"><h4 data-de="Preis herausfinden" data-en="Find out the price">Preis herausfinden</h4><p data-de="Wie viel kostet es? Frag Mama oder Papa oder schau im Internet nach." data-en="How much does it cost? Ask mum or dad or look it up online.">Wie viel kostet es? Frag Mama oder Papa oder schau im Internet nach.</p></div></div>
+    <div class="step"><div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-dark))">3</div><div class="step-text"><h4 data-de="Plan machen" data-en="Make a plan">Plan machen</h4><p data-de="Wie viel kannst du pro Woche sparen? Rechne aus wann du genug hast!" data-en="How much can you save per week? Calculate when you'll have enough!">Wie viel kannst du pro Woche sparen? Rechne aus wann du genug hast!</p></div></div>
+    <div class="step"><div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--blue-dark))">4</div><div class="step-text"><h4 data-de="Dranbleiben!" data-en="Stick with it!">Dranbleiben!</h4><p data-de="Auch wenn es schwer fällt – denk an dein Ziel! Du schaffst das! 💪" data-en="Even when it's hard – think of your goal! You can do it! 💪">Auch wenn es schwer fällt – denk an dein Ziel! Du schaffst das! 💪</p></div></div>
+  </div>
+  <a class="back-btn" href="kleine-sparer.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
 </div>
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <div>
-      <div class="footer-brand">Piggyplant</div>
-      <div class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</div>
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
       <a href="piggyplant.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
@@ -108,7 +186,7 @@
       <span class="footer-divider">·</span>
       <a href="datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
       <span class="footer-divider">·</span>
-      <a href="/cdn-cgi/l/email-protection#b7dcd8d9c3d6dcc3f7c7ded0d0cec7dbd6d9c399d3d2"><span class="__cf_email__" data-cfemail="b9d2d6d7cdd8d2cdf9c9d0dedec0c9d5d8d7cd97dddc">[email&#160;protected]</span></a>
+      <a href="/cdn-cgi/l/email-protection#472c282933262c3307372e20203e372b262933692322"><span class="__cf_email__" data-cfemail="b4dfdbdac0d5dfc0f4c4ddd3d3cdc4d8d5dac09ad0d1">[email&#160;protected]</span></a>
     </div>
   </div>
 </footer>
@@ -135,4 +213,49 @@
     if (l) l.textContent = dark ? (lang==='de'?'Dunkel':'Dark') : (lang==='de'?'Hell':'Light');
   }
   function setLang(l) {
-    lang = l; localStorage.setItem('piggy
+    lang = l; localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+    const lbl = document.getElementById('dark-label');
+    if (lbl) lbl.textContent = dark ? (l==='de'?'Dunkel':'Dark') : (l==='de'?'Hell':'Light');
+  }
+
+  // ── VORLESEN ──
+  let reading = false, speed = 1.0;
+  function getReadText() {
+    return Array.from(document.querySelectorAll('[id^="readable-"]'))
+      .map(s => s.innerText.trim()).join('. ');
+  }
+  function toggleRead() { reading ? stopRead() : startRead(); }
+  function startRead() {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(getReadText());
+    utt.lang = lang === 'de' ? 'de-DE' : 'en-GB';
+    utt.rate = speed; utt.pitch = 1.1;
+    const sections = Array.from(document.querySelectorAll('[id^="readable-"]')).map(e => e.id);
+    let sIdx = 0;
+    utt.onstart = () => { reading=true; updateBtn(true); document.getElementById(sections[0])?.classList.add('reading-highlight'); };
+    utt.onboundary = (e) => {
+      const newIdx = Math.min(sections.length-1, Math.floor((e.charIndex/utt.text.length)*sections.length));
+      if (newIdx !== sIdx) { document.getElementById(sections[sIdx])?.classList.remove('reading-highlight'); sIdx=newIdx; document.getElementById(sections[sIdx])?.classList.add('reading-highlight'); }
+    };
+    utt.onend = () => { reading=false; updateBtn(false); sections.forEach(id=>document.getElementById(id)?.classList.remove('reading-highlight')); };
+    utt.onerror = () => { reading=false; updateBtn(false); };
+    window.speechSynthesis.speak(utt);
+  }
+  function stopRead() { window.speechSynthesis.cancel(); reading=false; updateBtn(false); document.querySelectorAll('.reading-highlight').forEach(el=>el.classList.remove('reading-highlight')); }
+  function updateBtn(isPlaying) {
+    const btn=document.getElementById('readBtn'), icon=document.getElementById('readIcon'), txt=document.getElementById('readBtnText');
+    if(isPlaying){btn.classList.add('playing');icon.textContent='⏹️';txt.textContent=lang==='de'?'Stopp':'Stop';}
+    else{btn.classList.remove('playing');icon.textContent='🔊';txt.textContent=lang==='de'?'Vorlesen':'Read aloud';}
+  }
+  function setSpeed(s,el) { speed=s; document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); if(reading){stopRead();startRead();} }
+  window.addEventListener('beforeunload',()=>window.speechSynthesis?.cancel());
+</script>
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      w
