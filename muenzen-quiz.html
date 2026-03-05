@@ -131,10 +131,10 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
   .question-num { font-size: 12px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .imgs-gallery { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:0 auto 16px; max-width:360px; }
-  .imgs-gallery img { height:38px; border-radius:6px; object-fit:contain; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+  .imgs-gallery { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:0 auto 10px; max-width:360px; }
+  .imgs-gallery img { width:20px; height:20px; border-radius:50%; object-fit:contain; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
   .question-img {
-    width: 100%; max-width: 240px; margin: 0 auto 16px;
+    width: 100%; max-width: 130px; margin: 0 auto 8px;
     display: block; border-radius: 12px; object-fit: contain;
   }
   .question-text {
@@ -160,7 +160,7 @@
   .answer-btn.reveal { background: linear-gradient(135deg,#E8F7EE,#D0F0DC); border-color: var(--green); color: var(--green-dark); opacity: 0.7; }
   @keyframes bounceIn { 0%{transform:scale(0.95)} 60%{transform:scale(1.04)} 100%{transform:scale(1)} }
 
-  .answer-icon { font-size: 20px; flex-shrink: 0; }
+  .answer-icon { display: none; }
 
   /* FEEDBACK */
   .feedback {
@@ -320,14 +320,14 @@ const allQuestions = [
     img: BASE + '10Euro.webp'
   },
   {
-    de: { q: 'Wie viele verschiedene Euro-Münzen gibt es?\n🪙 1ct  2ct  5ct  10ct  20ct  50ct  1€  2€', answers: ['6','7','8','10'], correct: 2 },
-    en: { q: 'How many different Euro coins are there?\n🪙 1ct  2ct  5ct  10ct  20ct  50ct  1€  2€', answers: ['6','7','8','10'], correct: 2 },
-    img: BASE + '2Euro.webp'
+    de: { q: 'Wie viele verschiedene Euro-Münzen gibt es?', answers: ['6','7','8','10'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp','10Cent.webp','20Cent.webp','50Cent.webp','1Euro.webp','2Euro.webp'] },
+    en: { q: 'How many different Euro coins are there?', answers: ['6','7','8','10'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp','10Cent.webp','20Cent.webp','50Cent.webp','1Euro.webp','2Euro.webp'] }
   },
   {
-    de: { q: 'Welche Münzen ziehen Magneten an?', answers: ['1€ und 2€','10 und 20 Cent','1 und 2 Cent','50 Cent'], correct: 2 },
-    en: { q: 'Which coins are attracted to magnets?', answers: ['1€ and 2€','10 and 20 cent','1 and 2 cent','50 cent'], correct: 2 },
-    img: BASE + '1Cent.webp'
+    de: { q: 'Welche Münzen ziehen Magneten an?', answers: ['1€ und 2€','10 und 20 Cent','1, 2 und 5 Cent','50 Cent'], correct: 2 },
+    en: { q: 'Which coins are attracted to magnets?', answers: ['1€ and 2€','10 and 20 cent','1, 2 and 5 cent','50 cent'], correct: 2 }
   },
   {
     de: { q: 'Welche Farbe hat der 5-Euro-Schein?', answers: ['Rot','Grau','Blau','Gelb'], correct: 1 },
@@ -435,7 +435,7 @@ let wrong = 0;
 let answered = false;
 
 const icons = ['🅰️','🅱️','🅲','🅳'];
-const answerIcons = ['🟡','🔵','🟠','🟢'];
+const answerIcons = ['','','',''];
 
 function shuffle(arr) {
   const a = [...arr];
@@ -469,12 +469,12 @@ function showQuestion() {
   const oldGallery = document.getElementById('imgsGallery');
   if (oldGallery) oldGallery.remove();
 
-  if (q.imgs) {
+  if (data.imgs) {
     img.style.display = 'none';
     const gallery = document.createElement('div');
     gallery.id = 'imgsGallery';
     gallery.className = 'imgs-gallery';
-    q.imgs.forEach(name => {
+    data.imgs.forEach(name => {
       const i = document.createElement('img');
       i.src = BASE + name;
       i.alt = name.replace('.webp','');
