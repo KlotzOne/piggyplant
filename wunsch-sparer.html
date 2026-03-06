@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wunsch-Sparer 🐷</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-dark:#2A85B0;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+    --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+    --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+    --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.12);
+  }
+  body.dark {
+    --bg:#0F1A14; --text:#E8F5EE; --text-light:#8FBFA0;
+    --surface:#1A2E20; --surface2:#1E3525; --border:#2A4A35;
+    --shadow:0 6px 24px rgba(0,0,0,0.4);
+  }
+  body.dark .header { background:linear-gradient(135deg,#0A2018,#0F2A20); border-bottom-color:#1A4030; }
+  body.dark .card { border-color:#1A4030; }
+  body.dark .progress-wrap { background:#1A3528; }
+  body.dark .event-card.temptation { background:linear-gradient(135deg,#2A0D18,#3A1A28); border-color:#5A2A3A; }
+  body.dark .event-card.income { background:linear-gradient(135deg,#0A2018,#0F2A20); border-color:#1A4030; }
+  body.dark .event-card.dilemma { background:linear-gradient(135deg,#1A1A08,#252510); border-color:#8B7020; }
+  body.dark .event-card.random { background:linear-gradient(135deg,#0A1A2A,#0F2035); border-color:#1A4060; }
+  body.dark .week-strip { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; }
+  body.dark .ausgaben-box { background:#2A0D18 !important; }
+  body.dark .summary-item { background:var(--surface2); }
+
+  body.dark .wish-option { border-color:var(--border); }
+  body.dark .wish-option.selected { background:var(--surface2); }
+  body.dark .badge { background:var(--surface2); }
+  body.dark .close-btn { background:rgba(0,0,0,0.4); color:var(--green); }
+  body.dark .stat-pill { background:var(--surface2); }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  .close-btn { position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(91,191,122,0.4); color:var(--green-dark); font-size:20px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.2s; z-index:10; }
+  .close-btn:hover { background:rgba(91,191,122,0.2); transform:scale(1.1); }
+  .back-btn { display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(91,191,122,0.4); transition:all 0.2s; margin:24px auto 32px; width:fit-content; }
+  .back-btn:hover { transform:translateY(-2px); }
+
+  .header { text-align:center; padding:20px 20px 16px; background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border-bottom:2px solid #B3E8CC; position:relative; overflow:hidden; }
+  .float-icon { position:absolute; animation:floatIcon 4s ease-in-out infinite; opacity:0.6; font-size:22px; pointer-events:none; }
+  .fi-1{left:7%;top:20%;animation-delay:0s} .fi-2{left:12%;top:65%;animation-delay:0.8s}
+  .fi-3{right:7%;top:25%;animation-delay:1.5s} .fi-4{right:12%;top:65%;animation-delay:2.2s}
+  @keyframes floatIcon{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(10deg)}}
+  .header-title { font-family:'Fredoka One',cursive; font-size:clamp(24px,6vw,40px); background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:4px; position:relative; z-index:1; }
+  .header-sub { color:var(--text-light); font-size:14px; font-weight:600; position:relative; z-index:1; }
+
+  .game-container { max-width:600px; margin:0 auto; padding:16px 16px 40px; }
+
+
+  /* WISH GRID */
+  .wish-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+  .wish-option { background:var(--surface); border:3px solid var(--border); border-radius:16px; padding:14px 8px; text-align:center; cursor:pointer; transition:all 0.2s; }
+  .wish-option:hover { border-color:var(--green); transform:translateY(-3px); box-shadow:var(--shadow); }
+  .wish-option.selected { border-color:var(--green); background:var(--green-light); }
+  .wish-emoji { font-size:34px; display:block; margin-bottom:5px; }
+  .wish-name { font-family:'Fredoka One',cursive; font-size:12px; }
+  .wish-price { font-size:11px; font-weight:800; color:var(--green-dark); margin-top:2px; }
+  body.dark .wish-price { color:var(--green); }
+  .start-btn { display:block; width:100%; padding:16px; border-radius:50px; border:none; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 20px rgba(91,191,122,0.4); margin-top:14px; }
+  .start-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+  /* CARD */
+  .card { background:var(--surface); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); border:2px solid var(--border); margin-bottom:12px; }
+  .wish-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .wish-big-emoji { font-size:44px; }
+  .wish-info { flex:1; }
+  .wish-label { font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; }
+  .wish-title { font-family:'Fredoka One',cursive; font-size:20px; }
+  .wish-target { font-size:13px; font-weight:800; color:var(--green-dark); }
+  body.dark .wish-target { color:var(--green); }
+  .progress-wrap { background:var(--border); border-radius:100px; height:18px; overflow:hidden; margin-bottom:5px; }
+  .progress-bar { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--green),var(--blue)); transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+  .progress-text { display:flex; justify-content:space-between; font-size:12px; font-weight:700; }
+  .saved-amt { color:var(--green-dark); font-family:'Fredoka One',cursive; }
+  body.dark .saved-amt { color:var(--green); }
+
+  /* STATS */
+  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+  .stat-pill { background:var(--surface2); border-radius:12px; padding:8px 6px; text-align:center; }
+  .stat-pill-val { font-family:'Fredoka One',cursive; font-size:17px; }
+  .stat-pill-label { font-size:10px; font-weight:700; color:var(--text-light); }
+
+  /* BADGES */
+  .badges-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; min-height:28px; }
+  .badge { display:flex; align-items:center; gap:4px; background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border:1.5px solid var(--yellow); border-radius:50px; padding:4px 10px; font-size:12px; font-weight:800; color:#8B6200; animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
+
+  /* EVENT CARD */
+  .event-card { border-radius:var(--radius); padding:20px; margin-bottom:12px; box-shadow:var(--shadow); border:2px solid var(--border); animation:slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .event-card.income    { background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border-color:#B3E8CC; }
+  .event-card.temptation{ background:linear-gradient(135deg,#FFF0F5,#FFE4EE); border-color:#FFB3CC; }
+  .event-card.dilemma   { background:linear-gradient(135deg,#FFFDE0,#FFF8CC); border-color:#FFD166; }
+  .event-card.random    { background:linear-gradient(135deg,#F0F5FF,#E4EEFF); border-color:#B3C8FF; }
+  .event-emoji { font-size:48px; display:block; text-align:center; margin-bottom:8px; }
+  .event-title { font-family:'Fredoka One',cursive; font-size:20px; text-align:center; margin-bottom:6px; }
+  .event-desc { font-size:14px; font-weight:600; color:var(--text-light); text-align:center; line-height:1.5; margin-bottom:14px; }
+  .event-amount { font-family:'Fredoka One',cursive; font-size:26px; text-align:center; margin-bottom:14px; }
+  .event-amount.plus { color:var(--green-dark); }
+  body.dark .event-amount.plus { color:var(--green); }
+  .event-amount.minus { color:var(--pink); }
+  .event-btns { display:flex; gap:10px; flex-direction:column; }
+  .event-btn { padding:14px; border-radius:50px; border:none; font-family:'Fredoka One',cursive; font-size:16px; cursor:pointer; transition:all 0.2s; width:100%; }
+  .event-btn:hover { transform:translateY(-2px); }
+  .btn-save     { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; box-shadow:0 4px 14px rgba(91,191,122,0.4); }
+  .btn-spend    { background:linear-gradient(135deg,var(--pink),var(--orange)); color:white; box-shadow:0 4px 14px rgba(255,107,157,0.4); }
+  .btn-dia-a    { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; box-shadow:0 4px 14px rgba(91,191,122,0.3); }
+  .btn-dia-b    { background:linear-gradient(135deg,var(--yellow),var(--orange)); color:white; box-shadow:0 4px 14px rgba(255,166,60,0.3); }
+  .btn-next     { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; box-shadow:0 4px 14px rgba(91,191,122,0.4); }
+  .consequence  { font-size:13px; font-weight:700; text-align:center; padding:10px; border-radius:12px; margin-bottom:10px; line-height:1.4; }
+  .consequence.good    { background:var(--green-light); color:var(--green-dark); }
+  .consequence.neutral { background:#FFF9E0; color:#8B6200; }
+  .consequence.bad     { background:#FFF0F5; color:#C0436D; }
+
+  /* SUMMARY */
+  .summary-card { background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border:2px solid #B3E8CC; border-radius:var(--radius); padding:20px; margin-bottom:12px; animation:slideUp 0.35s ease; }
+  .summary-title { font-family:'Fredoka One',cursive; font-size:20px; text-align:center; margin-bottom:14px; }
+  .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .summary-item { background:white; border-radius:12px; padding:10px; text-align:center; }
+  .summary-item-val { font-family:'Fredoka One',cursive; font-size:20px; display:block; }
+  .summary-item-label { font-size:11px; font-weight:700; color:var(--text-light); }
+  .summary-msg { font-size:14px; font-weight:700; text-align:center; color:var(--text-light); margin-bottom:14px; line-height:1.5; }
+
+  /* FEEDBACK */
+  .feedback { text-align:center; font-family:'Fredoka One',cursive; font-size:17px; min-height:26px; margin-bottom:8px; }
+  .feedback.good    { color:var(--green-dark); }
+  body.dark .feedback.good { color:var(--green); }
+  .feedback.bad     { color:var(--pink); }
+  .feedback.neutral { color:var(--orange); }
+
+  /* OVERLAYS */
+  .overlay { position:fixed; inset:0; backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:100; opacity:0; pointer-events:none; transition:opacity 0.3s; padding:20px; }
+  .overlay.show { opacity:1; pointer-events:all; }
+  .overlay-card { background:var(--surface); border-radius:28px; padding:32px 28px; text-align:center; max-width:340px; width:100%; transform:scale(0.8); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .overlay.show .overlay-card { transform:scale(1); }
+  .overlay-emoji { font-size:64px; display:block; margin-bottom:10px; }
+  .overlay-title { font-family:'Fredoka One',cursive; font-size:26px; margin-bottom:8px; }
+  .overlay-text  { font-size:14px; font-weight:600; color:var(--text-light); margin-bottom:12px; line-height:1.5; }
+  .overlay-sub   { font-family:'Fredoka One',cursive; font-size:15px; color:var(--orange); margin-bottom:16px; }
+  .btn-replay { padding:14px 32px; border-radius:100px; border:none; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; box-shadow:0 4px 16px rgba(91,191,122,0.4); }
+  #celebOverlay .overlay-card   { box-shadow:0 20px 60px rgba(91,191,122,0.3); border:3px solid #B3E8CC; }
+  #gameoverOverlay .overlay-card{ box-shadow:0 20px 60px rgba(255,107,157,0.3); border:3px solid #FFB3CC; }
+
+  .confetti-piece { position:fixed; border-radius:2px; pointer-events:none; z-index:200; animation:confettiFall linear forwards; }
+  @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="float-icon fi-1">🎯</span>
+  <span class="float-icon fi-2">💰</span>
+  <span class="float-icon fi-3">⭐</span>
+  <span class="float-icon fi-4">🎁</span>
+  <a class="close-btn" href="sparziel.html" id="closeBtn">✕</a>
+  <div class="header-title">Wunsch-Sparer 🐷</div>
+  <div class="header-sub">Spar auf deinen Traumwunsch – und widersteh den Versuchungen!</div>
+</div>
+
+<div class="game-container">
+
+  <!-- SELECT SCREEN -->
+  <div id="screenSelect">
+
+    <div class="card">
+      <div style="font-family:'Fredoka One',cursive;font-size:17px;margin-bottom:12px;text-align:center">🎁 Wähle deinen Wunsch!</div>
+      <div class="wish-grid" id="wishGrid"></div>
+      <button class="start-btn" id="startBtn" onclick="startGame()" disabled>🚀 Los geht's!</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screenGame" style="display:none">
+    <div class="card" id="wishCard">
+      <div class="wish-top">
+        <div class="wish-big-emoji" id="wcEmoji"></div>
+        <div class="wish-info">
+          <div class="wish-label">Mein Ziel</div>
+          <div class="wish-title" id="wcName"></div>
+          <div class="wish-target" id="wcTarget"></div>
+        </div>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-text">
+        <span class="saved-amt" id="savedAmt">0,00 €</span>
+        <span id="goalAmt"></span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill">
+        <div class="stat-pill-val" id="statWeek">1</div>
+        <div class="stat-pill-label">📅 Woche</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val" id="statStreak" style="color:var(--orange)">0🔥</div>
+        <div class="stat-pill-label">Spar-Streak</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val" id="statLeft">–</div>
+        <div class="stat-pill-label">noch ca.</div>
+      </div>
+    </div>
+
+    <div class="badges-row" id="badgesRow"></div>
+    <div class="feedback" id="feedback"></div>
+    <div id="eventArea"></div>
+  </div>
+
+</div>
+
+<!-- CELEBRATION -->
+<div class="overlay" id="celebOverlay">
+  <div class="overlay-card">
+    <span class="overlay-emoji" id="celebEmoji">🎉</span>
+    <div class="overlay-title" id="celebTitle" style="color:var(--green-dark)">Geschafft!</div>
+    <div class="overlay-text" id="celebText"></div>
+    <div class="overlay-sub" id="celebSub"></div>
+    <button class="btn-replay" onclick="resetGame()">🔄 Nochmal spielen</button>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="overlay" id="gameoverOverlay">
+  <div class="overlay-card">
+    <span class="overlay-emoji">😅</span>
+    <div class="overlay-title" style="color:var(--pink)">Knapp vorbei!</div>
+    <div class="overlay-text" id="gameoverText"></div>
+    <button class="btn-replay" onclick="resetGame()">🔄 Nochmal versuchen</button>
+  </div>
+</div>
+
+<a class="back-btn" href="sparziel.html" id="backBtn">← Zurück</a>
+
+<script>
+  if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const from = new URLSearchParams(window.location.search).get('from');
+    const url = from === 'lernspiele' ? 'lernspiele.html' : 'sparziel.html';
+    document.querySelectorAll('.close-btn,.back-btn').forEach(el => el.href = url);
+    buildWishGrid();
+  });
+
+  const DIFF = { temptChance:0.40, bonus:1.0, extra:4 };
+  const difficulty = 'medium';
+
+  const ALL_WISHES = [
+    { emoji:'🛼', name:'Rollschuhe',    price:2500 },
+    { emoji:'🧱', name:'Lego-Set',      price:4000 },
+    { emoji:'🦁', name:'Zoobesuch',     price:1000 },
+    { emoji:'🎮', name:'Spiel',         price:6000 },
+    { emoji:'📚', name:'Buch-Paket',    price:1000 },
+    { emoji:'🚲', name:'Fahrrad',       price:8000 },
+    { emoji:'🎨', name:'Malset',        price:1200 },
+    { emoji:'🏕️', name:'Zelt',          price:3500 },
+    { emoji:'🎸', name:'Ukulele',       price:2000 },
+    { emoji:'🧩', name:'Puzzle',        price:1500 },
+    { emoji:'🪁', name:'Nerf-Gun',      price:2500 },
+    { emoji:'🛹', name:'Skateboard',    price:4500 },
+    { emoji:'🎭', name:'Theaterkarte',  price:1000 },
+    { emoji:'🔭', name:'Fernrohr',      price:3000 },
+  ];
+
+  const INCOME = [
+    { emoji:'🤑', title:'Taschengeld!',        desc:'Es ist Montag – Taschengeld-Tag!',                   amount:200 },
+    { emoji:'🎂', title:'Geburtstagsgeld!',     desc:'Oma hat dir Geld geschenkt. Was ein Glück!',         amount:500 },
+    { emoji:'🌿', title:'Nachbar geholfen!',    desc:'Du hast beim Rasenmähen geholfen.',                  amount:300 },
+    { emoji:'🌳', title:'Kastanien verkauft!',   desc:'Du hast Kastanien gesammelt und am Markt verkauft.', amount:150 },
+    { emoji:'🎨', title:'Bild gemalt!',          desc:'Du hast Oma ein Bild gemalt – sie hat sich so gefreut, dass sie dir was gibt!', amount:150 },
+    { emoji:'♻️', title:'Flaschen gesammelt!', desc:'Du hast alte Flaschen zum Supermarkt gebracht.',     amount:100 },
+    { emoji:'🦷', title:'Zahnfee!',            desc:'Heute Nacht war die Zahnfee da!',                    amount:100 },
+    { emoji:'🐟', title:'Goldfisch gehütet!',    desc:'Die Nachbarn waren im Urlaub – du hast ihren Goldfisch versorgt.', amount:200 },
+    { emoji:'🐕', title:'Hund gassi geführt!',  desc:'Der Nachbarshund war heute bei dir.',                amount:200 },
+  ];
+
+  const TEMPTATIONS = [
+    { emoji:'🍦', title:'Eiswagen!',          desc:'Der Eiswagen kommt! Ein Eis kostet 1,50 €.',          amount:150 },
+    { emoji:'🎪', title:'Jahrmarkt!',         desc:'Eine Runde Kettenkarussell kostet 2 €.',              amount:200 },
+    { emoji:'🃏', title:'Sammelkarten!',      desc:'Neue Sammelkarten für 1 €. Kaufst du?',              amount:100 },
+    { emoji:'🍿', title:'Kino!',              desc:'Deine Freunde gehen ins Kino. Ticket: 5 €.',          amount:500 },
+    { emoji:'🎈', title:'Flohmarkt!',         desc:'Tolles Spielzeug für 2,50 €. Kaufst du?',            amount:250 },
+    { emoji:'🍭', title:'Süßigkeitenladen!',  desc:'Deine Lieblingsschokoriegel für 1 €.',               amount:100 },
+    { emoji:'🎡', title:'Rummelplatz!',          desc:'Schulfreunde gehen zum Rummelplatz. Eine Runde kostet 2 €.', amount:200 },
+  ];
+
+  const DILEMMAS = [
+    { emoji:'🌞', title:'Freibad-Tag!',
+      desc:'Deine Freunde gehen ins Freibad. Mitgehen oder zuhause bleiben?',
+      optA:{ label:'🏊 Mitgehen (−2,00 €)',         delta:-200, msg:'War mega Spaß! Aber 2 € weniger im Sparschwein.', type:'neutral' },
+      optB:{ label:'🏠 Zuhause bleiben (0 €)',       delta:0,    msg:'Du hast gespart – vielleicht nächstes Mal!', type:'neutral' }
+    },
+    { emoji:'🌧️', title:'Regentag!',
+      desc:'Es regnet. Du kannst zuhause chillen oder Pfandflaschen sammeln gehen.',
+      optA:{ label:'📺 Zuhause bleiben (0 €)',      delta:0,    msg:'War gemütlich – aber kein Geld verdient.', type:'neutral' },
+      optB:{ label:'♻️ Flaschen sammeln (+1,50 €)', delta:150,  msg:'Kalt und nass, aber 1,50 € reicher!', type:'good' }
+    },
+    { emoji:'💝', title:'Oma gibt dir Geld!',
+      desc:'Oma gibt dir 5 €. Alles sparen oder etwas genießen?',
+      optA:{ label:'🐷 Alles sparen (+5,00 €)',     delta:500, spent:0,   msg:'Stark! Das Sparschwein wird schwerer!', type:'good' },
+      optB:{ label:'🍰 2 € genießen (+3,00 €)',     delta:300, spent:200, msg:'Lecker war es – und 3 € hast du trotzdem gespart!', type:'neutral' }
+    },
+    { emoji:'🍔', title:'Burger nach dem Sport!',
+      desc:'Alle gehen nach dem Training Burger essen. Mitmachen oder heimgehen?',
+      optA:{ label:'🍔 Mitessen (−2,50 €)',          delta:-250, msg:'Lecker! Aber 2,50 € sind weg.', type:'neutral' },
+      optB:{ label:'🏃 Heimgehen (0 €)',             delta:0,    msg:'Zuhause schmeckt es auch – und du hast gespart!', type:'good' }
+    },
+    { emoji:'📱', title:'Coole App!',
+      desc:'Im App Store gibt es eine coole App für 1,99 €. Kaufen oder warten?',
+      optA:{ label:'📲 App kaufen (−2,00 €)',        delta:-200, msg:'Macht Spaß – aber 2 € sind weg.', type:'bad' },
+      optB:{ label:'⏳ Warten (0 €)',               delta:0,    msg:'Es gibt auch viele tolle kostenlose Apps!', type:'good' }
+    },
+  ];
+
+  const RANDOM_GOOD = [
+    { emoji:'🍀', title:'Glückstag!',      desc:'Du findest eine Münze auf dem Gehweg!',            delta:50,  type:'good' },
+    { emoji:'💌', title:'Brief von Opa!',  desc:'Opa hat dir zum Spaß 1 € geschickt.',             delta:100, type:'good' },
+    { emoji:'🌟', title:'Netter Nachbar!',   desc:'Der Nachbar lobt dich spontan und gibt dir etwas.',  delta:50,  type:'good' },
+  ];
+  const RANDOM_BAD = [
+    { emoji:'🕳️', title:'Hoppla!',          desc:'Loch in der Hosentasche – 0,50 € verloren!',          delta:-50,  type:'bad' },
+    { emoji:'🧃', title:'Getränk verschüttet!', desc:'Dein Lieblingsgetränk ist umgefallen – du musst ein neues kaufen.', delta:-50, type:'bad' },
+    { emoji:'😱', title:'Missgeschick!',     desc:'Etwas kaputt gemacht – 1 € Schadensersatz.',           delta:-100, type:'bad' },
+  ];
+
+  const BADGE_DEFS = {
+    week1:   '⭐ Erste Woche!',
+    str3:    '🔥 3er-Streak!',
+    str5:    '⚡ 5er-Streak!',
+    str10:   '🏆 Spar-Champion!',
+    p25:     '🌱 25% geschafft!',
+    p50:     '🌿 Halbzeit!',
+    p75:     '🌳 75% – fast da!',
+  };
+
+  let wish=null, saved=0, week=0, maxWeeks=0;
+  let streak=0, totalEarned=0, totalSpent=0;
+  let weekSaved=0, weekSpent=0, eventsThisWeek=0, savedAtWeekStart=0;
+  let badges=[], weekLog=[];
+  let eventsPerWeek = 2; // wird pro Woche neu gesetzt
+
+  function fmt(c){ return (c/100).toFixed(2).replace('.',',') + ' €'; }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function buildWishGrid() {
+    const shuffled = [...ALL_WISHES].sort(() => Math.random() - 0.5);
+    const WISHES = shuffled.slice(0, 6);
+    const grid = document.getElementById('wishGrid');
+    grid.innerHTML = '';
+    WISHES.forEach(w => {
+      const el = document.createElement('div');
+      el.className = 'wish-option';
+      el.innerHTML = `<span class="wish-emoji">${w.emoji}</span><div class="wish-name">${w.name}</div><div class="wish-price">${fmt(w.price)}</div>`;
+      el.onclick = () => {
+        document.querySelectorAll('.wish-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        wish = w;
+        document.getElementById('startBtn').disabled = false;
+      };
+      grid.appendChild(el);
+    });
+  }
+
+  function startGame() {
+    if (!wish) return;
+    saved=0; week=0; streak=0; totalEarned=0; totalSpent=0;
+    weekSaved=0; weekSpent=0; eventsThisWeek=0; badges=[], weekLog=[];
+    birthdayMoneyUsed = false; savedAtWeekStart = 0;
+    eventsPerWeek = Math.random() < 0.33 ? 3 : 2;
+    maxWeeks = Math.ceil(wish.price / (200 * DIFF.bonus)) + DIFF.extra;
+
+    document.getElementById('wcEmoji').textContent   = wish.emoji;
+    document.getElementById('wcName').textContent    = wish.name;
+    document.getElementById('wcTarget').textContent  = fmt(wish.price);
+    document.getElementById('goalAmt').textContent   = fmt(wish.price);
+    document.getElementById('badgesRow').innerHTML   = '';
+    document.getElementById('eventArea').innerHTML   = '';
+    updateUI();
+
+    document.getElementById('screenSelect').style.display = 'none';
+    document.getElementById('screenGame').style.display   = 'block';
+    nextEvent();
+  }
+
+  function updateUI() {
+    const pct = Math.min(100, (saved / wish.price) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('savedAmt').textContent    = fmt(saved);
+    document.getElementById('statWeek').textContent    = week + 1;
+    document.getElementById('statStreak').textContent  = streak + '🔥';
+    const left = saved >= wish.price ? 0 : Math.ceil((wish.price - saved) / 200);
+    document.getElementById('statLeft').textContent    = left > 0 ? '~' + left + ' Wo.' : '🎉';
+  }
+
+  let birthdayMoneyUsed = false;
+
+  function nextEvent() {
+    clearFeedback();
+    if (saved >= wish.price) { showCelebration(); return; }
+    if (week >= maxWeeks)    { showGameOver();    return; }
+
+    if (eventsThisWeek >= eventsPerWeek) { showWeeklySummary(); return; }
+    eventsThisWeek++;
+
+    const d = DIFF;
+    const hasSaved = saved > 0;
+
+    // 1. Event jeder Woche: immer Taschengeld
+    if (eventsThisWeek === 1) { showTaschengeld(); return; }
+
+    // 2. Event: Zufalls (15%), Dilemma (25%), Verlockung (30%), Einnahme (30%)
+    if (hasSaved && Math.random() < 0.15)                { showRandom();     return; }
+    if (hasSaved && week > 0 && Math.random() < 0.294)   { showDilemma();    return; }
+    if (hasSaved && Math.random() < 0.47)                { showTemptation(); return; }
+    showIncome();
+  }
+
+  function showTaschengeld() {
+    const amt = Math.round(200 * DIFF.bonus);
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+
+    if (Math.random() < 0.15) {
+      // Dilemma-Variante: alles sparen oder 1€ ausgeben
+      const half = Math.round(amt / 2);
+      card.className = 'event-card dilemma';
+      card.innerHTML = `
+        <span class="event-emoji">🤑</span>
+        <div class="event-title">Taschengeld!</div>
+        <div class="event-desc">Du bekommst ${fmt(amt)} Taschengeld. Alles ins Sparschwein – oder gönnst du dir etwas?</div>
+        <div class="event-btns">
+          <button class="event-btn btn-dia-a"
+            data-delta="${amt}" data-spent="0" data-msg="Stark! Das Sparschwein freut sich!" data-type="good" data-label="🤑 Taschengeld gespart"
+            onclick="resolveDilemma(this)">🐷 Alles sparen (+${fmt(amt)})</button>
+          <button class="event-btn btn-dia-b"
+            data-delta="${half}" data-spent="${half}" data-msg="Die Hälfte gespart – und die andere Hälfte genossen!" data-type="neutral" data-label="🤑 Taschengeld gespart"
+            data-saveonly="true"
+            onclick="resolveDilemma(this)">🍬 Hälfte ausgeben (+${fmt(half)})</button>
+        </div>`;
+    } else {
+      card.className = 'event-card income';
+      card.innerHTML = `
+        <span class="event-emoji">🤑</span>
+        <div class="event-title">Taschengeld!</div>
+        <div class="event-desc">Es ist Montag – Taschengeld-Tag! Jede Woche kommt es pünktlich.</div>
+        <div class="event-amount plus">+${fmt(amt)}</div>
+        <div class="event-btns">
+          <button class="event-btn btn-save" onclick="earn(${amt}, '🤑 Taschengeld')">🐷 Ins Sparschwein!</button>
+        </div>`;
+    }
+    area.innerHTML = ''; area.appendChild(card);
+  }
+
+  function showIncome() {
+    const pool = INCOME.filter(e => {
+      if (e.title === 'Taschengeld!') return false;
+      if (e.title === 'Geburtstagsgeld!' && birthdayMoneyUsed) return false;
+      return true;
+    });
+    const ev = pick(pool);
+    if (ev.title === 'Geburtstagsgeld!') birthdayMoneyUsed = true;
+    const amt = Math.round(ev.amount * DIFF.bonus);
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+    card.className = 'event-card income';
+    card.innerHTML = `
+      <span class="event-emoji">${ev.emoji}</span>
+      <div class="event-title">${ev.title}</div>
+      <div class="event-desc">${ev.desc}</div>
+      <div class="event-amount plus">+${fmt(amt)}</div>
+      <div class="event-btns">
+        <button class="event-btn btn-save" onclick="earn(${amt}, '${ev.emoji} ${ev.title.replace(/!$/,'')}')">🐷 Ins Sparschwein!</button>
+      </div>`;
+    area.innerHTML = ''; area.appendChild(card);
+  }
+
+  function showTemptation() {
+    const pool = TEMPTATIONS.filter(e => e.amount <= saved);
+    // Fallback: wenn alle zu teuer, normale Einnahme zeigen
+    if (pool.length === 0) { showIncome(); return; }
+    const ev = pick(pool);
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+    card.className = 'event-card temptation';
+    card.innerHTML = `
+      <span class="event-emoji">${ev.emoji}</span>
+      <div class="event-title">${ev.title}</div>
+      <div class="event-desc">${ev.desc}</div>
+      <div class="event-amount minus">−${fmt(ev.amount)}</div>
+      <div class="event-btns">
+        <button class="event-btn btn-spend" onclick="spend(${ev.amount}, '${ev.emoji} ${ev.title.replace(/!$/,'')}')">😋 Kaufen!</button>
+        <button class="event-btn btn-save"  onclick="skip()">💪 Nein danke – ich spar!</button>
+      </div>`;
+    area.innerHTML = ''; area.appendChild(card);
+  }
+
+  function showDilemma() {
+    const ev = pick(DILEMMAS);
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+    card.className = 'event-card dilemma';
+    card.innerHTML = `
+      <span class="event-emoji">${ev.emoji}</span>
+      <div class="event-title">${ev.title}</div>
+      <div class="event-desc">${ev.desc}</div>
+      <div class="event-btns">
+        <button class="event-btn btn-dia-a"
+          data-delta="${ev.optA.delta}" data-spent="${ev.optA.spent||0}" data-msg="${ev.optA.msg}" data-type="${ev.optA.type}"
+          onclick="resolveDilemma(this)">${ev.optA.label}</button>
+        <button class="event-btn btn-dia-b"
+          data-delta="${ev.optB.delta}" data-spent="${ev.optB.spent||0}" data-msg="${ev.optB.msg}" data-type="${ev.optB.type}"
+          onclick="resolveDilemma(this)">${ev.optB.label}</button>
+      </div>`;
+    area.innerHTML = ''; area.appendChild(card);
+  }
+
+  function showRandom() {
+    // Wenn nichts gespart: nur positive Zufalls-Events
+    const pool = saved > 0 ? [...RANDOM_GOOD, ...RANDOM_BAD] : RANDOM_GOOD;
+    const ev = pick(pool);
+    const sign = ev.delta >= 0 ? '+' : '−';
+    const cls  = ev.delta >= 0 ? 'plus' : 'minus';
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+    card.className = 'event-card random';
+    card.innerHTML = `
+      <span class="event-emoji">${ev.emoji}</span>
+      <div class="event-title">${ev.title}</div>
+      <div class="event-desc">${ev.desc}</div>
+      <div class="event-amount ${cls}">${sign}${fmt(Math.abs(ev.delta))}</div>
+      <div class="event-btns">
+        <button class="event-btn btn-next" onclick="resolveRandom(${ev.delta}, '${ev.emoji} ${ev.title}')">OK, weiter!</button>
+      </div>`;
+    area.innerHTML = ''; area.appendChild(card);
+  }
+
+  function showWeeklySummary() {
+    week++;
+    eventsThisWeek = 0;
+    eventsPerWeek = Math.random() < 0.33 ? 3 : 2;
+    checkBadges();
+    const logIn  = weekLog.filter(e => e.type === 'in').reduce((s, e) => s + e.amt, 0);
+    const logOut = weekLog.filter(e => e.type === 'out').reduce((s, e) => s + e.amt, 0);
+    const netto  = logIn - logOut;
+    const weeksLeft = Math.ceil((wish.price - saved) / 200);
+    const msg = netto > 0
+      ? '🌟 Super Woche! Du hast mehr gespart als ausgegeben!'
+      : netto < 0
+      ? '😬 Diese Woche hast du mehr ausgegeben als eingenommen. Nächste Woche packst du das!'
+      : '😊 Ausgeglichene Woche – weiter so!';
+    const nettoColor = netto >= 0 ? 'var(--green-dark)' : 'var(--pink)';
+    const nettoSign  = netto >= 0 ? '+' : '−';
+
+    // Aufschlüsselung
+    const inItems  = weekLog.filter(e => e.type === 'in');
+    const outItems = weekLog.filter(e => e.type === 'out');
+
+    const renderItems = (items, sign, color) => items.length === 0 ? '<div style="font-size:12px;color:var(--text-light);padding:4px 0">–</div>' :
+      items.map(e => `<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;padding:3px 0;border-bottom:1px dashed var(--border)">
+        <span>${e.label}</span><span style="color:${color}">${sign}${fmt(e.amt)}</span>
+      </div>`).join('');
+
+    const area = document.getElementById('eventArea');
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+    card.innerHTML = `
+      <div class="summary-title">📊 Woche ${week} geschafft!</div>
+
+      <div style="background:var(--green-light);border-radius:12px;padding:10px 12px;margin-bottom:8px">
+        <div style="font-family:'Fredoka One',cursive;font-size:13px;color:var(--green-dark);margin-bottom:6px">📥 Einnahmen</div>
+        ${renderItems(inItems, '+', 'var(--green-dark)')}
+        <div style="display:flex;justify-content:space-between;font-family:'Fredoka One',cursive;font-size:15px;padding-top:6px">
+          <span>Gesamt</span><span style="color:var(--green-dark)">+${fmt(weekSaved)}</span>
+        </div>
+      </div>
+
+      <div style="background:#FFF0F5;border-radius:12px;padding:10px 12px;margin-bottom:8px" class="ausgaben-box">
+        <div style="font-family:'Fredoka One',cursive;font-size:13px;color:var(--pink);margin-bottom:6px">📤 Ausgaben</div>
+        ${renderItems(outItems, '−', 'var(--pink)')}
+        <div style="display:flex;justify-content:space-between;font-family:'Fredoka One',cursive;font-size:15px;padding-top:6px">
+          <span>Gesamt</span><span style="color:var(--pink)">−${fmt(weekSpent)}</span>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-item-val" style="color:${nettoColor}">${nettoSign}${fmt(Math.abs(netto))}</span>
+          <div class="summary-item-label">Diese Woche gespart</div>
+        </div>
+        <div class="summary-item">
+          <span class="summary-item-val">${fmt(saved)}</span>
+          <div class="summary-item-label">Gesamt 🐷</div>
+        </div>
+        <div class="summary-item" style="grid-column:1/-1">
+          <span class="summary-item-val" style="color:var(--orange)">${saved >= wish.price ? '🎉' : '~' + weeksLeft + ' Wo.'}</span>
+          <div class="summary-item-label">noch ca.</div>
+        </div>
+      </div>
+      <div class="summary-msg">${msg}</div>
+      <button class="event-btn btn-next" onclick="afterSummary()">➡️ Nächste Woche!</button>`;
+    area.innerHTML = ''; area.appendChild(card);
+    weekSaved = 0; weekSpent = 0; weekLog = []; savedAtWeekStart = saved;
+    document.getElementById('statWeek').textContent = week + 1;
+  }
+
+  function afterSummary() {
+    if (saved >= wish.price) { showCelebration(); return; }
+    if (week >= maxWeeks)    { showGameOver();    return; }
+    nextEvent();
+  }
+
+  function earn(amt, label) {
+    saved += amt; weekSaved += amt; totalEarned += amt; streak++;
+    weekLog.push({ label: label || 'Einnahme', amt, type: 'in' });
+    showFeedback('+' + fmt(amt) + ' gespart! 🎉', 'good');
+    updateUI();
+    if (saved >= wish.price) { setTimeout(showCelebration, 600); return; }
+    setTimeout(nextEvent, 700);
+  }
+
+  function spend(amt, label) {
+    saved = Math.max(0, saved - amt); weekSpent += amt; totalSpent += amt; streak = 0;
+    weekLog.push({ label: label || 'Ausgabe', amt, type: 'out' });
+    showFeedback('−' + fmt(amt) + ' ausgegeben 😅', 'bad');
+    updateUI();
+    setTimeout(nextEvent, 700);
+  }
+
+  function skip() {
+    streak++;
+    showFeedback('Stark geblieben! 💪', 'good');
+    setTimeout(nextEvent, 700);
+  }
+
+  function resolveDilemma(btn) {
+    const delta = parseInt(btn.dataset.delta);
+    const spent = parseInt(btn.dataset.spent) || 0;
+    const msg   = btn.dataset.msg;
+    const type  = btn.dataset.type;
+
+    const logLabel = btn.dataset.label || btn.textContent.split('(')[0].trim();
+
+    if (delta > 0)      { saved += delta; weekSaved += delta; totalEarned += delta; streak++; weekLog.push({ label: logLabel, amt: delta, type: 'in' }); }
+    else if (delta < 0) { saved = Math.max(0, saved + delta); weekSpent += Math.abs(delta); totalSpent += Math.abs(delta); streak = 0; weekLog.push({ label: logLabel, amt: Math.abs(delta), type: 'out' }); }
+    else                { streak++; }
+
+    // Zusätzliche Ausgabe: bei Taschengeld-Dilemma ist spent bereits im delta eingepreist
+    // (delta=1€ gespart, spent=1€ ausgegeben von 2€ Taschengeld → nur für Log und totalSpent)
+    // Bei Oma-Geld (delta=3€ gespart, spent=2€ ausgegeben von 5€) muss spent in weekSpent
+    // Unterscheidung: data-saveonly="true" = spent schon im delta verrechnet
+    if (spent > 0) {
+      const spentLabel = btn.dataset.label ? '🍬 Taschengeld ausgegeben' : '🍰 Genossen';
+      totalSpent += spent;
+      weekSpent += spent;
+      weekLog.push({ label: spentLabel, amt: spent, type: 'out' });
+    }
+
+    updateUI();
+
+    const area = document.getElementById('eventArea');
+    const btns = area.querySelector('.event-btns');
+    const con = document.createElement('div');
+    con.className = 'consequence ' + type;
+    con.textContent = msg;
+    btns.replaceWith(con);
+
+    const next = document.createElement('button');
+    next.className = 'event-btn btn-next';
+    next.style.marginTop = '10px';
+    next.textContent = '➡️ Weiter';
+    next.onclick = () => { if (saved >= wish.price) showCelebration(); else nextEvent(); };
+    area.querySelector('.event-card').appendChild(next);
+  }
+
+  function resolveRandom(delta, label) {
+    if (delta > 0)      { saved += delta; weekSaved += delta; totalEarned += delta; weekLog.push({ label: label||'Zufallsgewinn', amt: delta, type: 'in' }); }
+    else if (delta < 0) { saved = Math.max(0, saved + delta); weekSpent += Math.abs(delta); totalSpent += Math.abs(delta); weekLog.push({ label: label||'Zufallsausgabe', amt: Math.abs(delta), type: 'out' }); }
+    updateUI();
+    if (saved >= wish.price) { setTimeout(showCelebration, 400); return; }
+    setTimeout(nextEvent, 400);
+  }
+
+  function checkBadges() {
+    const add = (key) => {
+      if (badges.includes(key)) return;
+      badges.push(key);
+      const el = document.createElement('div');
+      el.className = 'badge';
+      el.textContent = BADGE_DEFS[key];
+      document.getElementById('badgesRow').appendChild(el);
+    };
+    if (week === 1) add('week1');
+    if (streak >= 3) add('str3');
+    if (streak >= 5) add('str5');
+    if (streak >= 10) add('str10');
+    if (saved >= wish.price * 0.25) add('p25');
+    if (saved >= wish.price * 0.5)  add('p50');
+    if (saved >= wish.price * 0.75) add('p75');
+  }
+
+  function showFeedback(msg, type) {
+    const el = document.getElementById('feedback');
+    el.textContent = msg; el.className = 'feedback ' + type;
+  }
+  function clearFeedback() {
+    const el = document.getElementById('feedback');
+    el.textContent = ''; el.className = 'feedback';
+  }
+
+  function showCelebration() {
+    document.getElementById('celebEmoji').textContent  = wish.emoji;
+    document.getElementById('celebTitle').textContent  = wish.name + ' erreicht! 🎉';
+    document.getElementById('celebText').textContent   = `In ${week} Wochen hast du ${fmt(totalEarned)} gespart und ${fmt(totalSpent)} ausgegeben.`;
+    document.getElementById('celebSub').textContent    = '🗓️ ' + week + ' Wochen · 🔥 Streak: ' + streak;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+  }
+
+  function showGameOver() {
+    document.getElementById('gameoverText').textContent =
+      `Du hast ${fmt(saved)} von ${fmt(wish.price)} gespart – das sind ${Math.round((saved/wish.price)*100)}%! Beim nächsten Versuch schaffst du es! 💪`;
+    document.getElementById('gameoverOverlay').classList.add('show');
+  }
+
+  function resetGame() {
+    document.getElementById('celebOverlay').classList.remove('show');
+    document.getElementById('gameoverOverlay').classList.remove('show');
+    document.getElementById('screenGame').style.display   = 'none';
+    document.getElementById('screenSelect').style.display = 'block';
+    document.querySelectorAll('.wish-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('eventArea').innerHTML  = '';
+    document.getElementById('badgesRow').innerHTML  = '';
+    wish=null; saved=0; week=0; streak=0;
+    totalEarned=0; totalSpent=0; weekSaved=0; weekSpent=0; eventsThisWeek=0; badges=[], weekLog=[];
+    birthdayMoneyUsed = false;
+    buildWishGrid();
+  }
+
+  function launchConfetti() {
+    const colors = ['#5BBF7A','#4AACDB','#FFD166','#FF6B9D','#9B7FE8','#FF9A3C'];
+    for (let i=0; i<70; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.cssText = `left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.2+Math.random()*1.5}s;animation-delay:${Math.random()*0.4}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }, i * 25);
+    }
+  }
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body>
+</html>

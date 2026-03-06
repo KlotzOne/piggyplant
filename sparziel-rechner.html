@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sparziel-Rechner</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-dark:#2A85B0;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+    --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+    --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+    --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.12);
+  }
+  body.dark {
+    --bg:#0F1A14; --text:#E8F5EE; --text-light:#8FBFA0;
+    --surface:#1A2E20; --surface2:#1E3525; --border:#2A4A35;
+    --shadow:0 6px 24px rgba(0,0,0,0.4);
+  }
+  body.dark .header { background:linear-gradient(135deg,#0A2018,#0F2A20); border-bottom-color:#1A4030; }
+  body.dark .milestone-badge { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; color:var(--yellow); }
+  body.dark .motivation-box { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; color:var(--yellow); }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  /* CLOSE BTN */
+  .close-btn { position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(91,191,122,0.4); color:var(--green-dark); font-size:20px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.2s; z-index:10; }
+  .close-btn:hover { background:rgba(91,191,122,0.2); transform:scale(1.1); }
+  body.dark .close-btn { color:var(--green); }
+
+  /* DARK TOGGLE */
+  .dark-toggle { position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.3); border:2px solid rgba(91,191,122,0.4); border-radius:50px; width:48px; height:26px; cursor:pointer; z-index:10; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+
+  /* HEADER */
+  .header { text-align:center; padding:20px 20px 16px; background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border-bottom:2px solid #B3E8CC; position:relative; overflow:hidden; }
+  .float-icon { position:absolute; animation:floatIcon 4s ease-in-out infinite; opacity:0.6; font-size:22px; pointer-events:none; }
+  .fi-1 { left:7%;  top:15%; animation-delay:0s; }
+  .fi-2 { left:12%;  top:70%; animation-delay:0.8s; }
+  .fi-3 { right:4%; top:25%; animation-delay:1.5s; }
+  .fi-4 { right:7%; top:60%; animation-delay:2.2s; }
+  @keyframes floatIcon { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(10deg)} }
+  .header-title { font-family:'Fredoka One',cursive; font-size:clamp(26px,6vw,42px); background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:4px; position:relative; z-index:1; }
+  .header-sub { color:var(--text-light); font-size:14px; font-weight:600; position:relative; z-index:1; }
+
+  /* CONTAINER */
+  .game-container { max-width:600px; margin:0 auto; padding:16px 16px 40px; }
+
+  /* INPUT CARD */
+  .input-card { background:var(--surface); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:2px solid var(--border); margin-bottom:16px; }
+  .input-card h3 { font-family:'Fredoka One',cursive; font-size:20px; color:var(--text); margin-bottom:16px; }
+  .input-group { margin-bottom:14px; }
+  .input-label { font-size:13px; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; display:block; }
+  .input-row { display:flex; gap:10px; align-items:center; }
+  .emoji-prefix { font-size:24px; flex-shrink:0; }
+  input[type="text"], input[type="number"] {
+    width:100%; padding:12px 16px; border-radius:14px;
+    border:2px solid var(--border); background:var(--bg);
+    color:var(--text); font-family:'Nunito',sans-serif;
+    font-size:16px; font-weight:700; outline:none;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  input[type="text"]:focus, input[type="number"]:focus {
+    border-color:var(--green); box-shadow:0 0 0 3px rgba(91,191,122,0.2);
+  }
+  body.dark input[type="text"], body.dark input[type="number"] {
+    background:var(--surface2); border-color:var(--border); color:var(--text);
+  }
+  input[type="number"] { max-width:160px; }
+  .euro-suffix { font-size:15px; font-weight:800; color:var(--text-light); flex-shrink:0; }
+
+  /* SLIDER */
+  .slider-group { margin-bottom:18px; }
+  .slider-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .slider-label { font-size:13px; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:6px; }
+  .slider-value { font-family:'Fredoka One',cursive; font-size:22px; color:var(--green-dark); background:var(--green-light); padding:4px 14px; border-radius:50px; min-width:80px; text-align:center; }
+  body.dark .slider-value { color:var(--green); background:var(--surface2); }
+  .slider-value-wrap { display:flex; align-items:center; gap:6px; }
+  .slider-num-input {
+    font-family:'Fredoka One',cursive; font-size:18px; color:var(--green-dark);
+    background:var(--green-light); border:2px solid transparent;
+    border-radius:50px; padding:4px 10px; width:90px; text-align:center;
+    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .slider-num-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(91,191,122,0.2); }
+  body.dark .slider-num-input { color:var(--green); background:var(--surface2); }
+  .slider-euro { font-size:15px; font-weight:800; color:var(--text-light); }
+  .slider-wrap { position:relative; padding:8px 0; }
+  input[type="range"] {
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:10px; border-radius:100px;
+    outline:none; cursor:pointer;
+    background:linear-gradient(to right, var(--green) 0%, var(--green) var(--pct,50%), var(--border) var(--pct,50%), var(--border) 100%);
+    transition:background 0.1s;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance:none; appearance:none;
+    width:30px; height:30px; border-radius:50%;
+    background:linear-gradient(135deg,var(--green),var(--blue));
+    border:3px solid white; box-shadow:0 3px 10px rgba(91,191,122,0.5);
+    cursor:grab; transition:transform 0.15s, box-shadow 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:active { cursor:grabbing; transform:scale(1.2); box-shadow:0 6px 18px rgba(91,191,122,0.6); }
+  input[type="range"]::-moz-range-thumb {
+    width:30px; height:30px; border-radius:50%;
+    background:linear-gradient(135deg,var(--green),var(--blue));
+    border:3px solid white; box-shadow:0 3px 10px rgba(91,191,122,0.5);
+    cursor:grab;
+  }
+  body.dark input[type="range"] { border-color:var(--border); }
+  .slider-minmax { display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:var(--text-light); margin-top:4px; padding:0 2px; }
+
+  /* FREQUENCY TOGGLE */
+  .freq-toggle { display:flex; gap:8px; margin-top:10px; }
+  .freq-btn { flex:1; padding:10px; border-radius:12px; border:2px solid var(--border); background:var(--bg); color:var(--text-light); font-family:'Nunito',sans-serif; font-weight:800; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .freq-btn.active { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border-color:transparent; box-shadow:0 4px 12px rgba(91,191,122,0.35); }
+  body.dark .freq-btn { background:var(--surface2); }
+
+  /* CALC BUTTON */
+  .calc-btn { width:100%; padding:16px; border-radius:50px; border:none; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 20px rgba(91,191,122,0.4); margin-top:4px; }
+  .calc-btn:hover { transform:translateY(-2px) scale(1.02); }
+  .calc-btn:active { transform:scale(0.98); }
+
+  /* RESULT CARD */
+  .result-card { background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border:2px solid var(--border); margin-bottom:16px; display:none; }
+  .result-card.show { display:block; animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+  .result-hero { text-align:center; margin-bottom:20px; }
+  .result-emoji { font-size:64px; display:block; animation:bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes bounceIn { from{transform:scale(0)} to{transform:scale(1)} }
+  .result-title { font-family:'Fredoka One',cursive; font-size:28px; margin:8px 0 4px; }
+  .result-goal-name { font-size:16px; font-weight:800; color:var(--green-dark); margin-bottom:12px; }
+  body.dark .result-goal-name { color:var(--green); }
+
+  /* STAT BOXES */
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .stat-box { background:var(--green-light); border-radius:16px; padding:14px; text-align:center; }
+  body.dark .stat-box { background:var(--surface2); }
+  .stat-value { font-family:'Fredoka One',cursive; font-size:26px; color:var(--green-dark); display:block; }
+  body.dark .stat-value { color:var(--green); }
+  .stat-label { font-size:12px; font-weight:700; color:var(--text-light); margin-top:2px; }
+
+  /* MOTIVATION */
+  .motivation-box { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border:2px solid var(--yellow); border-radius:16px; padding:14px 18px; margin-bottom:16px; font-size:14px; font-weight:700; color:#8B6200; line-height:1.6; text-align:center; }
+
+  /* MILESTONES */
+  .milestones { margin-bottom:16px; }
+  .milestones-title { font-family:'Fredoka One',cursive; font-size:17px; margin-bottom:10px; }
+  .milestone-list { display:flex; flex-wrap:wrap; gap:8px; }
+  .milestone-badge { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border:2px solid var(--yellow); border-radius:50px; padding:6px 14px; font-size:13px; font-weight:800; color:#8B6200; display:flex; align-items:center; gap:6px; }
+
+  /* WEEK TABLE */
+  .week-table-wrap { border-radius:16px; overflow:hidden; border:2px solid var(--border); margin-bottom:16px; }
+  .week-table-header { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:'Fredoka One',cursive; font-size:15px; padding:10px 16px; display:flex; justify-content:space-between; }
+  .week-row { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; font-size:13px; font-weight:700; border-bottom:1px solid var(--border); }
+  .week-row:last-child { border-bottom:none; }
+  .week-row:nth-child(even) { background:var(--surface2); }
+  .week-row.highlight { background:linear-gradient(135deg,var(--green-light),#D0F5E0) !important; }
+  body.dark .week-row.highlight { background:linear-gradient(135deg,#1A3528,#1E4030) !important; }
+  .week-num { color:var(--text-light); min-width:80px; }
+  .week-saved { color:var(--green-dark); font-family:'Fredoka One',cursive; font-size:15px; }
+  body.dark .week-saved { color:var(--green); }
+  .week-check { font-size:16px; min-width:24px; text-align:right; }
+  .show-more-btn { width:100%; padding:10px; border:none; background:var(--surface2); color:var(--text-light); font-family:'Nunito',sans-serif; font-weight:800; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .show-more-btn:hover { background:var(--green-light); color:var(--green-dark); }
+
+  /* BUTTONS */
+  .reset-btn { display:block; margin:0 auto 16px; padding:12px 32px; border-radius:100px; border:none; background:var(--surface2); color:var(--text-light); font-family:'Fredoka One',cursive; font-size:16px; cursor:pointer; transition:all 0.2s; }
+  .reset-btn:hover { background:var(--border); }
+  .back-btn { display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(91,191,122,0.4); transition:all 0.2s; margin:32px auto 32px; width:fit-content; }
+  .back-btn:hover { transform:translateY(-2px); }
+  .print-btn { display:none; align-items:center; gap:8px; background:linear-gradient(135deg,var(--yellow),var(--orange)); color:white; border:none; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; box-shadow:0 6px 20px rgba(255,154,60,0.4); transition:all 0.2s; margin:0 auto 12px; width:fit-content; }
+  .print-btn:hover { transform:translateY(-2px); }
+  .print-btn.visible { display:flex; }
+  /* Print-only elements hidden on screen */
+  .print-logo-bar, .print-footer-bar { display:none; }
+
+  @media print {
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    body { background:white !important; font-family:'Nunito',sans-serif; color:#2D3748 !important;
+      --bg:#F0FAF5 !important; --text:#2D3748 !important; --text-light:#718096 !important;
+      --surface:#FDFCFA !important; --surface2:#EEF5EF !important; --border:#E8F7EE !important;
+      --green:#5BBF7A !important; --green-dark:#3D9E5F !important; --green-light:#E8F7EE !important;
+    }
+
+    /* Hide all screen elements */
+    .header, .input-card, .back-btn, .print-btn, .reset-btn, .show-more-btn { display:none !important; }
+    .game-container { padding:0 !important; max-width:100% !important; }
+    .result-card { display:block !important; box-shadow:none !important; border:none !important; padding:0 !important; }
+
+    /* ── LOGO BAR ── */
+    .print-logo-bar {
+      display:flex !important;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 0 12px;
+      border-bottom:2px solid #E8F7EE;
+      margin-bottom:0;
+    }
+    .print-logo-bar img { width:28px; height:28px; object-fit:contain; }
+    .print-logo-bar span { font-family:'Fredoka One',cursive; font-size:20px; color:#3D9E5F; }
+
+    /* ── HERO SECTION ── */
+    .print-hero {
+      display:block !important;
+      background:linear-gradient(135deg,#F0FFF8,#E0F7EE) !important;
+      text-align:center;
+      padding:20px 24px 16px;
+      margin-bottom:20px;
+      position:relative;
+      border-bottom:2px solid #B3E8CC;
+    }
+    .print-hero-title { font-family:'Fredoka One',cursive; font-size:28px; color:#3D9E5F; margin-bottom:4px; }
+    .print-hero-sub { font-size:13px; color:#718096; }
+    .print-hero-icons { position:absolute; top:50%; transform:translateY(-50%); font-size:20px; opacity:0.7; }
+    .print-hero-icons.left { left:20px; display:flex; flex-direction:column; gap:12px; }
+    .print-hero-icons.right { right:20px; display:flex; flex-direction:column; gap:12px; }
+
+    /* ── RESULT HERO ── */
+    .result-hero { text-align:center; padding:16px 0 10px; margin-bottom:16px; }
+    .result-emoji { font-size:52px; display:block; }
+    .result-title { font-family:'Fredoka One',cursive; font-size:22px; color:#2D3748; margin:6px 0 4px; }
+    .result-goal-name { font-size:14px; color:#3D9E5F; font-weight:700; }
+
+    /* ── STAT GRID ── */
+    .stat-grid { display:grid !important; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+    .stat-box { background:#E8F7EE !important; border-radius:12px; padding:14px; text-align:center; border:1.5px solid #B3E8CC; }
+    .stat-value { font-family:'Fredoka One',cursive; font-size:26px; color:#3D9E5F !important; display:block; }
+    .stat-label { font-size:11px; font-weight:700; color:#718096; margin-top:2px; }
+
+    /* ── MOTIVATION ── */
+    .motivation-box { background:#FFFDE0 !important; border:1.5px solid #FFD166 !important; border-radius:12px; padding:12px 18px; margin-bottom:18px; font-size:13px; color:#8B6200 !important; line-height:1.6; text-align:center; }
+    .motivation-box::after {
+      content:'🖨️ Tipp: Druck diese Seite aus und streich jede Woche nach dem Sparen eine Zeile durch – so siehst du sofort wie nah du deinem Ziel schon bist!';
+      display:block;
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid #FFD166;
+      font-size:12px;
+      color:#8B6200;
+    }
+
+    /* ── MILESTONES ── */
+    .milestones { margin-bottom:18px; }
+    .milestones-title { font-family:'Fredoka One',cursive; font-size:16px; color:#2D3748; margin-bottom:10px; }
+    .milestone-list { display:flex; flex-wrap:wrap; gap:8px; }
+    .milestone-badge { background:#FFFDE0 !important; border:1.5px solid #FFD166 !important; border-radius:50px; padding:5px 14px; font-size:12px; font-weight:800; color:#8B6200 !important; }
+
+    /* ── WEEK TABLE ── */
+    .week-table-wrap { border:1.5px solid #B3E8CC !important; border-radius:12px; overflow:hidden; margin-bottom:20px; }
+    .week-table-header { background:linear-gradient(135deg,#5BBF7A,#4AACDB) !important; color:white !important; padding:9px 16px; font-family:'Fredoka One',cursive; font-size:14px; display:flex; justify-content:space-between; }
+    .week-row { padding:8px 16px; font-size:12px; font-weight:700; border-bottom:1px solid #E8F7EE; display:flex; justify-content:space-between; color:#2D3748 !important; }
+    .week-row:nth-child(even) { background:#F0FAF5 !important; }
+    .week-row.highlight { background:#D0F5E0 !important; color:#2D3748 !important; }
+    body.dark .week-row.highlight { background:#D0F5E0 !important; color:#2D3748 !important; }
+    body.dark .week-saved { color:#3D9E5F !important; }
+    body.dark .week-row { color:#2D3748 !important; background:white !important; }
+    body.dark .week-row:nth-child(even) { background:#F0FAF5 !important; }
+    .week-num { color:#718096 !important; min-width:80px; }
+    .week-saved { color:#3D9E5F !important; font-family:'Fredoka One',cursive; font-size:13px; }
+
+    /* ── FOOTER BAR ── */
+    .print-footer-bar {
+      display:flex !important;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0 0;
+      border-top:1.5px solid #E8F7EE;
+      margin-top:4px;
+    }
+    .print-footer-text { font-size:11px; color:#A0AEC0; line-height:1.5; }
+    .print-footer-text strong { color:#3D9E5F; }
+    .print-qr { width:64px; height:64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="close-btn" href="sparziel.html" id="closeBtn">✕</a>
+  <span class="float-icon fi-1">🎯</span>
+  <span class="float-icon fi-2">💰</span>
+  <span class="float-icon fi-3">⭐</span>
+  <span class="float-icon fi-4">🏆</span>
+  <div class="header-title">Sparziel-Rechner</div>
+  <div class="header-sub">Wie lange brauchst du, um dein Ziel zu erreichen?</div>
+</div>
+
+<div class="game-container">
+
+  <div class="input-card">
+    <h3>✏️ Was möchtest du kaufen?</h3>
+
+    <div class="input-group">
+      <label class="input-label">Mein Wunsch</label>
+      <div class="input-row">
+        <span class="emoji-prefix">🎁</span>
+        <input type="text" id="goalName" placeholder="z.B. Lego-Set, Fahrrad, Spiel..." maxlength="40">
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">💰 Das kostet es</span>
+        <div class="slider-value-wrap">
+          <input class="slider-num-input" id="priceDisplay" type="text" value="25,00" oninput="inputToSlider(this,'goalPrice')" onblur="inputBlur(this,'goalPrice')">
+          <span class="slider-euro">€</span>
+        </div>
+      </div>
+      <div class="slider-wrap">
+        <input type="range" id="goalPrice" min="1" max="200" step="0.50" value="25" oninput="updateSlider(this,'priceDisplay')">
+      </div>
+      <div class="slider-minmax"><span>1,00 €</span><span>200,00 €</span></div>
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">🐷 So viel spare ich</span>
+        <div class="slider-value-wrap">
+          <input class="slider-num-input" id="saveDisplay" type="text" value="2,00" oninput="inputToSlider(this,'saveAmount')" onblur="inputBlur(this,'saveAmount')">
+          <span class="slider-euro">€</span>
+        </div>
+      </div>
+      <div class="slider-wrap">
+        <input type="range" id="saveAmount" min="0.50" max="20" step="0.50" value="2" oninput="updateSlider(this,'saveDisplay')">
+      </div>
+      <div class="slider-minmax"><span>0,50 €</span><span>20,00 €</span></div>
+      <div class="freq-toggle">
+        <button class="freq-btn active" id="freqWeek" onclick="setFreq('week')">pro Woche</button>
+        <button class="freq-btn" id="freqMonth" onclick="setFreq('month')">pro Monat</button>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">✅ Schon gespart</span>
+        <div class="slider-value-wrap">
+          <input class="slider-num-input" id="alreadyDisplay" type="text" value="0,00" oninput="inputToSlider(this,'alreadySaved')" onblur="inputBlur(this,'alreadySaved')">
+          <span class="slider-euro">€</span>
+        </div>
+      </div>
+      <div class="slider-wrap">
+        <input type="range" id="alreadySaved" min="0" max="200" step="0.50" value="0" oninput="updateSlider(this,'alreadyDisplay')">
+      </div>
+      <div class="slider-minmax"><span>0,00 €</span><span>200,00 €</span></div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">🔢 Ausrechnen!</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+
+    <!-- PRINT: Logo Bar -->
+    <div class="print-logo-bar">
+      <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+      <span>Piggyplant</span>
+    </div>
+
+    <!-- PRINT: Hero -->
+    <div class="print-hero" style="display:none">
+      <div class="print-hero-icons left"><span>🎯</span><span>💰</span></div>
+      <div class="print-hero-icons right"><span>⭐</span><span>🏆</span></div>
+      <div class="print-hero-title">Sparziel-Rechner</div>
+      <div class="print-hero-sub">Wie lange brauchst du, um dein Ziel zu erreichen?</div>
+    </div>
+    <div class="result-hero">
+      <span class="result-emoji" id="resultEmoji">🎉</span>
+      <div class="result-title" id="resultTitle">Super!</div>
+      <div class="result-goal-name" id="resultGoalName"></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <span class="stat-value" id="statPeriods">–</span>
+        <div class="stat-label" id="statPeriodsLabel">Wochen</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value" id="statDate">–</span>
+        <div class="stat-label">ungefähr ab</div>
+      </div>
+    </div>
+
+    <div class="motivation-box" id="motivationBox"></div>
+
+    <div class="milestones">
+      <div class="milestones-title">🏁 Deine Meilensteine</div>
+      <div class="milestone-list" id="milestoneList"></div>
+    </div>
+
+    <div class="week-table-wrap">
+      <div class="week-table-header">
+        <span id="tableColPeriod">Woche</span>
+        <span>Gespart</span>
+        <span>Gesamt</span>
+        <span>✓</span>
+      </div>
+      <div id="weekTableBody"></div>
+      <button class="show-more-btn" id="showMoreBtn" onclick="showAllWeeks()" style="display:none">▼ Alle Schritte anzeigen</button>
+    </div>
+
+    <!-- PRINT: Footer with QR -->
+    <div class="print-footer-bar">
+      <div class="print-footer-text">
+        Erstellt mit <strong>Piggyplant.de</strong><br>
+        Finanzbildung für die ganze Familie
+      </div>
+      <canvas class="print-qr" id="qrCanvas"></canvas>
+    </div>
+
+    <button class="reset-btn" onclick="resetCalc()">↩ Neu berechnen</button>
+  </div>
+
+  <button class="print-btn" id="printBtn" onclick="printResult()">🖨️ Als PDF drucken</button>
+  <a class="back-btn" href="sparziel.html" id="backBtn">← Zurück</a>
+
+</div>
+
+<script>
+  // ── DARK MODE ──
+  let dark = false;
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    dark = true; document.body.classList.add('dark');
+  }
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('piggyplant-dark', dark);
+  }
+
+  // ── SLIDER ──
+  function fmtEuro(val) {
+    // Always show with comma and 2 decimal places: 51,00 / 51,50
+    return val.toFixed(2).replace('.', ',');
+  }
+
+  function updateSlider(el, displayId) {
+    const val = parseFloat(el.value);
+    const min = parseFloat(el.min);
+    const max = parseFloat(el.max);
+    const pct = ((val - min) / (max - min)) * 100;
+    el.style.setProperty('--pct', pct + '%');
+    document.getElementById(displayId).value = fmtEuro(val);
+    if (el.id === 'goalPrice') {
+      const already = document.getElementById('alreadySaved');
+      already.max = val;
+      if (parseFloat(already.value) > val) { already.value = val; updateSlider(already, 'alreadyDisplay'); }
+    }
+  }
+
+  function inputToSlider(inputEl, sliderId) {
+    // Accept both comma and dot as decimal separator
+    const raw = inputEl.value.replace(',', '.');
+    let val = parseFloat(raw);
+    if (isNaN(val)) return;
+    const slider = document.getElementById(sliderId);
+    // Snap to nearest 0.50
+    val = Math.round(val * 2) / 2;
+    val = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), val));
+    slider.value = val;
+    const pct = ((val - parseFloat(slider.min)) / (parseFloat(slider.max) - parseFloat(slider.min))) * 100;
+    slider.style.setProperty('--pct', pct + '%');
+    if (sliderId === 'goalPrice') {
+      const already = document.getElementById('alreadySaved');
+      already.max = val;
+      if (parseFloat(already.value) > val) { already.value = val; updateSlider(already, 'alreadyDisplay'); }
+    }
+  }
+
+  function inputBlur(inputEl, sliderId) {
+    // On blur: snap display to clean comma format
+    const raw = inputEl.value.replace(',', '.');
+    let val = parseFloat(raw);
+    if (isNaN(val)) val = parseFloat(document.getElementById(sliderId).value);
+    val = Math.round(val * 2) / 2;
+    const slider = document.getElementById(sliderId);
+    val = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), val));
+    slider.value = val;
+    inputEl.value = fmtEuro(val);
+    const pct = ((val - parseFloat(slider.min)) / (parseFloat(slider.max) - parseFloat(slider.min))) * 100;
+    slider.style.setProperty('--pct', pct + '%');
+  }
+
+  // ── INIT ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const map = { goalPrice:'priceDisplay', saveAmount:'saveDisplay', alreadySaved:'alreadyDisplay' };
+    Object.keys(map).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) updateSlider(el, map[id]);
+    });
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+    const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'sparziel.html';
+    document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.href = backUrl);
+  });
+
+  // ── FREQ ──
+  let freq = 'week';
+  function setFreq(f) {
+    freq = f;
+    document.getElementById('freqWeek').classList.toggle('active', f === 'week');
+    document.getElementById('freqMonth').classList.toggle('active', f === 'month');
+  }
+
+  function fmtShort(cents) {
+    return (cents / 100).toFixed(2).replace('.', ',') + ' €';
+  }
+
+  let allPeriods = [];
+
+  function showAllWeeks() {
+    renderTable(allPeriods);
+    document.getElementById('showMoreBtn').style.display = 'none';
+  }
+
+  function renderTable(periods) {
+    const body = document.getElementById('weekTableBody');
+    const label = freq === 'week' ? 'Woche' : 'Monat';
+    document.getElementById('tableColPeriod').textContent = label;
+    body.innerHTML = '';
+    periods.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'week-row' + (p.done ? ' highlight' : '');
+      row.innerHTML = `
+        <span class="week-num">${label} ${i + 1}</span>
+        <span class="week-saved">+${fmtShort(p.saveThisPeriod)}</span>
+        <span>${fmtShort(p.total)}</span>
+        <span class="week-check">${p.done ? '🎉' : ''}</span>
+      `;
+      body.appendChild(row);
+    });
+  }
+
+  function calculate() {
+    const name = document.getElementById('goalName').value.trim() || 'Mein Ziel';
+    const price = Math.round(parseFloat(document.getElementById('goalPrice').value) * 100);
+    const savePerPeriod = Math.round(parseFloat(document.getElementById('saveAmount').value) * 100);
+    const already = Math.round(parseFloat(document.getElementById('alreadySaved').value) * 100) || 0;
+
+    const remaining = Math.max(0, price - already);
+    const periods = remaining <= 0 ? 0 : Math.ceil(remaining / savePerPeriod);
+    const periodLabel = freq === 'week' ? 'Wochen' : 'Monate';
+
+    // Build period table
+    allPeriods = [];
+    let total = already;
+    for (let i = 0; i < periods; i++) {
+      const save = Math.min(savePerPeriod, price - total);
+      total += save;
+      allPeriods.push({ saveThisPeriod: save, total, done: total >= price });
+    }
+
+    // Date estimate
+    const today = new Date();
+    const daysPerPeriod = freq === 'week' ? 7 : 30;
+    const doneDate = new Date(today.getTime() + periods * daysPerPeriod * 86400000);
+    const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    const dateStr = periods === 0 ? 'Jetzt!' : `${months[doneDate.getMonth()]} ${doneDate.getFullYear()}`;
+
+    // Emoji & title
+    let emoji = '🎉', title = 'Du schaffst das!';
+    if (periods === 0)       { emoji = '🏆'; title = 'Schon erreicht!'; }
+    else if (periods <= 4)   { emoji = '🚀'; title = 'Fast da!'; }
+    else if (periods <= 10)  { emoji = '😊'; title = 'Du packst das!'; }
+    else if (periods <= 20)  { emoji = '💪'; title = 'Dranbleiben!'; }
+    else                     { emoji = '🌟'; title = 'Großes Ziel!'; }
+
+    // Motivation
+    const msgs = [
+      `In ${periods} ${periodLabel} hast du ${fmtShort(price)} zusammen – dann kannst du dir „${name}" kaufen! 🛒`,
+      `Schreib dir das Datum auf und freu dich drauf! Jede ${freq === 'week' ? 'Woche' : 'Monat'} kommst du deinem Ziel näher. 🗓️`,
+      `Stell dir vor wie schön es ist, wenn du es endlich in den Händen hältst – das ist dein Antrieb! ✨`
+    ];
+
+    // Milestones
+    const ml = document.getElementById('milestoneList');
+    ml.innerHTML = '';
+    [[25,'🌱'],[50,'🌿'],[75,'🌳'],[100,'🏆']].forEach(([pct, ico]) => {
+      const target = Math.ceil(price * pct / 100);
+      const p = target <= already ? '✓' : `${Math.ceil((target - already) / savePerPeriod)} ${freq === 'week' ? 'Wo.' : 'Mo.'}`;
+      const badge = document.createElement('div');
+      badge.className = 'milestone-badge';
+      badge.innerHTML = `${ico} ${pct}% – ${p}`;
+      ml.appendChild(badge);
+    });
+
+    // Fill result
+    document.getElementById('resultEmoji').textContent = emoji;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultGoalName').textContent = `„${name}" für ${fmtShort(price)}`;
+    document.getElementById('statPeriods').textContent = periods === 0 ? '✓' : periods;
+    document.getElementById('statPeriodsLabel').textContent = periodLabel;
+    document.getElementById('statDate').textContent = dateStr;
+    document.getElementById('motivationBox').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+
+    // Table – show first 5, rest on demand
+    const preview = allPeriods.slice(0, 5);
+    renderTable(preview);
+    const showMore = document.getElementById('showMoreBtn');
+    showMore.style.display = allPeriods.length > 5 ? 'block' : 'none';
+
+    // Show card
+    const card = document.getElementById('resultCard');
+    card.classList.remove('show');
+    void card.offsetWidth;
+    card.classList.add('show');
+    setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+    document.getElementById('printBtn').classList.add('visible');
+  }
+
+  function resetCalc() {
+    document.getElementById('resultCard').classList.remove('show');
+    document.getElementById('goalName').value = '';
+    document.getElementById('goalPrice').value = 25; updateSlider(document.getElementById('goalPrice'), 'priceDisplay');
+    document.getElementById('saveAmount').value = 2;  updateSlider(document.getElementById('saveAmount'), 'saveDisplay');
+    document.getElementById('alreadySaved').value = 0; updateSlider(document.getElementById('alreadySaved'), 'alreadyDisplay');
+    document.getElementById('printBtn').classList.remove('visible');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  function printResult() {
+    const showMoreBtn = document.getElementById('showMoreBtn');
+    const wasHidden = showMoreBtn.style.display !== 'none';
+    showAllWeeks();
+    showMoreBtn.style.display = 'none';
+    // Show print-only hero
+    document.querySelector('.print-hero').style.display = 'block';
+    window.print();
+    setTimeout(() => {
+      document.querySelector('.print-hero').style.display = 'none';
+      if (wasHidden && allPeriods.length > 5) {
+        renderTable(allPeriods.slice(0, 5));
+        showMoreBtn.style.display = 'block';
+      }
+    }, 500);
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  }
+
+  // ── QR CODE ──
+  // Simple QR code using Google Charts API
+  function generateQR() {
+    const url = 'https://piggyplant.vercel.app/sparziel-rechner.html';
+    const canvas = document.getElementById('qrCanvas');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function() {
+      const ctx = canvas.getContext('2d');
+      canvas.width = 64; canvas.height = 64;
+      ctx.drawImage(img, 0, 0, 64, 64);
+    };
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=${encodeURIComponent(url)}&color=3D9E5F&bgcolor=FFFFFF`;
+  }
+  generateQR();
+</script>
+</body>
+</html>
