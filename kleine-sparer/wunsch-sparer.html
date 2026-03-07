@@ -120,12 +120,16 @@
   .consequence.good    { background:var(--green-light); color:var(--green-dark); }
   .consequence.neutral { background:#FFF9E0; color:#8B6200; }
   .consequence.bad     { background:#FFF0F5; color:#C0436D; }
+  body.dark .consequence.neutral { background:#252510; color:#E0B040; }
+  body.dark .consequence.bad     { background:#2A0D18; color:#FF8BB0; }
 
   /* SUMMARY */
   .summary-card { background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border:2px solid #B3E8CC; border-radius:var(--radius); padding:20px; margin-bottom:12px; animation:slideUp 0.35s ease; }
+  body.dark .summary-card { background:linear-gradient(135deg,#0F2820,#162E22); border-color:#2A4035; }
   .summary-title { font-family:'Fredoka One',cursive; font-size:20px; text-align:center; margin-bottom:14px; }
   .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
   .summary-item { background:white; border-radius:12px; padding:10px; text-align:center; }
+  body.dark .summary-item { background:var(--surface2); }
   .summary-item-val { font-family:'Fredoka One',cursive; font-size:20px; display:block; }
   .summary-item-label { font-size:11px; font-weight:700; color:var(--text-light); }
   .summary-msg { font-size:14px; font-weight:700; text-align:center; color:var(--text-light); margin-bottom:14px; line-height:1.5; }
