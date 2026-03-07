@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Münzen & Scheine Quiz 🎯</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #5BBF7A;
+    --green-dark: #3D9E5F;
+    --blue: #4AACDB;
+    --blue-dark: #2A85B0;
+    --yellow: #FFD166;
+    --orange: #FF9A3C;
+    --pink: #FF6B9D;
+    --purple: #9B7FE8;
+    --bg: #F0FAF5;
+    --text: #2D3748;
+    --text-light: #718096;
+    --surface: #FDFCFA;
+    --surface2: #EEF5EF;
+    --border: #E8F7EE;
+    --radius: 20px;
+    --shadow: 0 6px 24px rgba(61,158,95,0.12);
+  }
+  body.dark {
+    --bg: #0F1A14;
+    --text: #E8F5EE;
+    --text-light: #8FBFA0;
+    --surface: #1A2E20;
+    --surface2: #1E3525;
+    --border: #2A4A35;
+    --shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+  body.dark .header { background: linear-gradient(135deg, #0A1F14, #1A3525); border-bottom-color: #2A4A35; }
+  body.dark .answer-btn { background: var(--surface2); border-color: var(--border); }
+  body.dark .answer-btn:hover:not(:disabled) { background: #1A3528; border-color: var(--green); }
+  body.dark .close-btn { background: rgba(0,0,0,0.4); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background 0.3s; }
+
+  /* CLOSE BTN */
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    border: 2px solid rgba(255,107,157,0.4);
+    color: var(--pink);
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    z-index: 10;
+    line-height: 1;
+  }
+  .close-btn:hover { background: rgba(255,107,157,0.2); transform: scale(1.1); }
+
+  /* BACK BTN */
+  .back-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #3a9b65, #328ea6);
+    color: white; border: none; font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 15px; padding: 14px 28px;
+    border-radius: 50px; cursor: pointer; text-decoration: none;
+    box-shadow: 0 6px 20px rgba(50,142,166,0.4);
+    transition: all 0.2s; margin: 24px auto 32px; width: fit-content;
+  }
+  .back-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(50,142,166,0.5); }
+
+  /* HEADER */
+  .header {
+    text-align: center; padding: 32px 20px 20px;
+    background: linear-gradient(135deg, #FFFBEA, #FFF3CC);
+    border-bottom: 2px solid #FFE08A;
+    position: relative; overflow: hidden;
+  }
+  .float-coins { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
+  .float-coin { position: absolute; animation: floatCoin 4s ease-in-out infinite; opacity: 0.45; font-size: 28px; }
+  .float-coin:nth-child(1) { left: 5%;  top: 20%; animation-delay: 0s; }
+  .float-coin:nth-child(2) { left: 14%; top: 55%; animation-delay: 0.8s; }
+  .float-coin:nth-child(3) { left: 80%; top: 15%; animation-delay: 1.5s; }
+  .float-coin:nth-child(4) { left: 88%; top: 55%; animation-delay: 2.2s; }
+  .float-coin:nth-child(5) { left: 50%; top: 6%;  animation-delay: 0.4s; }
+  @keyframes floatCoin { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(10deg)} }
+
+  .header-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(26px, 6vw, 44px);
+    background: linear-gradient(135deg, #B8860B, #DAA520, #FF9A3C);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 6px; position: relative; z-index: 1;
+  }
+  .header-sub { color: var(--text-light); font-size: 15px; font-weight: 600; position: relative; z-index: 1; }
+
+  /* SCORE BAR */
+  .score-bar {
+    display: flex; justify-content: center; gap: 16px; align-items: center;
+    padding: 12px 20px; background: var(--surface);
+    border-bottom: 2px solid var(--border); flex-wrap: wrap;
+  }
+  .score-item { font-weight: 800; font-size: 14px; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
+  .score-item span { font-family: 'Fredoka One', cursive; font-size: 18px; }
+  .score-item.correct span { color: var(--green); }
+  .score-item.wrong span { color: var(--pink); }
+  .score-item.total span { color: var(--blue); }
+
+  /* PROGRESS */
+  .progress-wrap { height: 8px; background: var(--surface2); border-radius: 8px; overflow: hidden; margin: 0 20px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 8px; transition: width 0.5s ease; }
+
+  /* GAME CONTAINER */
+  .game-container { max-width: 680px; margin: 0 auto; padding: 24px 16px 40px; }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--surface); border-radius: var(--radius);
+    padding: 28px 24px; box-shadow: var(--shadow);
+    border: 2px solid var(--border); margin-bottom: 20px;
+    animation: fadeUp 0.4s ease;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .question-num { font-size: 12px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .imgs-gallery { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:0 auto 10px; max-width:360px; }
+  .imgs-gallery img { width:20px; height:20px; border-radius:50%; object-fit:contain; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+  .question-img {
+    width: 100%; max-width: 130px; margin: 0 auto 8px;
+    display: block; border-radius: 12px; object-fit: contain;
+  }
+  .question-text {
+    font-family: 'Fredoka One', cursive; font-size: clamp(18px, 4vw, 24px);
+    color: var(--text); text-align: center; margin-bottom: 20px; line-height: 1.3;
+  }
+
+  /* ANSWERS */
+  .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 480px) { .answers { grid-template-columns: 1fr; } }
+
+  .answer-btn {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: 14px; padding: 14px 16px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px;
+    color: var(--text); cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px; text-align: left;
+  }
+  .answer-btn:hover:not(:disabled) { background: #E8F7EE; border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(91,191,122,0.2); }
+  .answer-btn:disabled { cursor: default; }
+  .answer-btn.correct { background: linear-gradient(135deg,#E8F7EE,#D0F0DC); border-color: var(--green); color: var(--green-dark); animation: bounceIn 0.4s ease; }
+  .answer-btn.wrong { background: linear-gradient(135deg,#FFF0F5,#FFE0EC); border-color: var(--pink); color: #C0204E; }
+  .answer-btn.reveal { background: linear-gradient(135deg,#E8F7EE,#D0F0DC); border-color: var(--green); color: var(--green-dark); opacity: 0.7; }
+  @keyframes bounceIn { 0%{transform:scale(0.95)} 60%{transform:scale(1.04)} 100%{transform:scale(1)} }
+
+  .answer-icon { display: none; }
+
+  /* FEEDBACK */
+  .feedback {
+    border-radius: 14px; padding: 14px 18px; margin-top: 14px;
+    font-weight: 700; font-size: 15px; display: none; animation: fadeUp 0.3s ease;
+  }
+  .feedback.correct { background: linear-gradient(135deg,#E8F7EE,#D0F0DC); color: var(--green-dark); border: 2px solid var(--green); }
+  .feedback.wrong { background: linear-gradient(135deg,#FFF0F5,#FFE0EC); color: #C0204E; border: 2px solid var(--pink); }
+
+  /* NEXT BTN */
+  .next-btn {
+    display: none; margin: 16px auto 0; padding: 14px 32px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white; border: none; border-radius: 50px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 16px;
+    cursor: pointer; box-shadow: 0 6px 20px rgba(74,172,219,0.4);
+    transition: all 0.2s; width: fit-content;
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(74,172,219,0.5); }
+  .next-btn.show { display: flex; align-items: center; gap: 8px; }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    display: none; text-align: center;
+    background: var(--surface); border-radius: var(--radius);
+    padding: 40px 24px; box-shadow: var(--shadow);
+    border: 2px solid var(--border); animation: fadeUp 0.5s ease;
+  }
+  .result-emoji { font-size: 80px; display: block; margin-bottom: 16px; animation: bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+  .result-title { font-family: 'Fredoka One', cursive; font-size: 32px; margin-bottom: 8px; }
+  .result-score { font-family: 'Fredoka One', cursive; font-size: 52px; margin: 16px 0; }
+  .result-score .correct { color: var(--green); }
+  .result-score .total { color: var(--text-light); font-size: 32px; }
+  .result-msg { font-size: 15px; font-weight: 600; color: var(--text-light); margin-bottom: 24px; line-height: 1.5; }
+  .result-stars { font-size: 36px; margin: 8px 0 20px; letter-spacing: 4px; }
+
+  .restart-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 14px 36px;
+    border-radius: 100px;
+    border: none;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(91,191,122,0.35);
+  }
+  .restart-btn:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 24px rgba(91,191,122,0.45); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <a class="close-btn" href="muenzen.html" title="Schließen">✕</a>
+  <div class="float-coins">
+    <span class="float-coin">🪙</span>
+    <span class="float-coin">💶</span>
+    <span class="float-coin">🏅</span>
+    <span class="float-coin">💰</span>
+    <span class="float-coin">✨</span>
+  </div>
+  <div class="header-title" data-de="Münzen & Scheine Quiz" data-en="Coins & Banknotes Quiz">Münzen & Scheine Quiz</div>
+  <div class="header-sub" data-de="Teste dein Wissen über Euro-Münzen und Scheine!" data-en="Test your knowledge about Euro coins and banknotes!">Teste dein Wissen über Euro-Münzen und Scheine!</div>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-item correct">✅ <span id="scoreCorrect">0</span> <span style="font-family:Nunito;font-size:14px" data-de="Richtig" data-en="Correct">Richtig</span></div>
+  <div class="score-item wrong">❌ <span id="scoreWrong">0</span> <span style="font-family:Nunito;font-size:14px" data-de="Falsch" data-en="Wrong">Falsch</span></div>
+  <div class="score-item total">🎯 <span id="scoreTotal">0</span>/10</div>
+</div>
+<div style="padding:8px 20px 0; background:var(--surface); border-bottom:2px solid var(--border);">
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+  <div style="height:8px"></div>
+</div>
+
+<!-- GAME CONTAINER -->
+<div class="game-container">
+
+  <!-- QUESTION CARD -->
+  <div class="question-card" id="questionCard">
+    <div class="question-num" id="questionNum">Frage 1 von 10</div>
+    <img id="questionImg" class="question-img" src="" alt="" style="display:none">
+    <div class="question-text" id="questionText"></div>
+    <div class="answers" id="answersGrid"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
+      <span data-de="Weiter" data-en="Next">Weiter</span> →
+    </button>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="result-screen" id="resultScreen">
+    <span class="result-emoji" id="resultEmoji">🏆</span>
+    <div class="result-title" id="resultTitle" data-de="Quiz beendet!" data-en="Quiz finished!">Quiz beendet!</div>
+    <div class="result-stars" id="resultStars"></div>
+    <div class="result-score"><span class="correct" id="finalScore">0</span><span class="total"> / 10</span></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 <span data-de="Neues Spiel" data-en="New game">Neues Spiel</span></button>
+  </div>
+
+  <a class="back-btn" href="muenzen.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
+</div>
+
+<script>
+// ?from= Parameter: wohin führt der X-Button zurück
+const _from = new URLSearchParams(window.location.search).get('from');
+const _backUrl = _from === 'lernspiele' ? 'lernspiele.html' : 'muenzen.html';
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.setAttribute('href', _backUrl));
+});
+
+const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
+
+const allQuestions = [
+  {
+    de: { q: 'Wie viel Cent hat ein Euro?', answers: ['50 Cent','100 Cent','200 Cent','10 Cent'], correct: 1 },
+    en: { q: 'How many cents make one Euro?', answers: ['50 cents','100 cents','200 cents','10 cents'], correct: 1 },
+    img: BASE + '1Euro.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['1 Cent','2 Cent','5 Cent','10 Cent'], correct: 0 },
+    en: { q: 'Which coin is this?', answers: ['1 cent','2 cent','5 cent','10 cent'], correct: 0 },
+    img: BASE + '1Cent.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['5 Cent','10 Cent','20 Cent','50 Cent'], correct: 2 },
+    en: { q: 'Which coin is this?', answers: ['5 cent','10 cent','20 cent','50 cent'], correct: 2 },
+    img: BASE + '20Cent.webp'
+  },
+  {
+    de: { q: 'Welcher Schein ist das?', answers: ['5 Euro','10 Euro','20 Euro','50 Euro'], correct: 2 },
+    en: { q: 'Which banknote is this?', answers: ['5 Euro','10 Euro','20 Euro','50 Euro'], correct: 2 },
+    img: BASE + '20Euro.webp'
+  },
+  {
+    de: { q: 'Welche Farbe hat der Kern der 2-Euro-Münze?', answers: ['Gold','Silber','Kupfer','Bronze'], correct: 0 },
+    en: { q: 'What colour is the core of the 2 Euro coin?', answers: ['Gold','Silver','Copper','Bronze'], correct: 0 },
+    img: BASE + '2Euro.webp'
+  },
+  {
+    de: { q: 'Welche Farbe hat der 50-Euro-Schein?', answers: ['Blau','Grün','Grau','Orange'], correct: 3 },
+    en: { q: 'What colour is the 50 Euro banknote?', answers: ['Blue','Green','Grey','Orange'], correct: 3 },
+    img: BASE + '50Euro.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['50 Cent','1 Euro','2 Euro','20 Cent'], correct: 1 },
+    en: { q: 'Which coin is this?', answers: ['50 cent','1 Euro','2 Euro','20 cent'], correct: 1 },
+    img: BASE + '1Euro.webp'
+  },
+  {
+    de: { q: 'Woraus bestehen Euro-Scheine?', answers: ['Normales Papier','Kunststoff','Baumwolle','Leinen'], correct: 2 },
+    en: { q: 'What are Euro banknotes made of?', answers: ['Normal paper','Plastic','Cotton','Linen'], correct: 2 },
+    img: BASE + '5Euro.webp'
+  },
+  {
+    de: { q: 'Welcher Schein ist das?', answers: ['5 Euro','10 Euro','20 Euro','100 Euro'], correct: 1 },
+    en: { q: 'Which banknote is this?', answers: ['5 Euro','10 Euro','20 Euro','100 Euro'], correct: 1 },
+    img: BASE + '10Euro.webp'
+  },
+  {
+    de: { q: 'Wie viele verschiedene Euro-Münzen gibt es?', answers: ['6','7','8','10'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp','10Cent.webp','20Cent.webp','50Cent.webp','1Euro.webp','2Euro.webp'] },
+    en: { q: 'How many different Euro coins are there?', answers: ['6','7','8','10'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp','10Cent.webp','20Cent.webp','50Cent.webp','1Euro.webp','2Euro.webp'] }
+  },
+  {
+    de: { q: 'Welche Münzen ziehen Magneten an?', answers: ['1€ und 2€','10 und 20 Cent','1, 2 und 5 Cent','50 Cent'], correct: 2 },
+    en: { q: 'Which coins are attracted to magnets?', answers: ['1€ and 2€','10 and 20 cent','1, 2 and 5 cent','50 cent'], correct: 2 }
+  },
+  {
+    de: { q: 'Welche Farbe hat der 5-Euro-Schein?', answers: ['Rot','Grau','Blau','Gelb'], correct: 1 },
+    en: { q: 'What colour is the 5 Euro banknote?', answers: ['Red','Grey','Blue','Yellow'], correct: 1 },
+    img: BASE + '5Euro.webp'
+  },
+  {
+    de: { q: 'Welcher Schein ist das?', answers: ['50 Euro','100 Euro','200 Euro','500 Euro'], correct: 1 },
+    en: { q: 'Which banknote is this?', answers: ['50 Euro','100 Euro','200 Euro','500 Euro'], correct: 1 },
+    img: BASE + '100Euro.webp'
+  },
+  {
+    de: { q: 'Was siehst du, wenn du einen Schein gegen das Licht hältst?', answers: ['Eine Zahl','Ein Wasserzeichen','Einen QR-Code','Nichts'], correct: 1 },
+    en: { q: 'What do you see when you hold a banknote up to the light?', answers: ['A number','A watermark','A QR code','Nothing'], correct: 1 },
+    img: BASE + '100Euro.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['1 Euro','2 Euro','50 Cent','20 Cent'], correct: 1 },
+    en: { q: 'Which coin is this?', answers: ['1 Euro','2 Euro','50 cent','20 cent'], correct: 1 },
+    img: BASE + '2Euro.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['2 Cent','5 Cent','10 Cent','20 Cent'], correct: 0 },
+    en: { q: 'Which coin is this?', answers: ['2 cent','5 cent','10 cent','20 cent'], correct: 0 },
+    img: BASE + '2Cent.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['1 Cent','2 Cent','5 Cent','10 Cent'], correct: 2 },
+    en: { q: 'Which coin is this?', answers: ['1 cent','2 cent','5 cent','10 cent'], correct: 2 },
+    img: BASE + '5Cent.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['5 Cent','10 Cent','20 Cent','50 Cent'], correct: 1 },
+    en: { q: 'Which coin is this?', answers: ['5 cent','10 cent','20 cent','50 cent'], correct: 1 },
+    img: BASE + '10Cent.webp'
+  },
+  {
+    de: { q: 'Welche Münze ist das?', answers: ['10 Cent','20 Cent','50 Cent','1 Euro'], correct: 2 },
+    en: { q: 'Which coin is this?', answers: ['10 cent','20 cent','50 cent','1 Euro'], correct: 2 },
+    img: BASE + '50Cent.webp'
+  },
+  {
+    de: { q: 'Welcher Schein ist das?', answers: ['100 Euro','200 Euro','500 Euro','50 Euro'], correct: 1 },
+    en: { q: 'Which banknote is this?', answers: ['100 Euro','200 Euro','500 Euro','50 Euro'], correct: 1 },
+    img: BASE + '200Euro.webp'
+  },
+  {
+    de: { q: 'Wie viele verschiedene Euro-Scheine gibt es aktuell?', answers: ['5','6','7','8'], correct: 1 },
+    en: { q: 'How many different Euro banknotes are there currently?', answers: ['5','6','7','8'], correct: 1 },
+    img: null,
+    imgs: ['5Euro.webp','10Euro.webp','20Euro.webp','50Euro.webp','100Euro.webp','200Euro.webp']
+  },
+  {
+    de: { q: 'Welche Farbe hat der 20-Euro-Schein?', answers: ['Grün','Rot','Blau','Orange'], correct: 2 },
+    en: { q: 'What colour is the 20 Euro banknote?', answers: ['Green','Red','Blue','Orange'], correct: 2 },
+    img: BASE + '20Euro.webp'
+  },
+  {
+    de: { q: 'Was ist auf der gemeinsamen Seite aller Euro-Münzen zu sehen?', answers: ['Eine Flagge','Der Wert','Ein Stern','Das Land'], correct: 1 },
+    en: { q: 'What is shown on the common side of all Euro coins?', answers: ['A flag','The value','A star','The country'], correct: 1 },
+    img: BASE + '1Euro.webp'
+  },
+  {
+    de: { q: 'Wofür ist das Hologramm auf einem Euro-Schein?', answers: ['Für die Druckerei','Als Sicherheitsmerkmal','Als Dekoration','Für das Land'], correct: 1 },
+    en: { q: 'What is the hologram on a Euro banknote for?', answers: ['For the printer','As a security feature','As decoration','For the country'], correct: 1 },
+    img: BASE + '50Euro.webp'
+  },
+  {
+    de: { q: 'Welcher ist der kleinste Euro-Schein?', answers: ['10 Euro','5 Euro','2 Euro','1 Euro'], correct: 1 },
+    en: { q: 'Which is the smallest Euro banknote?', answers: ['10 Euro','5 Euro','2 Euro','1 Euro'], correct: 1 },
+    img: BASE + '5Euro.webp'
+  },
+  {
+    de: { q: 'Welcher Schein ist das?', answers: ['5 Euro','10 Euro','20 Euro','50 Euro'], correct: 3 },
+    en: { q: 'Which banknote is this?', answers: ['5 Euro','10 Euro','20 Euro','50 Euro'], correct: 3 },
+    img: BASE + '50Euro.webp'
+  },
+  {
+    de: { q: 'Wie nennt man das Merkmal, das man beim Kippen des Scheins sieht?', answers: ['Wasserzeichen','Sicherheitsfaden','Hologramm / Smaragdzahl','Prägung'], correct: 2 },
+    en: { q: 'What is the feature called that you see when tilting a banknote?', answers: ['Watermark','Security thread','Hologram / Emerald number','Embossing'], correct: 2 },
+    img: BASE + '100Euro.webp'
+  },
+  {
+    de: { q: 'Wie viel ist die größte Euro-Münze wert?', answers: ['1 Euro','2 Euro','2 Cent','50 Cent'], correct: 1 },
+    en: { q: 'How much is the largest Euro coin worth?', answers: ['1 Euro','2 Euro','2 cent','50 cent'], correct: 1 },
+    img: BASE + '2Euro.webp'
+  },
+  {
+    de: { q: 'Warum haben Münzen unterschiedlich geprägte Ränder?', answers: ['Damit sie schöner aussehen','Damit Sehbehinderte sie unterscheiden können','Damit sie nicht rollen','Damit sie nicht gefälscht werden'], correct: 1 },
+    en: { q: 'Why do coins have differently patterned edges?', answers: ['To look nicer','So visually impaired people can tell them apart','So they don\'t roll','So they can\'t be forged'], correct: 1 },
+    img: BASE + '50Cent.webp'
+  },
+  {
+    de: { q: 'Welche Farbe hat der 100-Euro-Schein?', answers: ['Blau','Orange','Grün','Grau'], correct: 2 },
+    en: { q: 'What colour is the 100 Euro banknote?', answers: ['Blue','Orange','Green','Grey'], correct: 2 },
+    img: BASE + '100Euro.webp'
+  },
+];
+
+let lang = 'de';
+let questions = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+
+const icons = ['🅰️','🅱️','🅲','🅳'];
+const answerIcons = ['','','',''];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  questions = shuffle(allQuestions).slice(0, 10);
+  current = 0; correct = 0; wrong = 0; answered = false;
+  updateScoreBar();
+  document.getElementById('questionCard').style.display = 'block';
+  document.getElementById('resultScreen').style.display = 'none';
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[current];
+  const data = q[lang];
+
+  document.getElementById('questionNum').textContent =
+    lang === 'de' ? `Frage ${current+1} von 10` : `Question ${current+1} of 10`;
+  document.getElementById('questionText').textContent = data.q;
+
+  const img = document.getElementById('questionImg');
+  // Bildergalerie entfernen falls vorhanden
+  const oldGallery = document.getElementById('imgsGallery');
+  if (oldGallery) oldGallery.remove();
+
+  if (data.imgs) {
+    img.style.display = 'none';
+    const gallery = document.createElement('div');
+    gallery.id = 'imgsGallery';
+    gallery.className = 'imgs-gallery';
+    data.imgs.forEach(name => {
+      const i = document.createElement('img');
+      i.src = BASE + name;
+      i.alt = name.replace('.webp','');
+      gallery.appendChild(i);
+    });
+    document.getElementById('questionText').after(gallery);
+  } else if (q.img) {
+    img.src = q.img;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+
+  // Shuffle answers but keep correct index
+  const indices = shuffle([0,1,2,3]);
+  const correctVal = data.answers[data.correct];
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+
+  indices.forEach((origIdx, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = `<span class="answer-icon">${answerIcons[i]}</span>${data.answers[origIdx]}`;
+    const isCorrect = data.answers[origIdx] === correctVal;
+    btn.onclick = () => selectAnswer(btn, isCorrect, correctVal, grid);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('progressBar').style.width = `${(current / 10) * 100}%`;
+}
+
+function selectAnswer(btn, isCorrect, correctVal, grid) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = grid.querySelectorAll('.answer-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent.includes(correctVal)) b.classList.add('reveal');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    btn.classList.remove('reveal');
+    btn.classList.add('correct');
+    correct++;
+    fb.className = 'feedback correct';
+    fb.textContent = lang === 'de' ? '✅ Super! Das ist richtig!' : '✅ Great! That\'s correct!';
+  } else {
+    btn.classList.add('wrong');
+    wrong++;
+    fb.className = 'feedback wrong';
+    fb.textContent = lang === 'de'
+      ? `❌ Nicht ganz! Richtig wäre: ${correctVal}`
+      : `❌ Not quite! The correct answer is: ${correctVal}`;
+  }
+  fb.style.display = 'block';
+  updateScoreBar();
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.classList.add('show');
+  if (current === 9) {
+    nextBtn.querySelector('span').textContent = lang === 'de' ? 'Ergebnis sehen' : 'See results';
+  } else {
+    nextBtn.querySelector('span').textContent = lang === 'de' ? 'Weiter' : 'Next';
+  }
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= 10) {
+    showResult();
+  } else {
+    document.getElementById('questionCard').style.animation = 'none';
+    setTimeout(() => {
+      document.getElementById('questionCard').style.animation = 'fadeUp 0.4s ease';
+      showQuestion();
+    }, 10);
+  }
+}
+
+function showResult() {
+  document.getElementById('questionCard').style.display = 'none';
+  const rs = document.getElementById('resultScreen');
+  rs.style.display = 'block';
+  document.getElementById('progressBar').style.width = '100%';
+
+  document.getElementById('finalScore').textContent = correct;
+
+  let emoji, title, stars, msg;
+  if (correct === 10) {
+    emoji = '🏆'; stars = '⭐⭐⭐⭐⭐';
+    title = lang === 'de' ? 'Perfekt! Du bist ein Experte!' : 'Perfect! You\'re an expert!';
+    msg = lang === 'de' ? 'Unglaublich! Alle 10 Fragen richtig – du kennst dich mit Euro-Münzen und Scheinen super aus!' : 'Incredible! All 10 questions correct – you know Euro coins and banknotes really well!';
+  } else if (correct >= 8) {
+    emoji = '🥇'; stars = '⭐⭐⭐⭐';
+    title = lang === 'de' ? 'Sehr gut gemacht!' : 'Very well done!';
+    msg = lang === 'de' ? 'Fast perfekt! Du weißt schon sehr viel über Münzen und Scheine.' : 'Almost perfect! You already know a lot about coins and banknotes.';
+  } else if (correct >= 6) {
+    emoji = '🥈'; stars = '⭐⭐⭐';
+    title = lang === 'de' ? 'Gut gemacht!' : 'Well done!';
+    msg = lang === 'de' ? 'Du hast mehr als die Hälfte richtig! Noch ein bisschen üben und du schaffst die 10!' : 'You got more than half right! A little more practice and you\'ll get 10!';
+  } else if (correct >= 4) {
+    emoji = '🥉'; stars = '⭐⭐';
+    title = lang === 'de' ? 'Weiter üben!' : 'Keep practising!';
+    msg = lang === 'de' ? 'Du lernst noch dazu! Schau dir die Münzen & Scheine Seite nochmal an und versuch es erneut.' : 'You\'re still learning! Check out the coins & banknotes page again and try once more.';
+  } else {
+    emoji = '🌱'; stars = '⭐';
+    title = lang === 'de' ? 'Nicht aufgeben!' : 'Don\'t give up!';
+    msg = lang === 'de' ? 'Das war noch schwierig – aber das wird! Lies dir die Infos nochmal durch und probiere es nochmal!' : 'That was still tricky – but you\'ll get there! Read the info again and try once more!';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultStars').textContent = stars;
+  document.getElementById('resultMsg').textContent = msg;
+}
+
+function updateScoreBar() {
+  document.getElementById('scoreCorrect').textContent = correct;
+  document.getElementById('scoreWrong').textContent = wrong;
+  document.getElementById('scoreTotal').textContent = current;
+}
+
+function restartQuiz() {
+  startQuiz();
+}
+
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('piggyplant-dark', document.body.classList.contains('dark'));
+}
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('[data-de]').forEach(el => {
+    el.textContent = l === 'de' ? el.dataset.de : el.dataset.en;
+  });
+}
+
+// Init
+window.onload = () => {
+  if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
+  startQuiz();
+};
+</script>
+</body>
+</html>

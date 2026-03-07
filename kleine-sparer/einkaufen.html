@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="manifest" href="../assets/manifest.json">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Clever einkaufen – Piggyplant</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-dark:#2A85B0; --blue-light:#E6F6FF;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+    --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+    --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+    --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.10);
+    --font-body:'Nunito',sans-serif; --font-display:'Fredoka One',cursive;
+  }
+  body.dark {
+    --bg:#0F1A14; --text:#E8F5EE; --text-light:#8EAAA0;
+    --surface:#1A2E22; --surface2:#243B2C; --border:#2A4035;
+    --green-light:#1C3528; --blue-light:#172838;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  /* NAV */
+  nav { background:var(--surface); border-bottom:2px solid var(--border); padding:10px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:background 0.4s; }
+  .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  @media (max-width:520px) {
+    .nav-logo span { font-size:16px; }
+    .lang-btn { font-size:10px; padding:5px 8px; }
+    .nav-back { font-size:11px; padding:5px 10px; }
+    #dark-label { display:none; }
+    .nav-right { gap:4px; }
+  }
+  @media (max-width:380px) { .nav-back { display:none; } }
+  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
+  .nav-back { background:var(--green-light); color:var(--green-dark); border:none; font-family:var(--font-body); font-weight:800; font-size:13px; padding:7px 16px; border-radius:50px; cursor:pointer; text-decoration:none; transition:all 0.2s; display:inline-flex; align-items:center; gap:4px; }
+  .nav-back:hover { background:var(--green); color:white; transform:scale(1.05); }
+  .lang-btn { border:2px solid var(--green); background:transparent; color:var(--green-dark); font-family:var(--font-body); font-weight:800; font-size:14px; padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1; }
+  body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
+  .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
+  body.dark .lang-btn.active { background:var(--blue); color:white; border-color:var(--blue-dark); }
+  .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  @keyframes wiggle { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
+  @keyframes pulse { 0%,100%{box-shadow:0 4px 16px rgba(255,107,157,0.4)} 50%{box-shadow:0 4px 28px rgba(255,107,157,0.8)} }
+
+  /* HERO */
+  .page-hero { text-align:center; padding:40px 20px 30px; background:linear-gradient(135deg,#E8F7FF,#D0F0E8); position:relative; overflow:hidden; transition:background 0.4s; }
+  body.dark .page-hero { background:linear-gradient(135deg,#0A1F30,#0F2820); }
+  .page-hero-emoji { font-size:64px; display:block; animation:bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+  .page-hero-title { font-family:var(--font-display); font-size:36px; margin:10px 0 6px; animation:fadeUp 0.5s 0.1s both; }
+  .page-hero-sub { font-size:15px; color:var(--text-light); font-weight:600; animation:fadeUp 0.5s 0.2s both; }
+  .floating-coins { position:absolute; font-size:24px; animation:float 3s ease-in-out infinite; pointer-events:none; user-select:none; opacity:0.75; }
+  .coin1 { top:20%; left:8%; animation-delay:0s; }
+  .coin2 { top:30%; right:10%; animation-delay:0.7s; }
+  .coin3 { top:60%; left:5%; animation-delay:1.4s; font-size:20px; }
+  .coin4 { bottom:20%; right:6%; animation-delay:0.3s; font-size:22px; }
+  @media (max-width:600px) {
+    .coin1 { top:18%; left:6%; font-size:18px; }
+    .coin2 { top:18%; right:6%; font-size:18px; }
+    .coin3 { bottom:18%; left:6%; font-size:16px; }
+    .coin4 { bottom:18%; right:6%; font-size:16px; }
+  }
+
+  /* CONTENT */
+  .content { max-width:800px; margin:0 auto; padding:30px 20px 60px; }
+  .info-box { background:var(--surface); border-radius:20px; padding:24px; margin-bottom:20px; box-shadow:var(--shadow); border-left:5px solid var(--blue); animation:fadeUp 0.5s both; transition:background 0.4s; }
+  .info-box h3 { font-family:var(--font-display); font-size:22px; margin-bottom:10px; color:var(--text); }
+  .info-box p { font-size:15px; color:var(--text-light); font-weight:600; line-height:1.6; }
+
+  .fun-fact { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border-radius:20px; padding:20px; margin-bottom:20px; box-shadow:var(--shadow); animation:fadeUp 0.5s 0.2s both; border:2px solid var(--yellow); }
+  body.dark .fun-fact { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; }
+  .fun-fact h3 { font-family:var(--font-display); font-size:18px; color:#8B6200; margin-bottom:8px; }
+  body.dark .fun-fact h3 { color:var(--yellow); }
+  .fun-fact p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.6; }
+
+  /* SECTION TITLE */
+  .section-title { font-family:var(--font-display); font-size:24px; color:var(--text); margin:32px 0 14px; display:flex; align-items:center; gap:10px; }
+
+  /* STEPS */
+  .steps { display:flex; flex-direction:column; gap:16px; margin-bottom:24px; }
+  .step { display:flex; gap:16px; align-items:flex-start; background:var(--surface); border-radius:16px; padding:18px; box-shadow:var(--shadow); animation:fadeUp 0.5s both; transition:background 0.4s; }
+  .step-num { color:white; font-family:var(--font-display); font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text h4 { font-family:var(--font-display); font-size:18px; margin-bottom:4px; }
+  .step-text p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.5; }
+
+  /* CHECKLIST */
+  .checklist { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  .check-item { display:flex; align-items:flex-start; gap:14px; background:var(--surface); border-radius:16px; padding:16px 18px; box-shadow:var(--shadow); animation:fadeUp 0.5s both; }
+  .check-icon { font-size:26px; flex-shrink:0; margin-top:2px; }
+  .check-text h4 { font-family:var(--font-display); font-size:17px; margin-bottom:3px; }
+  .check-text p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.5; }
+
+  /* BEISPIEL KARTE */
+  .example-card { background:linear-gradient(135deg,var(--green-light),var(--blue-light)); border-radius:20px; padding:22px; margin-bottom:20px; border:2px solid var(--green); animation:fadeUp 0.5s both; }
+  body.dark .example-card { background:linear-gradient(135deg,#1C3528,#172838); border-color:var(--blue); }
+  .example-card h4 { font-family:var(--font-display); font-size:19px; margin-bottom:12px; color:var(--green-dark); }
+  body.dark .example-card h4 { color:var(--green); }
+  .example-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border); font-weight:700; font-size:15px; }
+  .example-row:last-child { border-bottom:none; font-size:16px; color:var(--green-dark); }
+  body.dark .example-row:last-child { color:var(--green); }
+  .example-row span:first-child { color:var(--text); }
+  .example-row span:last-child { font-family:var(--font-display); }
+
+  /* PREISVERGLEICH */
+  .price-compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  @media (max-width:480px) { .price-compare { grid-template-columns:1fr; } }
+  .price-card { border-radius:16px; padding:18px; text-align:center; box-shadow:var(--shadow); animation:fadeUp 0.5s both; }
+  .price-card.expensive { background:linear-gradient(135deg,#FFF0F5,#FFE4EE); border:2px solid var(--pink); }
+  body.dark .price-card.expensive { background:linear-gradient(135deg,#2A0D18,#3A1A28); }
+  .price-card.cheap { background:linear-gradient(135deg,var(--green-light),#D0F0E8); border:2px solid var(--green); }
+  body.dark .price-card.cheap { background:linear-gradient(135deg,#1C3528,#172838); }
+  .price-card .product-emoji { font-size:40px; display:block; margin-bottom:8px; }
+  .price-card .product-name { font-family:var(--font-display); font-size:16px; margin-bottom:4px; }
+  .price-card .product-price { font-family:var(--font-display); font-size:28px; }
+  .price-card.expensive .product-price { color:var(--pink); }
+  .price-card.cheap .product-price { color:var(--green-dark); }
+  .price-card .product-badge { font-size:11px; font-weight:800; padding:4px 10px; border-radius:50px; margin-top:6px; display:inline-block; }
+  .price-card.expensive .product-badge { background:var(--pink); color:white; }
+  .price-card.cheap .product-badge { background:var(--green); color:white; }
+
+  /* VORLESEN */
+  .read-bar { background:linear-gradient(135deg,#E8F7FF,#D0F0E8); border-radius:20px; padding:16px 20px; margin-bottom:20px; display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap; border:2px solid var(--blue); animation:fadeUp 0.5s both; }
+  body.dark .read-bar { background:linear-gradient(135deg,#0A1F30,#0F2820); border-color:var(--blue-dark); }
+  .read-btn { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; width:52px; height:52px; border-radius:50%; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(74,172,219,0.4); transition:all 0.2s; flex-shrink:0; padding:0; }
+  .read-btn:hover { transform:scale(1.1); }
+  .read-btn.playing { animation:pulse 1.2s infinite; }
+  .read-label { font-size:14px; font-weight:700; color:var(--text-light); }
+  .speed-btns { display:flex; gap:6px; }
+  .speed-btn { background:var(--surface); border:2px solid var(--border); color:var(--text); font-family:var(--font-body); font-weight:800; font-size:12px; padding:6px 12px; border-radius:50px; cursor:pointer; transition:all 0.2s; }
+  .speed-btn.active { background:var(--blue); border-color:var(--blue); color:white; }
+
+  /* BACK BTN */
+  .game-cta-box {
+    background: linear-gradient(135deg, #E8F7FF, #D0F0E8);
+    border: 2.5px dashed var(--blue);
+    border-radius: 24px;
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s 0.3s both;
+  }
+  body.dark .game-cta-box { background: linear-gradient(135deg, #0A1F30, #0F2820); border-color: var(--blue); }
+  .game-cta-box .cta-emoji { font-size: 52px; display: block; margin-bottom: 8px; animation: wiggle 2s ease-in-out infinite; }
+  .game-cta-box h3 { font-family: var(--font-display); font-size: 22px; color: var(--blue-dark); margin-bottom: 6px; }
+  body.dark .game-cta-box h3 { color: var(--blue); }
+  .game-cta-box p { font-size: 14px; font-weight: 600; color: var(--text-light); margin-bottom: 18px; line-height: 1.5; }
+  .game-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #3a9b65, #328ea6);
+    color: white; border: none; font-family: var(--font-body);
+    font-weight: 900; font-size: 17px; padding: 16px 36px;
+    border-radius: 50px; cursor: pointer; text-decoration: none;
+    box-shadow: 0 8px 24px rgba(50,142,166,0.45);
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .game-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(50,142,166,0.55); }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin-top:10px; }
+  .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
+
+  /* FOOTER */
+  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--text-light); font-size:13px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant" style="width:36px;height:36px;object-fit:contain;">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <span class="floating-coins coin1">🛒</span>
+  <span class="floating-coins coin2">💰</span>
+  <span class="floating-coins coin3">🏷️</span>
+  <span class="floating-coins coin4">🪙</span>
+  <span class="page-hero-emoji">🛍️</span>
+  <h1 class="page-hero-title" data-de="Clever einkaufen" data-en="Smart shopping">Clever einkaufen</h1>
+  <p class="page-hero-sub" data-de="Lern wie du mit deinem Geld gut haushaltest – beim Einkaufen! 🧠" data-en="Learn how to handle your money well – while shopping! 🧠">Lern wie du mit deinem Geld gut haushaltest – beim Einkaufen! 🧠</p>
+</section>
+
+<div class="content">
+
+  <!-- VORLESEN BAR -->
+  <div style="text-align:center;margin-bottom:20px">
+    <div class="read-bar" style="margin-bottom:0">
+      <button class="read-btn" id="readBtn" onclick="toggleRead()" title="Vorlesen">
+        <svg id="readIcon" width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,4 20,12 6,20"/></svg>
+      </button>
+      <span style="font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--text)" id="readBtnText" data-de="Vorlesen" data-en="Read aloud">Vorlesen</span>
+      <span class="read-label" data-de="Geschwindigkeit:" data-en="Speed:">Geschwindigkeit:</span>
+      <div class="speed-btns">
+        <button class="speed-btn" onclick="setSpeed(0.7,this)" data-de="🐢 Langsam" data-en="🐢 Slow">🐢 Langsam</button>
+        <button class="speed-btn active" onclick="setSpeed(1.0,this)" data-de="🐇 Normal" data-en="🐇 Normal">🐇 Normal</button>
+        <button class="speed-btn" onclick="setSpeed(1.4,this)" data-de="🚀 Schnell" data-en="🚀 Fast">🚀 Schnell</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div style="text-align:center;margin-bottom:20px;animation:fadeUp 0.5s both;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Sparschweinmuenzetranspa.webp" alt="Piggyplant" style="width:90px;height:90px;object-fit:contain;animation:wiggle 2s ease-in-out infinite;">
+    <p style="font-family:var(--font-display);font-size:16px;color:var(--text-light);margin-top:6px" data-de="„Ich passe auf dein Geld auf – aber beim Einkaufen bist du dran! 🛒"" data-en='"I look after your money – but when shopping, it is your turn! 🛒"'>„Ich passe auf dein Geld auf – aber beim Einkaufen bist du dran! 🛒"</p>
+  </div>
+  <div class="info-box" id="readable-1">
+    <h3 data-de="🛒 Was bedeutet einkaufen?" data-en="🛒 What does shopping mean?">🛒 Was bedeutet einkaufen?</h3>
+    <p data-de="Einkaufen bedeutet: Du gibst Geld aus, um etwas zu bekommen, das du brauchst oder möchtest. Das kann ein Heft für die Schule sein, ein Snack oder ein neues Spiel. Wichtig ist, dass du weißt, wie viel Geld du hast – und wie viel du ausgeben kannst, ohne später nichts mehr übrig zu haben!" data-en="Shopping means: you spend money to get something you need or want. It could be a notebook for school, a snack or a new game. The important thing is to know how much money you have – and how much you can spend without having nothing left later!">Einkaufen bedeutet: Du gibst Geld aus, um etwas zu bekommen, das du brauchst oder möchtest. Das kann ein Heft für die Schule sein, ein Snack oder ein neues Spiel. Wichtig ist, dass du weißt, wie viel Geld du hast – und wie viel du ausgeben kannst, ohne später nichts mehr übrig zu haben!</p>
+  </div>
+
+  <!-- AUF WAS ACHTEN -->
+  <div class="section-title" data-de="👀 Worauf musst du achten?" data-en="👀 What should you pay attention to?">👀 Worauf musst du achten?</div>
+  <div class="checklist" id="readable-2">
+    <div class="check-item">
+      <span class="check-icon">💵</span>
+      <div class="check-text">
+        <h4 data-de="Weißt du, wie viel du hast?" data-en="Do you know how much you have?">Weißt du, wie viel du hast?</h4>
+        <p data-de="Bevor du einkaufst, schau nach, wie viel Geld du dabei hast. Zähl deine Münzen und Scheine durch – so weißt du, was du dir leisten kannst." data-en="Before you shop, check how much money you have with you. Count your coins and notes – that way you know what you can afford.">Bevor du einkaufst, schau nach, wie viel Geld du dabei hast. Zähl deine Münzen und Scheine durch – so weißt du, was du dir leisten kannst.</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <span class="check-icon">🏷️</span>
+      <div class="check-text">
+        <h4 data-de="Schau auf den Preis!" data-en="Look at the price!">Schau auf den Preis!</h4>
+        <p data-de="Jedes Produkt hat ein Preisschild. Der Preis zeigt dir, wie viel du zahlen musst. Vergleich ruhig auch verschiedene Produkte – manchmal gibt es dasselbe günstiger!" data-en="Every product has a price tag. The price shows you how much you need to pay. Feel free to compare different products – sometimes you can get the same thing cheaper!">Jedes Produkt hat ein Preisschild. Der Preis zeigt dir, wie viel du zahlen musst. Vergleich ruhig auch verschiedene Produkte – manchmal gibt es dasselbe günstiger!</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <span class="check-icon">🧾</span>
+      <div class="check-text">
+        <h4 data-de="Brauchst du das wirklich?" data-en="Do you really need it?">Brauchst du das wirklich?</h4>
+        <p data-de='Frag dich kurz: Brauche ich das wirklich – oder will ich es nur haben, weil es gerade so verlockend aussieht? Manchmal kauft man etwas ganz spontan und bereut es danach. Deshalb: kurz nachdenken, bevor du zugreifst!' data-en='Ask yourself: do I really need this – or do I just want it because it looks so tempting right now? Sometimes you buy something on the spot and regret it afterwards. So: think for a moment before you grab it!'>Frag dich kurz: Brauche ich das wirklich – oder will ich es nur haben, weil es gerade so verlockend aussieht? Manchmal kauft man etwas ganz spontan und bereut es danach. Deshalb: kurz nachdenken, bevor du zugreifst!</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <span class="check-icon">📋</span>
+      <div class="check-text">
+        <h4 data-de="Einkaufsliste mitnehmen!" data-en="Take a shopping list!">Einkaufsliste mitnehmen!</h4>
+        <p data-de="Eine Liste hilft dir, nichts zu vergessen – und nicht mehr zu kaufen als du wolltest. Schreib vorher auf, was du brauchst, und halte dich daran!" data-en="A list helps you not to forget anything – and not to buy more than you intended. Write down what you need beforehand and stick to it!">Eine Liste hilft dir, nichts zu vergessen – und nicht mehr zu kaufen als du wolltest. Schreib vorher auf, was du brauchst, und halte dich daran!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WECHSELGELD -->
+  <div class="section-title" data-de="🔄 Was ist Wechselgeld?" data-en="🔄 What is change?">🔄 Was ist Wechselgeld?</div>
+  <div class="info-box" id="readable-3" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Muenzstapel.webp" alt="Münzstapel" style="width:70px;height:70px;object-fit:contain;flex-shrink:0;">
+    <div>
+      <h3 data-de="So funktioniert Wechselgeld" data-en="How change works">So funktioniert Wechselgeld</h3>
+      <p data-de="Wenn du mehr Geld gibst als das Produkt kostet, bekommst du den Rest zurück – das nennt man Wechselgeld! Stell dir vor: Eine Schokolade kostet 1,30 €. Du gibst dem Kassierer 2,00 €. Dann bekommst du 0,70 € zurück. Zähl das Wechselgeld kurz nach, damit du sicher bist, dass es stimmt!" data-en="When you give more money than the product costs, you get the rest back – that is called change! Imagine: a chocolate bar costs €1.30. You give the cashier €2.00. Then you get €0.70 back. Count the change quickly to make sure it is correct!">Wenn du mehr Geld gibst als das Produkt kostet, bekommst du den Rest zurück – das nennt man Wechselgeld! Stell dir vor: Eine Schokolade kostet 1,30 €. Du gibst dem Kassierer 2,00 €. Dann bekommst du 0,70 € zurück. Zähl das Wechselgeld kurz nach, damit du sicher bist, dass es stimmt!</p>
+    </div>
+  </div>
+
+  <div class="example-card" id="readable-4">
+    <h4 data-de="📝 Beispiel: Einkauf im Supermarkt" data-en="📝 Example: Shopping at the supermarket">📝 Beispiel: Einkauf im Supermarkt</h4>
+    <div class="example-row">
+      <span data-de="🍫 Schokolade" data-en="🍫 Chocolate">🍫 Schokolade</span>
+      <span>0,89 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="🧃 Apfelsaft" data-en="🧃 Apple juice">🧃 Apfelsaft</span>
+      <span>1,29 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="🍞 Toastbrot" data-en="🍞 Toast bread">🍞 Toastbrot</span>
+      <span>1,49 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="🧀 Käse" data-en="🧀 Cheese">🧀 Käse</span>
+      <span>2,19 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="🍎 Äpfel (1kg)" data-en="🍎 Apples (1kg)">🍎 Äpfel (1kg)</span>
+      <span>1,99 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="🥛 Milch" data-en="🥛 Milk">🥛 Milch</span>
+      <span>1,19 €</span>
+    </div>
+    <div class="example-row" style="padding-top:12px;margin-top:4px;border-top:2px solid var(--border)">
+      <span data-de="Gesamt" data-en="Total">Gesamt</span>
+      <span>9,04 €</span>
+    </div>
+    <div class="example-row">
+      <span data-de="Du gibst" data-en="You give">Du gibst</span>
+      <span>10,00 €</span>
+    </div>
+    <div class="example-row" style="font-size:18px">
+      <span data-de="🎉 Wechselgeld" data-en="🎉 Change">🎉 Wechselgeld</span>
+      <span>0,96 €</span>
+    </div>
+  </div>
+
+  <!-- PREISE VERGLEICHEN -->
+  <div class="section-title" data-de="⚖️ Preise vergleichen" data-en="⚖️ Comparing prices">⚖️ Preise vergleichen</div>
+  <div id="readable-5">
+    <div class="info-box">
+      <h3 data-de="Gleich gut, aber günstiger?" data-en="Just as good, but cheaper?">Gleich gut, aber günstiger?</h3>
+      <p data-de="Manchmal gibt es dasselbe Produkt zweimal – einmal teuer mit bekanntem Namen, und einmal günstiger. Oft ist der Inhalt fast gleich! Es lohnt sich, kurz zu schauen: Was kostet weniger? Schau auch auf die Menge – 500g für 1,50€ ist oft besser als 250g für 0,99€!" data-en="Sometimes the same product comes in different sizes or from different manufacturers at different prices. It is worth taking a quick look: which version is cheaper? Is the cheaper one just as good? Also check the quantity – 500g for €1.50 is often better than 250g for €0.99!">Manchmal gibt es dasselbe Produkt zweimal – einmal teuer mit bekanntem Namen, und einmal günstiger. Oft ist der Inhalt fast gleich! Es lohnt sich, kurz zu schauen: Was kostet weniger? Schau auch auf die Menge – 500g für 1,50€ ist oft besser als 250g für 0,99€!</p>
+
+      <p style="margin-top:10px;font-size:15px;font-weight:600;color:var(--text-light);line-height:1.6" data-de="💡 Tipp: Im Supermarkt steht auf jedem Preisschild nicht nur der Gesamtpreis, sondern auch der Preis pro 100g oder pro 100ml. So kannst du Produkte verschiedener Größen ganz einfach vergleichen – schau einfach auf diese kleine Zahl!" data-en="💡 Tip: In the supermarket, every price label shows not just the total price but also the price per 100g or per 100ml. This makes it easy to compare products of different sizes – just look at that small number!">💡 Tipp: Im Supermarkt steht auf jedem Preisschild nicht nur der Gesamtpreis, sondern auch der Preis pro 100g oder pro 100ml. So kannst du Produkte verschiedener Größen ganz einfach vergleichen – schau einfach auf diese kleine Zahl!</p>
+    </div>
+    <div class="price-compare">
+      <div class="price-card expensive">
+        <span class="product-emoji">🥤</span>
+        <div class="product-name" data-de="Bekannter Saft 1L" data-en="Famous brand juice 1L">Bekannter Saft 1L</div>
+        <div class="product-price">2,49 €</div>
+        <div class="product-badge" data-de="Teurer" data-en="More expensive">Teurer</div>
+      </div>
+      <div class="price-card cheap">
+        <span class="product-emoji">🥤</span>
+        <div class="product-name" data-de="Günstiger Saft 1L" data-en="Budget juice 1L">Günstiger Saft 1L</div>
+        <div class="product-price">0,89 €</div>
+        <div class="product-badge" data-de="Günstiger! 🎉" data-en="Cheaper! 🎉">Günstiger! 🎉</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EINKAUFSLISTE & BUDGET -->
+  <div class="section-title" data-de="📋 Einkaufsliste & Budget" data-en="📋 Shopping list & budget">📋 Einkaufsliste & Budget</div>
+  <div class="steps" id="readable-6">
+    <div class="step">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--purple))">1</div>
+      <div class="step-text">
+        <h4 data-de="Budget festlegen 💰" data-en="Set a budget 💰">Budget festlegen 💰</h4>
+        <p data-de="Überlege dir vorher, wie viel Geld du maximal ausgeben möchtest. Das ist dein Budget. Zum Beispiel: 'Ich habe 5€ zum Einkaufen.'" data-en="Decide beforehand how much money you want to spend at most. That is your budget. For example: 'I have €5 for shopping.'">Überlege dir vorher, wie viel Geld du maximal ausgeben möchtest. Das ist dein Budget. Zum Beispiel: "Ich habe 5€ zum Einkaufen."</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--purple))">2</div>
+      <div class="step-text">
+        <h4 data-de="Liste schreiben 📝" data-en="Write a list 📝">Liste schreiben 📝</h4>
+        <p data-de="Schreib alle Dinge auf, die du kaufen möchtest. So vergisst du nichts und kaufst auch nichts, das nicht auf der Liste steht!" data-en="Write down everything you want to buy. That way you will not forget anything and will not buy anything that is not on the list!">Schreib alle Dinge auf, die du kaufen möchtest. So vergisst du nichts und kaufst auch nichts, das nicht auf der Liste steht!</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--purple))">3</div>
+      <div class="step-text">
+        <h4 data-de="Preise schätzen 🔢" data-en="Estimate prices 🔢">Preise schätzen 🔢</h4>
+        <p data-de="Überleg dir ungefähr, was jedes Ding kostet. Addiere alles zusammen. Passt das in dein Budget? Falls nicht, streiche etwas von der Liste." data-en="Think about roughly what each thing costs. Add it all up. Does it fit in your budget? If not, cross something off the list.">Überleg dir ungefähr, was jedes Ding kostet. Addiere alles zusammen. Passt das in dein Budget? Falls nicht, streiche etwas von der Liste.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:linear-gradient(135deg,var(--blue),var(--purple))">4</div>
+      <div class="step-text">
+        <h4 data-de="Rest zurück in den Geldbeutel! 👛" data-en="Rest back in the wallet! 👛">Rest zurück in den Geldbeutel! 👛</h4>
+        <p data-de="Was vom Budget übrig bleibt, kommt zurück in deinen Geldbeutel. So behältst du immer den Überblick und weißt genau, wie viel du noch hast!" data-en="Whatever is left of the budget goes back into your wallet. That way you always keep track and know exactly how much you still have!">Was vom Budget übrig bleibt, kommt zurück in deinen Geldbeutel. So behältst du immer den Überblick und weißt genau, wie viel du noch hast!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANGEBOTE & RABATTE -->
+  <div class="section-title" data-de="🏷️ Angebote & Rabatte" data-en="🏷️ Offers & discounts">🏷️ Angebote & Rabatte</div>
+  <div id="readable-7">
+    <div class="info-box">
+      <h3 data-de="Was bedeutet ein Rabatt?" data-en="What does a discount mean?">Was bedeutet ein Rabatt?</h3>
+      <p data-de="Ein Rabatt bedeutet: Das Produkt ist gerade günstiger als sonst. Oft siehst du im Supermarkt Schilder mit 'Angebot', '-20%' oder 'Spar-Preis'. Das heißt: Du zahlst weniger als normal! Zum Beispiel: Ein Heft kostet normalerweise 1,50€. Mit 20% Rabatt zahlst du nur 1,20€ – du sparst 30 Cent!" data-en="A discount means: the product is currently cheaper than usual. In the supermarket you often see signs saying 'special offer', '-20%' or 'saving price'. That means you pay less than normal! For example: a notebook normally costs €1.50. With 20% discount you only pay €1.20 – you save 30 cents!">Ein Rabatt bedeutet: Das Produkt ist gerade günstiger als sonst. Oft siehst du im Supermarkt Schilder mit "Angebot", "-20%" oder "Spar-Preis". Das heißt: Du zahlst weniger als normal! Zum Beispiel: Ein Heft kostet normalerweise 1,50€. Mit 20% Rabatt zahlst du nur 1,20€ – du sparst 30 Cent!</p>
+    </div>
+    <div class="fun-fact">
+      <h3 data-de="⚠️ Vorsicht bei Angeboten!" data-en="⚠️ Watch out for offers!">⚠️ Vorsicht bei Angeboten!</h3>
+      <p data-de="Angebote können verlockend sein – aber kaufe nur, was du wirklich brauchst! Ein Angebot spart nur Geld, wenn du das Produkt sowieso kaufen wolltest. Wenn du etwas kaufst, nur weil es im Angebot ist, gibst du eigentlich mehr Geld aus, nicht weniger!" data-en="Offers can be tempting – but only buy what you really need! An offer only saves money if you were going to buy the product anyway. If you buy something just because it is on offer, you are actually spending more money, not less!">Angebote können verlockend sein – aber kaufe nur, was du wirklich brauchst! Ein Angebot spart nur Geld, wenn du das Produkt sowieso kaufen wolltest. Wenn du etwas kaufst, nur weil es im Angebot ist, gibst du eigentlich mehr Geld aus, nicht weniger!</p>
+      <p style="margin-top:10px" data-de="🤔 Außerdem: Manchmal sind „Rabatte" gar keine richtigen Rabatte! Ein Produkt das vorher 1,00€ gekostet hat und jetzt als „Angebot" für 0,98€ verkauft wird, ist nur minimal billiger. Das große rote Schild macht es nur so aussehen, als würdest du viel sparen. Schau also genau hin, wie viel du wirklich sparst!" data-en="🤔 Also: sometimes 'discounts' are not real discounts at all! A product that used to cost €1.00 and is now sold as a 'special offer' for €0.98 is only minimally cheaper. The big red sign just makes it look like you are saving a lot. So take a close look at how much you are actually saving!">🤔 Außerdem: Manchmal sind „Rabatte" gar keine richtigen Rabatte! Ein Produkt das vorher 1,00€ gekostet hat und jetzt als „Angebot" für 0,98€ verkauft wird, ist nur minimal billiger. Das große rote Schild macht es nur so aussehen, als würdest du viel sparen. Schau also genau hin, wie viel du wirklich sparst!</p>
+      <p style="margin-top:10px;font-size:14px;font-weight:600;color:var(--text-light);line-height:1.6" data-de="🔍 Außerdem: Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der &quot;normale&quot; Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!" data-en="🔍 Also: sometimes discounts are not real discounts at all! A product that is supposedly 20% cheaper may have only briefly been more expensive before – so the &quot;normal&quot; price was actually the sale price. So look closely and compare with other products instead!">🔍 Außerdem: Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der "normale" Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!</p>
+    </div>
+  </div>
+
+  <!-- FUN FACT -->
+  <div class="fun-fact" id="readable-8">
+    <h3 data-de="🧠 Wusstest du schon?" data-en="🧠 Did you know?">🧠 Wusstest du schon?</h3>
+    <p data-de="💡 Supermärkte stellen teure Produkte oft auf Augenhöhe ins Regal, weil Kunden sie so als erstes sehen. Günstigere Produkte findest du oft ganz oben oder ganz unten im Regal. Es lohnt sich, genau hinzuschauen!" data-en="💡 Supermarkets often place expensive products at eye level on the shelf because customers see them first. Cheaper products are often right at the top or bottom of the shelf. It is worth taking a closer look!">💡 Supermärkte stellen teure Produkte oft auf Augenhöhe ins Regal, weil Kunden sie so als erstes sehen. Günstigere Produkte findest du oft ganz oben oder ganz unten im Regal. Es lohnt sich, genau hinzuschauen!</p>
+    <p style="margin-top:10px" data-de="🛒 In Deutschland machen Menschen im Durchschnitt 3-4 Einkäufe pro Woche. Wer dabei jedes Mal nur 50 Cent spart, hat am Ende des Jahres fast 100 Euro mehr – das ist fast ein ganzes Taschengeld-Jahr!" data-en="🛒 In Germany people go shopping an average of 3-4 times a week. If you save just 50 cents each time, you will have nearly €100 more in your wallet at the end of the year!">🛒 In Deutschland machen Menschen im Durchschnitt 3-4 Einkäufe pro Woche. Wer dabei jedes Mal nur 50 Cent spart, hat am Ende des Jahres fast 100 Euro mehr – das ist fast ein ganzes Taschengeld-Jahr!</p>
+  </div>
+
+  <div class="game-cta-box">
+    <span class="cta-emoji">🛒</span>
+    <h3 data-de="Jetzt einkaufen gehen!" data-en="Go shopping now!">Jetzt einkaufen gehen!</h3>
+    <p data-de="Wähle die Produkte aus deiner Einkaufsliste aus, pack sie in den Wagen und bezahl an der Kasse – schaffst du es, das richtige Wechselgeld zu bekommen?" data-en="Choose the products from your shopping list, pack them in the trolley and pay at the till – can you get the right change?">Wähle die Produkte aus deiner Einkaufsliste aus, pack sie in den Wagen und bezahl an der Kasse – schaffst du es, das richtige Wechselgeld zu bekommen?</p>
+    <a class="game-btn" href="einkaufen-spiel.html">🛒 <span data-de="Zum Einkaufen-Spiel!" data-en="Play shopping game!">Zum Einkaufen-Spiel!</span></a>
+  </div>
+
+  <a class="back-btn" href="kleine-sparer.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-brand">Piggyplant</div>
+      <div class="footer-copy" data-de="© 2025 Piggyplant. Für kleine Sparer." data-en="© 2025 Piggyplant. For little savers.">© 2025 Piggyplant. Für kleine Sparer.</div>
+    </div>
+    <div class="footer-links">
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// DARK MODE
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const d = document.body.classList.contains('dark');
+  localStorage.setItem('piggyplant-dark', d);
+  document.getElementById('dark-label').textContent = d ? 'Dunkel' : 'Hell';
+}
+if (localStorage.getItem('piggyplant-dark') === 'true') {
+  document.body.classList.add('dark');
+  document.getElementById('dark-label').textContent = 'Dunkel';
+}
+
+// LANGUAGE
+let currentLang = localStorage.getItem('lang') || 'de';
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.querySelectorAll('[data-de]').forEach(el => {
+    el.textContent = lang === 'de' ? el.dataset.de : el.dataset.en;
+  });
+  document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+}
+setLang(currentLang);
+
+// TEXT-TO-SPEECH
+let synth = window.speechSynthesis;
+let utterance = null;
+let isPlaying = false;
+let speed = 1.0;
+
+function getReadableText() {
+  const ids = ['readable-1','readable-2','readable-3','readable-4','readable-5','readable-6','readable-7','readable-8'];
+  return ids.map(id => {
+    const el = document.getElementById(id);
+    return el ? el.innerText : '';
+  }).join(' ');
+}
+
+function toggleRead() {
+  if (isPlaying) {
+    synth.cancel();
+    isPlaying = false;
+    updateReadBtn();
+    return;
+  }
+  const text = getReadableText();
+  utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = currentLang === 'de' ? 'de-DE' : 'en-GB';
+  utterance.rate = speed;
+  utterance.onend = () => { isPlaying = false; updateReadBtn(); };
+  synth.speak(utterance);
+  isPlaying = true;
+  updateReadBtn();
+}
+
+function setSpeed(s, btn) {
+  speed = s;
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (isPlaying) { synth.cancel(); isPlaying = false; toggleRead(); }
+}
+
+function updateReadBtn() {
+  const btn = document.getElementById('readBtn');
+  const icon = document.getElementById('readIcon');
+  btn.classList.toggle('playing', isPlaying);
+  icon.innerHTML = isPlaying
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="6,4 20,12 6,20"/>';
+}
+</script>
+</body>
+</html>
