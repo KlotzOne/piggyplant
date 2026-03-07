@@ -261,13 +261,6 @@
 </div>
 
 <script>
-// ?from= Parameter: wohin führt der X-Button zurück
-const _from = new URLSearchParams(window.location.search).get('from');
-const _backUrl = _from === 'lernspiele' ? 'lernspiele.html' : 'muenzen.html';
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.setAttribute('href', _backUrl));
-});
-
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
 
 // Alle Münzen mit Wert in Cent
@@ -298,7 +291,7 @@ let answered = false;
 const lang = localStorage.getItem('lang') || 'de';
 
 // Dunkelmodus
-if (localStorage.getItem('dark') === 'true') document.body.classList.add('dark');
+if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
 
 function formatCent(cent) {
   if (cent < 100) return cent + ' Cent';

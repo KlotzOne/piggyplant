@@ -216,13 +216,6 @@
 <a class="back-btn" href="sparschwein.html">← Zurück zum Sparschwein</a>
 
 <script>
-// ?from= Parameter: wohin führt der X-Button zurück
-const _from = new URLSearchParams(window.location.search).get('from');
-const _backUrl = _from === 'lernspiele' ? 'lernspiele.html' : 'sparschwein.html';
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.setAttribute('href', _backUrl));
-});
-
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
 
 const COIN_FILES  = { 1:'1Cent.webp', 2:'2Cent.webp', 5:'5Cent.webp', 10:'10Cent.webp', 20:'20Cent.webp', 50:'50Cent.webp', 100:'1Euro.webp', 200:'2Euro.webp' };
@@ -599,7 +592,7 @@ function buildFloating() {
 }
 
 // ── INIT ───────────────────────────────────────────────────
-if (localStorage.getItem('dark') === 'true') document.body.classList.add('dark');
+if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
 buildFloating();
 pickGoal();
 </script>

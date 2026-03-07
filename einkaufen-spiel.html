@@ -328,9 +328,9 @@ const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images
 function toggleDark() {
   document.body.classList.toggle('dark');
   const d = document.body.classList.contains('dark');
-  localStorage.setItem('dark', d);
+  localStorage.setItem('piggyplant-dark', d);
 }
-if (localStorage.getItem('dark') === 'true') {
+if (localStorage.getItem('piggyplant-dark') === 'true') {
   document.body.classList.add('dark');
 }
 
