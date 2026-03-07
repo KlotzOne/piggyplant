@@ -4,9 +4,9 @@
   <link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="assets/manifest.json">
 <meta name="theme-color" content="#5BBF7A">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Piggyplant">
@@ -733,7 +733,7 @@
     <span data-de="Wähle deinen Bereich 👇" data-en="Choose your area 👇">Wähle deinen Bereich 👇</span>
   </h2>
   <div class="cards-grid">
-    <div class="card card-1" onclick="window.location.href='kleine-sparer.html'">
+    <div class="card card-1" onclick="window.location.href='kleine-sparer/kleine-sparer.html'">
       <div class="card-emoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
   <!-- Shadow -->
   <ellipse cx="42" cy="68" rx="24" ry="5" fill="rgba(0,0,0,0.12)"/>
@@ -999,8 +999,8 @@
   const modalData = {
     kids: {
       emoji: '🐷',
-      de: { title: 'Kleine Sparer', subtitle: 'Für Kinder von 6 bis 10 Jahren', topics: ['🐷 Was ist ein Sparschwein?','🪙 Münzen & Scheine kennen','🛒 Einkaufen üben','🎯 Sparziel setzen','🎮 Lernspiele'], chipClass: 'pink', btn: "Los geht's! 🐷", link: 'kleine-sparer.html' },
-      en: { title: 'Little Savers', subtitle: 'For children aged 6 to 10', topics: ['🐷 What is a piggy bank?','🪙 Coins & notes','🛒 Practice shopping','🎯 Set a savings goal','🎮 Learning games'], chipClass: 'pink', btn: "Let's go! 🐷", link: 'kleine-sparer.html' }
+      de: { title: 'Kleine Sparer', subtitle: 'Für Kinder von 6 bis 10 Jahren', topics: ['🐷 Was ist ein Sparschwein?','🪙 Münzen & Scheine kennen','🛒 Einkaufen üben','🎯 Sparziel setzen','🎮 Lernspiele'], chipClass: 'pink', btn: "Los geht's! 🐷", link: 'kleine-sparer/kleine-sparer.html' },
+      en: { title: 'Little Savers', subtitle: 'For children aged 6 to 10', topics: ['🐷 What is a piggy bank?','🪙 Coins & notes','🛒 Practice shopping','🎯 Set a savings goal','🎮 Learning games'], chipClass: 'pink', btn: "Let's go! 🐷", link: 'kleine-sparer/kleine-sparer.html' }
     },
     tweens: {
       emoji: '📊',
@@ -1056,7 +1056,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('assets/service-worker.js')
           .then(r => console.log('SW registered'))
           .catch(e => console.log('SW error:', e));
       });
