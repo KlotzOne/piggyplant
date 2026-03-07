@@ -29,6 +29,8 @@
   body.dark .event-card.random { background:linear-gradient(135deg,#0A1A2A,#0F2035); border-color:#1A4060; }
   body.dark .week-strip { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; }
   body.dark .ausgaben-box { background:#2A0D18 !important; }
+  .einnahmen-box { background:var(--green-light); border-radius:12px; padding:10px 12px; margin-bottom:8px; }
+  body.dark .einnahmen-box { background:#0F2820; }
   body.dark .summary-item { background:var(--surface2); }
 
   body.dark .wish-option { border-color:var(--border); }
@@ -579,7 +581,7 @@
     card.innerHTML = `
       <div class="summary-title">📊 Woche ${week} geschafft!</div>
 
-      <div style="background:var(--green-light);border-radius:12px;padding:10px 12px;margin-bottom:8px">
+      <div class="einnahmen-box">
         <div style="font-family:'Fredoka One',cursive;font-size:13px;color:var(--green-dark);margin-bottom:6px">📥 Einnahmen</div>
         ${renderItems(inItems, '+', 'var(--green-dark)')}
         <div style="display:flex;justify-content:space-between;font-family:'Fredoka One',cursive;font-size:15px;padding-top:6px">
