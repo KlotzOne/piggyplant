@@ -273,51 +273,51 @@
 
   const INCOME = [
     { emoji:'🤑', title:'Taschengeld!',        desc:'Es ist Montag – Taschengeld-Tag!',                   amount:200 },
-    { emoji:'🎂', title:'Geburtstagsgeld!',     desc:'Oma hat dir Geld geschenkt. Was ein Glück!',         amount:500 },
-    { emoji:'🌿', title:'Nachbar geholfen!',    desc:'Du hast beim Rasenmähen geholfen.',                  amount:300 },
-    { emoji:'🌳', title:'Kastanien verkauft!',   desc:'Du hast Kastanien gesammelt und am Markt verkauft.', amount:150 },
-    { emoji:'🎨', title:'Bild gemalt!',          desc:'Du hast Oma ein Bild gemalt – sie hat sich so gefreut, dass sie dir was gibt!', amount:150 },
-    { emoji:'♻️', title:'Flaschen gesammelt!', desc:'Du hast alte Flaschen zum Supermarkt gebracht.',     amount:100 },
+    { emoji:'🎂', title:'Geburtstagsgeld!',     desc:'Oma hat dir Geld geschenkt. Was ein Glück!',         amount:1000 },
+    { emoji:'🌿', title:'Nachbar geholfen!',    desc:'Du hast beim Rasenmähen geholfen.',                  amount:200 },
+    { emoji:'🌳', title:'Kastanien verkauft!',  desc:'Du hast Kastanien gesammelt und am Markt verkauft.', amount:100 },
+    { emoji:'🎨', title:'Bild gemalt!',         desc:'Du hast Oma ein Bild gemalt – sie hat sich so gefreut, dass sie dir was gibt!', amount:100 },
+    { emoji:'♻️', title:'Flaschen gesammelt!', desc:'Du hast alte Flaschen zum Supermarkt gebracht.',     amount:150 },
     { emoji:'🦷', title:'Zahnfee!',            desc:'Heute Nacht war die Zahnfee da!',                    amount:100 },
-    { emoji:'🐟', title:'Goldfisch gehütet!',    desc:'Die Nachbarn waren im Urlaub – du hast ihren Goldfisch versorgt.', amount:200 },
+    { emoji:'🐟', title:'Goldfisch gehütet!',   desc:'Die Nachbarn waren im Urlaub – du hast ihren Goldfisch versorgt.', amount:300 },
     { emoji:'🐕', title:'Hund gassi geführt!',  desc:'Der Nachbarshund war heute bei dir.',                amount:200 },
   ];
 
   const TEMPTATIONS = [
-    { emoji:'🍦', title:'Eiswagen!',          desc:'Der Eiswagen kommt! Ein Eis kostet 1,50 €.',          amount:150 },
+    { emoji:'🍦', title:'Eiswagen!',          desc:'Der Eiswagen kommt! Ein Eis kostet 2 €.',             amount:200 },
     { emoji:'🎪', title:'Jahrmarkt!',         desc:'Eine Runde Kettenkarussell kostet 2 €.',              amount:200 },
-    { emoji:'🃏', title:'Sammelkarten!',      desc:'Neue Sammelkarten für 1 €. Kaufst du?',              amount:100 },
+    { emoji:'🃏', title:'Sammelkarten!',      desc:'Neue Sammelkarten für 1,50 €. Kaufst du?',           amount:150 },
     { emoji:'🍿', title:'Kino!',              desc:'Deine Freunde gehen ins Kino. Ticket: 5 €.',          amount:500 },
-    { emoji:'🎈', title:'Flohmarkt!',         desc:'Tolles Spielzeug für 2,50 €. Kaufst du?',            amount:250 },
+    { emoji:'🎈', title:'Flohmarkt!',         desc:'Tolles Spielzeug für 2 €. Kaufst du?',               amount:200 },
     { emoji:'🍭', title:'Süßigkeitenladen!',  desc:'Deine Lieblingsschokoriegel für 1 €.',               amount:100 },
-    { emoji:'🎡', title:'Rummelplatz!',          desc:'Schulfreunde gehen zum Rummelplatz. Eine Runde kostet 2 €.', amount:200 },
+    { emoji:'🎡', title:'Rummelplatz!',        desc:'Schulfreunde gehen zum Rummelplatz. Eine Runde kostet 2,50 €.', amount:250 },
   ];
 
   const DILEMMAS = [
     { emoji:'🌞', title:'Freibad-Tag!',
       desc:'Deine Freunde gehen ins Freibad. Mitgehen oder zuhause bleiben?',
-      optA:{ label:'🏊 Mitgehen (−2,00 €)',         delta:-200, msg:'War mega Spaß! Aber 2 € weniger im Sparschwein.', type:'neutral' },
+      optA:{ label:'🏊 Mitgehen (−3,00 €)',         delta:-300, msg:'War mega Spaß! Aber 3 € weniger im Sparschwein.', type:'neutral' },
       optB:{ label:'🏠 Zuhause bleiben (0 €)',       delta:0,    msg:'Du hast gespart – vielleicht nächstes Mal!', type:'neutral' }
     },
     { emoji:'🌧️', title:'Regentag!',
-      desc:'Es regnet. Du kannst zuhause chillen oder Pfandflaschen sammeln gehen.',
-      optA:{ label:'📺 Zuhause bleiben (0 €)',      delta:0,    msg:'War gemütlich – aber kein Geld verdient.', type:'neutral' },
-      optB:{ label:'♻️ Flaschen sammeln (+1,50 €)', delta:150,  msg:'Kalt und nass, aber 1,50 € reicher!', type:'good' }
+      desc:'Es regnet. Du kannst zuhause chillen oder dein Zimmer ausmisten und altes Spielzeug online verkaufen.',
+      optA:{ label:'📺 Zuhause chillen (0 €)',        delta:0,    msg:'War gemütlich – aber kein Geld verdient.', type:'neutral' },
+      optB:{ label:'📦 Zimmer ausmisten (+10,00 €)',  delta:1000, msg:'Wow! Altes Spielzeug verkauft – 10 € reicher!', type:'good' }
     },
     { emoji:'💝', title:'Oma gibt dir Geld!',
-      desc:'Oma gibt dir 5 €. Alles sparen oder etwas genießen?',
-      optA:{ label:'🐷 Alles sparen (+5,00 €)',     delta:500, spent:0,   msg:'Stark! Das Sparschwein wird schwerer!', type:'good' },
-      optB:{ label:'🍰 2 € genießen (+3,00 €)',     delta:300, spent:200, msg:'Lecker war es – und 3 € hast du trotzdem gespart!', type:'neutral' }
+      desc:'Oma gibt dir 10 €. Alles sparen oder etwas genießen?',
+      optA:{ label:'🐷 Alles sparen (+10,00 €)',     delta:1000, spent:0,   msg:'Stark! Das Sparschwein wird schwerer!', type:'good' },
+      optB:{ label:'🍰 5 € genießen (+5,00 €)',      delta:500,  spent:500, msg:'Lecker war es – und 5 € hast du trotzdem gespart!', type:'neutral' }
     },
     { emoji:'🍔', title:'Burger nach dem Sport!',
       desc:'Alle gehen nach dem Training Burger essen. Mitmachen oder heimgehen?',
-      optA:{ label:'🍔 Mitessen (−2,50 €)',          delta:-250, msg:'Lecker! Aber 2,50 € sind weg.', type:'neutral' },
-      optB:{ label:'🏃 Heimgehen (0 €)',             delta:0,    msg:'Zuhause schmeckt es auch – und du hast gespart!', type:'good' }
+      optA:{ label:'🍔 Mitessen (−4,00 €)',           delta:-400, msg:'Lecker! Aber 4 € sind weg.', type:'neutral' },
+      optB:{ label:'🏃 Heimgehen (0 €)',              delta:0,    msg:'Zuhause schmeckt es auch – und du hast gespart!', type:'good' }
     },
     { emoji:'📱', title:'Coole App!',
       desc:'Im App Store gibt es eine coole App für 1,99 €. Kaufen oder warten?',
-      optA:{ label:'📲 App kaufen (−2,00 €)',        delta:-200, msg:'Macht Spaß – aber 2 € sind weg.', type:'bad' },
-      optB:{ label:'⏳ Warten (0 €)',               delta:0,    msg:'Es gibt auch viele tolle kostenlose Apps!', type:'good' }
+      optA:{ label:'📲 App kaufen (−1,99 €)',         delta:-199, msg:'Macht Spaß – aber 2 € sind weg.', type:'bad' },
+      optB:{ label:'⏳ Warten (0 €)',                 delta:0,    msg:'Es gibt auch viele tolle kostenlose Apps!', type:'good' }
     },
   ];
 
