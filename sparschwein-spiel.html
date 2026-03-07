@@ -150,7 +150,7 @@
 <body>
 
 <div class="header">
-  <a class="close-btn" href="sparschwein.html" title="Zurück">✕</a>
+  <a class="close-btn" id="closeBtn" href="sparschwein.html" title="Zurück">✕</a>
   <div class="floating-coins" id="floatingCoins"></div>
   <h1 class="header-title">Füttere das Schweinchen!</h1>
   <p class="header-sub">Wirf Münzen ins Sparschwein und erreiche dein Ziel!</p>
@@ -213,10 +213,23 @@
   </div>
 </div>
 
-<a class="back-btn" href="sparschwein.html">← Zurück zum Sparschwein</a>
+<a class="back-btn" id="backBtn" href="sparschwein.html">← Zurück zum Sparschwein</a>
 
 <script>
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
+
+// ── FROM= NAVIGATION ───────────────────────────────────────
+(function() {
+  const from = new URLSearchParams(window.location.search).get('from');
+  const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'sparschwein.html';
+  const backLabel = from === 'lernspiele' ? '← Zurück zu Lernspiele' : '← Zurück zum Sparschwein';
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('closeBtn');
+    const backBtn = document.getElementById('backBtn');
+    if (closeBtn) closeBtn.href = backUrl;
+    if (backBtn) { backBtn.href = backUrl; backBtn.textContent = backLabel; }
+  });
+})();
 
 const COIN_FILES  = { 1:'1Cent.webp', 2:'2Cent.webp', 5:'5Cent.webp', 10:'10Cent.webp', 20:'20Cent.webp', 50:'50Cent.webp', 100:'1Euro.webp', 200:'2Euro.webp' };
 const COIN_LABELS = { 1:'1 Ct', 2:'2 Ct', 5:'5 Ct', 10:'10 Ct', 20:'20 Ct', 50:'50 Ct', 100:'1 €', 200:'2 €' };

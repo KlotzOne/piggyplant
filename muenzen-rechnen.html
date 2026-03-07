@@ -220,7 +220,7 @@
     <span class="float-coin">⭐</span>
     <span class="float-coin">🪙</span>
   </div>
-  <a class="close-btn" href="muenzen.html" title="Schließen">✕</a>
+  <a class="close-btn" id="closeBtn" href="muenzen.html" title="Schließen">✕</a>
   <div class="header-title" data-de="Münzen Rechnen" data-en="Counting Coins">Münzen Rechnen</div>
   <div class="header-sub" data-de="Wie viel sind diese Münzen zusammen?" data-en="How much are these coins together?">Wie viel sind diese Münzen zusammen?</div>
 </div>
@@ -257,13 +257,24 @@
     <button class="restart-btn" onclick="restartGame()">🔄 <span data-de="Neues Spiel" data-en="New game">Neues Spiel</span></button>
   </div>
 
-  <a class="back-btn" href="muenzen.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
+  <a class="back-btn" id="backBtn" href="muenzen.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
 </div>
 
 <script>
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
 
-// Alle Münzen mit Wert in Cent
+// ── FROM= NAVIGATION ───────────────────────────────────────
+(function() {
+  const from = new URLSearchParams(window.location.search).get('from');
+  const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'muenzen.html';
+  const backLabel = from === 'lernspiele' ? '← Zurück zu Lernspiele' : '← Zurück zur Übersicht';
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('closeBtn');
+    const backBtn = document.getElementById('backBtn');
+    if (closeBtn) closeBtn.href = backUrl;
+    if (backBtn) { backBtn.href = backUrl; backBtn.querySelector('span').textContent = backLabel; }
+  });
+})();
 const COINS = [
   { file: '1Cent.webp',   value: 1,   label: '1ct' },
   { file: '2Cent.webp',   value: 2,   label: '2ct' },
