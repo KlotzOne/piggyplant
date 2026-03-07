@@ -661,7 +661,7 @@
     // (delta=1€ gespart, spent=1€ ausgegeben von 2€ Taschengeld → nur für Log und totalSpent)
     // Bei Oma-Geld (delta=3€ gespart, spent=2€ ausgegeben von 5€) muss spent in weekSpent
     // Unterscheidung: data-saveonly="true" = spent schon im delta verrechnet
-    if (spent > 0) {
+    if (spent > 0 && !btn.dataset.saveonly) {
       const spentLabel = btn.dataset.label ? '🍬 Taschengeld ausgegeben' : '🍰 Genossen';
       totalSpent += spent;
       weekSpent += spent;
