@@ -120,6 +120,7 @@
   .freq-btn { flex:1; padding:10px; border-radius:12px; border:2px solid var(--border); background:var(--bg); color:var(--text-light); font-family:'Nunito',sans-serif; font-weight:800; font-size:13px; cursor:pointer; transition:all 0.2s; }
   .freq-btn.active { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border-color:transparent; box-shadow:0 4px 12px rgba(91,191,122,0.35); }
   body.dark .freq-btn { background:var(--surface2); }
+  body.dark .freq-btn.active { background:linear-gradient(135deg,var(--green),var(--blue)) !important; color:white !important; }
 
   /* CALC BUTTON */
   .calc-btn { width:100%; padding:16px; border-radius:50px; border:none; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 20px rgba(91,191,122,0.4); margin-top:4px; }
@@ -162,7 +163,7 @@
   .week-row:nth-child(even) { background:var(--surface2); }
   .week-row.highlight { background:linear-gradient(135deg,var(--green-light),#D0F5E0) !important; }
   body.dark .week-row.highlight { background:linear-gradient(135deg,#1A3528,#1E4030) !important; }
-  .week-num { color:var(--text-light); min-width:80px; }
+  .week-num { color:var(--text-light); min-width:160px; font-size:12px; }
   .week-saved { color:var(--green-dark); font-family:'Fredoka One',cursive; font-size:15px; }
   body.dark .week-saved { color:var(--green); }
   .week-check { font-size:16px; min-width:24px; text-align:right; }
@@ -179,6 +180,7 @@
   .print-btn.visible { display:flex; }
   /* Print-only elements hidden on screen */
   .print-logo-bar, .print-footer-bar { display:none; }
+  .print-snake-wrap { display:none; }
 
   @media print {
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
@@ -204,7 +206,8 @@
       margin-bottom:0;
     }
     .print-logo-bar img { width:28px; height:28px; object-fit:contain; }
-    .print-logo-bar span { font-family:'Fredoka One',cursive; font-size:20px; color:#3D9E5F; }
+    .print-logo-bar span { font-family:'Fredoka One',cursive; font-size:20px; background:linear-gradient(135deg,#5BBF7A,#4AACDB); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    
 
     /* ── HERO SECTION ── */
     .print-hero {
@@ -237,7 +240,7 @@
     /* ── MOTIVATION ── */
     .motivation-box { background:#FFFDE0 !important; border:1.5px solid #FFD166 !important; border-radius:12px; padding:12px 18px; margin-bottom:18px; font-size:13px; color:#8B6200 !important; line-height:1.6; text-align:center; }
     .motivation-box::after {
-      content:'🖨️ Tipp: Druck diese Seite aus und streich jede Woche nach dem Sparen eine Zeile durch – so siehst du sofort wie nah du deinem Ziel schon bist!';
+      content:'🖨️ Druck diese Seite aus, male die Schlange Feld für Feld aus und freu dich über jeden Fortschritt – du schaffst das!';
       display:block;
       margin-top:8px;
       padding-top:8px;
@@ -277,7 +280,96 @@
     .print-footer-text { font-size:11px; color:#A0AEC0; line-height:1.5; }
     .print-footer-text strong { color:#3D9E5F; }
     .print-qr { width:64px; height:64px; }
-  }
+
+    /* ── FREQ BUTTONS – explizit erhalten ── */
+    .freq-btn.active {
+      background:linear-gradient(135deg,#5BBF7A,#4AACDB) !important;
+      color:white !important;
+      border-color:transparent !important;
+    }
+
+    /* ── SNAKE ── */
+    .print-snake-wrap {
+      display:block !important;
+      margin:20px 0;
+      page-break-inside:avoid;
+    }
+    .print-snake-title {
+      font-family:'Fredoka One',cursive;
+      font-size:15px;
+      color:#3D9E5F;
+      margin-bottom:12px;
+      text-align:center;
+    }
+    .snake-grid {
+      display:flex;
+      flex-direction:column;
+      gap:0;
+      width:100%;
+    }
+    .snake-row {
+      display:flex;
+      align-items:stretch;
+      gap:0;
+      width:100%;
+    }
+    .snake-cell {
+      flex:1;
+      height:32px;
+      border:2px solid #B3E8CC;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:8px;
+      font-weight:800;
+      color:#718096;
+      background:white;
+      flex-shrink:0;
+      margin:0;
+      box-sizing:border-box;
+    }
+    .snake-cell.connected-right { border-right:none; }
+    .snake-cell.connected-left  { border-left:none; }
+    .snake-cell.connected-both  { border-left:none; border-right:none; }
+
+    .snake-cell.corner-tl { border-top-left-radius:16px; }
+    .snake-cell.corner-tr { border-top-right-radius:16px; }
+    .snake-cell.corner-bl { border-bottom-left-radius:16px; }
+    .snake-cell.corner-br { border-bottom-right-radius:16px; }
+
+    .snake-connector-row {
+      display:flex;
+      height:12px;
+      width:100%;
+    }
+    .snake-connector-cell {
+      flex:1;
+      box-sizing:border-box;
+    }
+    /* Rechte Kurve (gerade Reihe endet rechts → ungerade beginnt rechts) */
+    .snake-connector-cell.vert-right {
+      border-left:2px solid #B3E8CC;
+      border-right:2px solid #B3E8CC;
+      background:white;
+    }
+    /* Linke Kurve (ungerade Reihe endet links → gerade beginnt links) */
+    .snake-connector-cell.vert-left {
+      border-left:2px solid #B3E8CC;
+      border-right:2px solid #B3E8CC;
+      background:white;
+    }
+
+    .snake-cell.goal-cell {
+      border-color:#5BBF7A !important;
+      background:#E8F7EE !important;
+      color:#3D9E5F !important;
+      font-size:14px !important;
+      flex:1.5;
+    }
+    .snake-cell.spacer {
+      border:none !important;
+      background:transparent !important;
+    }
 </style>
 </head>
 <body>
@@ -404,6 +496,12 @@
       <button class="show-more-btn" id="showMoreBtn" onclick="showAllWeeks()" style="display:none">▼ Alle Schritte anzeigen</button>
     </div>
 
+    <!-- PRINT: Ausmal-Schlange -->
+    <div class="print-snake-wrap" id="printSnake">
+      <div class="print-snake-title">🐍 Male jedes Feld aus wenn du den Betrag gespart hast!</div>
+      <div id="snakeGrid"></div>
+    </div>
+
     <!-- PRINT: Footer with QR -->
     <div class="print-footer-bar">
       <div class="print-footer-text">
@@ -520,14 +618,13 @@
 
   function renderTable(periods) {
     const body = document.getElementById('weekTableBody');
-    const label = freq === 'week' ? 'Woche' : 'Monat';
-    document.getElementById('tableColPeriod').textContent = label;
+    document.getElementById('tableColPeriod').textContent = 'Zeitraum';
     body.innerHTML = '';
     periods.forEach((p, i) => {
       const row = document.createElement('div');
       row.className = 'week-row' + (p.done ? ' highlight' : '');
       row.innerHTML = `
-        <span class="week-num">${label} ${i + 1}</span>
+        <span class="week-num" style="font-size:11px">${p.dateRange}</span>
         <span class="week-saved">+${fmtShort(p.saveThisPeriod)}</span>
         <span>${fmtShort(p.total)}</span>
         <span class="week-check">${p.done ? '🎉' : ''}</span>
@@ -546,21 +643,24 @@
     const periods = remaining <= 0 ? 0 : Math.ceil(remaining / savePerPeriod);
     const periodLabel = freq === 'week' ? 'Wochen' : 'Monate';
 
-    // Build period table
-    allPeriods = [];
-    let total = already;
-    for (let i = 0; i < periods; i++) {
-      const save = Math.min(savePerPeriod, price - total);
-      total += save;
-      allPeriods.push({ saveThisPeriod: save, total, done: total >= price });
-    }
-
     // Date estimate
     const today = new Date();
     const daysPerPeriod = freq === 'week' ? 7 : 30;
     const doneDate = new Date(today.getTime() + periods * daysPerPeriod * 86400000);
     const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
     const dateStr = periods === 0 ? 'Jetzt!' : `${months[doneDate.getMonth()]} ${doneDate.getFullYear()}`;
+
+    // Build period table
+    allPeriods = [];
+    let total = already;
+    const fmtDate = d => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
+    for (let i = 0; i < periods; i++) {
+      const save = Math.min(savePerPeriod, price - total);
+      total += save;
+      const start = new Date(today.getTime() + i * daysPerPeriod * 86400000);
+      const end   = new Date(today.getTime() + (i + 1) * daysPerPeriod * 86400000 - 86400000);
+      allPeriods.push({ saveThisPeriod: save, total, done: total >= price, dateRange: `${fmtDate(start)} – ${fmtDate(end)}` });
+    }
 
     // Emoji & title
     let emoji = '🎉', title = 'Du schaffst das!';
@@ -573,7 +673,6 @@
     // Motivation
     const msgs = [
       `In ${periods} ${periodLabel} hast du ${fmtShort(price)} zusammen – dann kannst du dir „${name}" kaufen! 🛒`,
-      `Schreib dir das Datum auf und freu dich drauf! Jede ${freq === 'week' ? 'Woche' : 'Monat'} kommst du deinem Ziel näher. 🗓️`,
       `Stell dir vor wie schön es ist, wenn du es endlich in den Händen hältst – das ist dein Antrieb! ✨`
     ];
 
@@ -611,6 +710,102 @@
     card.classList.add('show');
     setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
     document.getElementById('printBtn').classList.add('visible');
+    buildSnake(price);
+  }
+
+  function buildSnake(priceCents) {
+    const totalEuro = Math.ceil(priceCents / 100);
+    const grid = document.getElementById('snakeGrid');
+    grid.innerHTML = '';
+    grid.className = 'snake-grid';
+
+    // Dynamische Spaltenanzahl: ~10 bei kleinen Zielen, mehr bei größeren
+    const COLS = totalEuro <= 20 ? 5
+               : totalEuro <= 50 ? 10
+               : totalEuro <= 100 ? 10
+               : 15;
+
+    // Reihen aufbauen
+    const rows = [];
+    for (let i = 0; i < totalEuro; i += COLS) {
+      rows.push(Array.from({length: Math.min(COLS, totalEuro - i)}, (_, j) => i + j + 1));
+    }
+
+    rows.forEach((row, rowIdx) => {
+      const isReverse  = rowIdx % 2 === 1;
+      const isLastRow  = rowIdx === rows.length - 1;
+      const isFirstRow = rowIdx === 0;
+      const displayRow = isReverse ? [...row].reverse() : [...row];
+      const paddingNeeded = COLS - row.length;
+
+      const rowEl = document.createElement('div');
+      rowEl.className = 'snake-row';
+
+      // Leerzellen am Ende (bei letzter Reihe mit weniger Feldern)
+      // Bei reverser Reihe kommen die Leerfelder LINKS (visuell), also vorne im Array
+      const buildCell = (euro, colIdx, totalCols) => {
+        const isFirst = colIdx === 0;
+        const isLast  = colIdx === totalCols - 1;
+        const isGoal  = euro === totalEuro;
+
+        const cell = document.createElement('div');
+        let cls = 'snake-cell';
+        if (isGoal) cls += ' goal-cell';
+
+        if (!isFirst && !isLast) cls += ' connected-both';
+        else if (isFirst && !isLast) cls += ' connected-right';
+        else if (!isFirst && isLast) cls += ' connected-left';
+
+        // Nur Startecke (1€) und Ziel-Zelle
+        if (isFirstRow && !isReverse && isFirst) cls += ' corner-tl corner-bl';
+        if (isGoal) cls += isReverse ? ' corner-tl corner-bl' : ' corner-tr corner-br';
+
+        cell.className = cls;
+        cell.textContent = isGoal ? '🎉 ' + (priceCents/100).toFixed(0) + '€' : euro + '€';
+        if (isGoal) cell.title = 'Ziel!';
+        return cell;
+      };
+
+      if (isReverse && paddingNeeded > 0) {
+        // Spacer links einfügen
+        for (let s = 0; s < paddingNeeded; s++) {
+          const sp = document.createElement('div');
+          sp.className = 'snake-cell spacer';
+          rowEl.appendChild(sp);
+        }
+      }
+
+      displayRow.forEach((euro, colIdx) => {
+        rowEl.appendChild(buildCell(euro, colIdx, displayRow.length));
+      });
+
+      if (!isReverse && paddingNeeded > 0) {
+        // Spacer rechts einfügen
+        for (let s = 0; s < paddingNeeded; s++) {
+          const sp = document.createElement('div');
+          sp.className = 'snake-cell spacer';
+          rowEl.appendChild(sp);
+        }
+      }
+
+      grid.appendChild(rowEl);
+
+      // Vertikaler Konnektor zwischen Reihen
+      if (!isLastRow) {
+        const connRow = document.createElement('div');
+        connRow.className = 'snake-connector-row';
+
+        // Verbindungsspalte: rechts wenn gerade Reihe, links wenn ungerade
+        const connColIdx = isReverse ? 0 : COLS - 1;
+
+        for (let c = 0; c < COLS; c++) {
+          const cc = document.createElement('div');
+          cc.className = 'snake-connector-cell' + (c === connColIdx ? (isReverse ? ' vert-left' : ' vert-right') : '');
+          connRow.appendChild(cc);
+        }
+        grid.appendChild(connRow);
+      }
+    });
   }
 
   function resetCalc() {
