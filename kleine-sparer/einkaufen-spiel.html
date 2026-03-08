@@ -67,6 +67,7 @@ body.dark .game-header { background:linear-gradient(135deg,#0A1F30,#0F2820); bor
 @keyframes coinDrop { 0%{transform:translateY(-20px);opacity:0} 100%{transform:translateY(0);opacity:1} }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+@keyframes popIn { 0%{transform:scale(0.7);opacity:0} 100%{transform:scale(1);opacity:1} }
 
 /* MAIN LAYOUT */
 .game-wrap { max-width:900px; margin:0 auto; padding:16px; }
@@ -103,6 +104,8 @@ body.dark .list-item .item-price { color:var(--green); }
 body.dark .product-card .prod-price { color:var(--green); }
 .product-card .noname-badge { position:absolute; top:6px; right:6px; background:var(--orange); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
 .product-card .brand-badge { position:absolute; top:6px; right:6px; background:var(--purple); color:white; font-size:9px; font-weight:900; padding:2px 5px; border-radius:6px; }
+@keyframes distractShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+.distract-shake { animation:distractShake 0.4s ease; }
 
 /* CART BAR */
 .cart-bar { background:linear-gradient(135deg,var(--green-light),var(--blue-light)); border:2px solid var(--green); border-radius:16px; padding:12px 16px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
@@ -400,12 +403,33 @@ const ALL_PRODUCTS = [
   { emoji:'🫗', name:'Mineralwasser 1L', brandPrice:99,  noNamePrice:29,  brand:'Volvic',         noName:'Spar-Wasser' },
 ];
 
+// Verlockende Kinderartikel – Teil des normalen Produktpools
+const EXTRA_SINGLES = [
+  { emoji:'🎈', name:'Luftballon',       price:49,  single:true },
+  { emoji:'🍩', name:'Donut',            price:129, single:true },
+  { emoji:'🍦', name:'Softeis',          price:159, single:true },
+  { emoji:'📖', name:'Pixi-Buch',        price:99,  single:true },
+  { emoji:'🥤', name:'Fanta 0,5L',       price:119, single:true },
+  { emoji:'🍭', name:'Lollipop',         price:39,  single:true },
+  { emoji:'🍿', name:'Popcorn',          price:129, single:true },
+  { emoji:'🧁', name:'Muffin',           price:159, single:true },
+  { emoji:'🍪', name:'Kekse 100g',       price:99,  single:true },
+  { emoji:'🍬', name:'Brausebonbons',    price:59,  single:true },
+  { emoji:'🎁', name:'Überraschungs-Ei', price:129, single:true },
+  { emoji:'🃏', name:'Sammelkarten',     price:149, single:true },
+];
+
+const ALL_SINGLES = [...ALL_PRODUCTS.filter(p => p.single), ...EXTRA_SINGLES];
+const ALL_PAIRS   = ALL_PRODUCTS.filter(p => !p.single);
+
 // ── GAME STATE ─────────────────────────────────────────────
 let round = 1;
 let totalScore = 0;
 let totalSaved = 0; // in Cent gespart durch NoName-Wahl
 let shoppingList = [];   // { emoji, name, price, brandPrice?, noNamePrice?, chosenIsNoName? }
 let cartItems = [];
+let distractItems = []; // Störprodukte diese Runde
+let impulseCount = 0;   // wie oft Störprodukt angeklickt
 let trayItems = []; // {value, label, file}
 let draggingMoney = null;
 
@@ -429,24 +453,31 @@ function getListSize() {
 function buildRound() {
   cartItems = [];
   trayItems = [];
+  distractItems = [];
+  impulseCount = 0;
   const size = getListSize();
+  const distractCount = round <= 2 ? 2 : 3;
 
-  // Pick products: mix singles and pairs
-  const pairs = shuffle(ALL_PRODUCTS.filter(p => !p.single));
-  const singles = shuffle(ALL_PRODUCTS.filter(p => p.single));
+  // Pick products from unified pools
+  const pairs   = shuffle(ALL_PAIRS);
+  const singles = shuffle(ALL_SINGLES);
 
   // Decide how many pairs (more in later rounds)
-  const pairCount = round <= 2 ? 1 : round <= 4 ? 2 : 3;
+  const pairCount   = round <= 2 ? 1 : round <= 4 ? 2 : 3;
   const singleCount = size - pairCount;
 
   shoppingList = [];
-
   pairs.slice(0, pairCount).forEach(p => {
     shoppingList.push({ ...p, type:'pair', chosen: null });
   });
   singles.slice(0, singleCount).forEach(p => {
     shoppingList.push({ ...p, type:'single', chosen: true });
   });
+
+  // Störprodukte: aus dem Rest des Single-Pools (nicht auf der Liste)
+  const usedSingles = singles.slice(0, singleCount);
+  const remainingSingles = singles.filter(p => !usedSingles.includes(p));
+  distractItems = remainingSingles.slice(0, distractCount);
 
   shoppingList = shuffle(shoppingList);
 
@@ -489,24 +520,27 @@ function renderShelf() {
   const grid = document.getElementById('shelfGrid');
   grid.innerHTML = '';
 
+  // Störprodukte hinzufügen (zufällig in die Liste gemischt)
+  const allCards = [];
   shoppingList.forEach((item, i) => {
     if (item.type === 'single') {
-      const card = makeProductCard(item.emoji, item.name, item.price, null, i, 'single');
-      grid.appendChild(card);
+      allCards.push(makeProductCard(item.emoji, item.name, item.price, null, i, 'single'));
     } else {
-      // Brand card
-      const brandCard = makeProductCard(item.emoji, item.brand, item.brandPrice, 'brand', i, 'brand');
-      // NoName card
-      const noNameCard = makeProductCard(item.emoji, item.noName, item.noNamePrice, 'noname', i, 'noname');
-      grid.appendChild(brandCard);
-      grid.appendChild(noNameCard);
+      allCards.push(makeProductCard(item.emoji, item.brand, item.brandPrice, 'brand', i, 'brand'));
+      allCards.push(makeProductCard(item.emoji, item.noName, item.noNamePrice, 'noname', i, 'noname'));
     }
   });
+  distractItems.forEach((item, i) => {
+    allCards.push(makeDistractCard(item, i));
+  });
+  shuffle(allCards).forEach(card => grid.appendChild(card));
 }
 
 function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
   const card = document.createElement('div');
   card.className = 'product-card';
+  card.dataset.listidx = listIdx;
+  card.dataset.variant = variant || '';
   const badge = badgeType === 'brand'
     ? `<div class="brand-badge">Marke</div>`
     : badgeType === 'noname'
@@ -522,7 +556,57 @@ function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
   return card;
 }
 
-// ── ADD TO CART ────────────────────────────────────────────
+function makeDistractCard(item, idx) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.innerHTML = `
+    <span class="prod-emoji">${item.emoji}</span>
+    <div class="prod-name">${item.name}</div>
+    <div class="prod-price">${fmt(item.price)}</div>
+  `;
+  card.onclick = () => {
+    impulseCount++;
+    card.classList.add('distract-shake');
+    setTimeout(() => card.classList.remove('distract-shake'), 500);
+    showFeedbackToast('Das steht nicht auf der Liste! 😅');
+  };
+  return card;
+}
+
+function showFeedbackToast(msg) {
+  let overlay = document.getElementById('shelfOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'shelfOverlay';
+    overlay.style.cssText = `
+      position:absolute; top:0; left:0; right:0; bottom:0;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:var(--radius); pointer-events:none;
+      z-index:10;
+    `;
+    const shelf = document.querySelector('.shelf-panel');
+    shelf.style.position = 'relative';
+    shelf.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div style="
+      background:rgba(255,107,157,0.95);
+      color:white;
+      font-family:'Fredoka One',cursive;
+      font-size:22px;
+      padding:18px 28px;
+      border-radius:20px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.25);
+      text-align:center;
+      animation:popIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    ">😅 Das steht nicht<br>auf der Liste!</div>
+  `;
+  overlay.style.opacity = '1';
+  clearTimeout(overlay._timer);
+  overlay._timer = setTimeout(() => { overlay.innerHTML = ''; }, 1500);
+}
+
+
 function addToCart(listIdx, variant, price) {
   if (cartItems.includes(listIdx)) return;
   const item = shoppingList[listIdx];
@@ -538,12 +622,8 @@ function addToCart(listIdx, variant, price) {
 
   cartItems.push(listIdx);
 
-  // Mark shelf cards as in-cart
-  const allCards = document.querySelectorAll('.product-card');
-  // rebuild shelf to reflect chosen state
-  renderShelf();
-  // disable both variants for this pair
-  rebuildShelfCartState();
+  // Karten direkt im DOM als in-cart markieren, kein Re-Render
+  updateShelfCartState();
 
   renderShoppingList();
 
@@ -556,25 +636,11 @@ function addToCart(listIdx, variant, price) {
   }
 }
 
-function rebuildShelfCartState() {
-  const cards = document.querySelectorAll('.product-card');
-  let cardIdx = 0;
-  shoppingList.forEach((item, i) => {
-    if (item.type === 'single') {
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
-    } else {
-      // brand + noname
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
-      if (cardIdx < cards.length) {
-        cards[cardIdx].classList.toggle('in-cart', cartItems.includes(i));
-        cardIdx++;
-      }
+function updateShelfCartState() {
+  document.querySelectorAll('.product-card[data-listidx]').forEach(card => {
+    const idx = parseInt(card.dataset.listidx);
+    if (!isNaN(idx)) {
+      card.classList.toggle('in-cart', cartItems.includes(idx));
     }
   });
 }
@@ -856,6 +922,7 @@ function showFinalResult() {
       <div class="result-savings" style="display:block">
         💡 Durch NoName-Produkte hast du insgesamt <strong>${fmt(totalSaved)}</strong> gespart!
       </div>
+      ${impulseCount > 0 ? `<div style="margin-top:8px;font-size:13px;color:var(--orange);font-weight:700">🛒 Du wolltest ${impulseCount}× etwas kaufen, das nicht auf der Liste stand!</div>` : `<div style="margin-top:8px;font-size:13px;color:var(--green-dark);font-weight:700">✅ Du hast alle Störprodukte ignoriert – perfekt!</div>`}
       <button class="next-btn" onclick="restartGame()" style="margin-top:16px">🔄 Nochmal spielen</button>
       <br>
       <a class="back-btn back-btn-nav" href="einkaufen.html">← Zurück zur Übersicht</a>
