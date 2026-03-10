@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Will ich's oder brauch ich's? – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#5BBF7A;--green-dark:#3D9E5F;--green-light:#E8F7EE;
+  --blue:#4AACDB;--blue-dark:#2A85B0;--blue-light:#E6F6FF;
+  --yellow:#FFD166;--orange:#FF9A3C;--pink:#FF6B9D;--purple:#9B7FE8;
+  --bg:#F0FAF5;--text:#2D3748;--text-light:#718096;
+  --surface:#FDFCFA;--surface2:#EEF5EF;--border:#E8F7EE;
+  --radius:20px;--shadow:0 6px 24px rgba(61,158,95,0.10);
+  --font-body:'Nunito',sans-serif;--font-display:'Fredoka One',cursive;
+}
+body.dark{
+  --bg:#0F1A14;--text:#E8F5EE;--text-light:#8EAAA0;
+  --surface:#1A2E22;--surface2:#243B2C;--border:#2A4035;
+  --green-light:#1C3528;--blue-light:#172838;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;transition:background 0.3s;min-height:100vh}
+
+/* HEADER */
+.header{text-align:center;padding:20px 20px 14px;background:linear-gradient(135deg,#FFF9E6,#E8F7EE);border-bottom:2px solid var(--border);position:relative;overflow:hidden}
+body.dark .header{background:linear-gradient(135deg,#1A1A08,#0F2820);border-bottom-color:var(--border)}
+.header h1{font-family:var(--font-display);font-size:clamp(20px,5vw,32px);background:linear-gradient(135deg,var(--orange),var(--green-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{font-size:14px;color:var(--text-light);font-weight:600;margin-top:4px}
+.float-icon{position:absolute;font-size:20px;animation:float 3s ease-in-out infinite;pointer-events:none;opacity:0.55}
+.fi1{top:20%;left:5%;animation-delay:0s}.fi2{top:20%;right:6%;animation-delay:0.7s}
+.fi3{bottom:15%;left:10%;animation-delay:1.3s}.fi4{bottom:15%;right:8%;animation-delay:0.4s}
+.close-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid rgba(255,107,157,0.4);color:var(--pink);font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.2s}
+.close-btn:hover{background:rgba(255,107,157,0.2);transform:scale(1.1)}
+
+/* SCORE BAR */
+.score-bar{background:var(--surface);border-bottom:2px solid var(--border);padding:12px 20px;display:flex;justify-content:center;gap:32px}
+.score-item{text-align:center}
+.score-num{font-family:var(--font-display);font-size:28px;line-height:1}
+.score-num.correct{color:var(--green)}
+.score-num.wrong{color:var(--pink)}
+.score-num.total{color:var(--blue)}
+.score-label{font-size:11px;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+
+/* MAIN */
+.game-wrap{max-width:560px;margin:0 auto;padding:24px 16px 48px}
+
+/* CARD (draggable object) */
+.card-stage{display:flex;justify-content:center;margin-bottom:28px}
+.item-card{
+  background:var(--surface);border-radius:24px;padding:28px 36px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12);border:3px solid var(--border);
+  text-align:center;cursor:grab;
+  user-select:none;touch-action:none;-webkit-user-drag:none;
+  display:inline-block;
+  transition:box-shadow 0.2s;
+}
+.item-card:hover{box-shadow:0 10px 36px rgba(0,0,0,0.16)}
+.item-card.grabbed{cursor:grabbing;opacity:0.25}
+.item-emoji{font-size:64px;display:block;margin-bottom:12px;pointer-events:none}
+.item-name{font-family:var(--font-display);font-size:24px;color:var(--text);pointer-events:none}
+.item-sub{font-size:13px;color:var(--text-light);font-weight:600;margin-top:4px;pointer-events:none}
+
+/* DROP ZONES */
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.drop-zone{
+  border-radius:20px;padding:24px 12px;text-align:center;
+  border:3px dashed var(--border);background:var(--surface2);
+  transition:all 0.2s;min-height:140px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.drop-zone.need{border-color:var(--green);background:var(--green-light)}
+.drop-zone.want{border-color:var(--orange);background:#FFF5E6}
+body.dark .drop-zone.want{background:#2A1800}
+.drop-zone.drag-over{transform:scale(1.05)}
+.drop-zone.need.drag-over{box-shadow:0 0 0 5px rgba(91,191,122,0.3)}
+.drop-zone.want.drag-over{box-shadow:0 0 0 5px rgba(255,154,60,0.3)}
+.dz-icon{font-size:36px;pointer-events:none}
+.dz-label{font-family:var(--font-display);font-size:17px;pointer-events:none}
+.drop-zone.need .dz-label{color:var(--green-dark)} body.dark .drop-zone.need .dz-label{color:var(--green)}
+.drop-zone.want .dz-label{color:#C05A00} body.dark .drop-zone.want .dz-label{color:var(--orange)}
+.dz-sub{font-size:12px;font-weight:700;color:var(--text-light);pointer-events:none;line-height:1.4}
+
+/* DRAG GHOST – exakt wie sparschwein-spiel */
+.drag-ghost{position:fixed;pointer-events:none;z-index:9999;opacity:0.88;transform:translate(-50%,-50%) scale(1.1) rotate(3deg);transition:none}
+.drag-ghost-inner{background:var(--surface);border-radius:20px;padding:18px 24px;box-shadow:0 12px 40px rgba(0,0,0,0.22);border:3px solid var(--border);text-align:center}
+.drag-ghost-inner .g-emoji{font-size:44px;display:block;margin-bottom:8px}
+.drag-ghost-inner .g-name{font-family:var(--font-display);font-size:18px;color:var(--text)}
+
+/* FEEDBACK TOAST – inline unter den Boxen */
+.toast{margin-top:16px;background:var(--surface);border-radius:16px;padding:14px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.18);border:2px solid var(--border);text-align:center;transition:opacity 0.3s,transform 0.3s cubic-bezier(0.34,1.56,0.64,1);opacity:0;transform:translateY(10px);pointer-events:none;min-height:80px}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.toast-emoji{font-size:32px;display:block;margin-bottom:4px}
+.toast-text{font-family:var(--font-display);font-size:18px;color:var(--text)}
+.toast-explain{font-size:13px;font-weight:700;color:var(--text-light);margin-top:4px;line-height:1.5}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:20px}
+.progress-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--text-light);margin-bottom:6px}
+.progress-bar-bg{background:var(--surface2);border-radius:50px;height:10px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width 0.4s ease}
+
+/* START */
+.start-card{background:var(--surface);border-radius:var(--radius);padding:32px 24px;text-align:center;box-shadow:var(--shadow);border:2px solid var(--border)}
+.start-emoji{font-size:72px;display:block;margin-bottom:14px}
+.start-title{font-family:var(--font-display);font-size:28px;margin-bottom:10px}
+.start-desc{font-size:15px;font-weight:600;color:var(--text-light);line-height:1.7;margin-bottom:20px}
+.rules{display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:24px}
+.rule{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:700;line-height:1.5}
+.rule-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.start-btn{background:linear-gradient(135deg,var(--orange),var(--green-dark));color:white;border:none;font-family:var(--font-display);font-size:20px;padding:16px 40px;border-radius:50px;cursor:pointer;transition:opacity 0.2s}
+.start-btn:hover{opacity:0.88}
+
+/* RESULT */
+.result-card{background:var(--surface);border-radius:var(--radius);padding:32px 24px;text-align:center;box-shadow:var(--shadow);border:2px solid var(--border)}
+.result-emoji{font-size:80px;display:block;margin-bottom:14px}
+.result-title{font-family:var(--font-display);font-size:30px;margin-bottom:8px}
+.result-sub{font-size:15px;font-weight:600;color:var(--text-light);line-height:1.7;margin-bottom:24px}
+.result-big-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.result-big-item{background:var(--surface2);border-radius:16px;padding:14px 8px;text-align:center}
+.result-big-num{font-family:var(--font-display);font-size:36px;display:block}
+.result-big-num.c{color:var(--green)} .result-big-num.w{color:var(--pink)} .result-big-num.p{color:var(--blue)}
+.result-big-label{font-size:12px;font-weight:800;color:var(--text-light);display:block;margin-top:2px}
+.next-btn{display:inline-block;background:linear-gradient(135deg,var(--green),var(--blue));color:white;border:none;font-family:var(--font-display);font-size:18px;padding:14px 36px;border-radius:50px;cursor:pointer;transition:opacity 0.2s;text-decoration:none;margin-top:4px}
+.next-btn:hover{opacity:0.88}
+.back-btn{display:inline-block;margin-top:14px;font-size:14px;font-weight:800;color:var(--text-light);text-decoration:none}
+.back-btn:hover{color:var(--green)}
+
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes cardIn{0%{opacity:0;transform:scale(0.7)}60%{transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes bounceIn{0%{transform:scale(0.7)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+/* LEKTION */
+.lesson-teaser{background:linear-gradient(135deg,var(--blue-light),var(--green-light));border:2px solid var(--blue);border-radius:16px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px}
+body.dark .lesson-teaser{background:linear-gradient(135deg,#172838,#1C3528);border-color:var(--blue)}
+.lesson-teaser-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.lesson-teaser-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.6}
+.lesson-teaser-text strong{color:var(--blue-dark)} body.dark .lesson-teaser-text strong{color:var(--blue)}
+
+.lesson-box{background:var(--surface2);border-radius:16px;padding:20px;margin-top:20px;text-align:left}
+.lesson-box-title{font-family:var(--font-display);font-size:18px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.lesson-row{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.lesson-row:last-child{margin-bottom:0}
+.lesson-row-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.lesson-row-content{}
+.lesson-row-label{font-family:var(--font-display);font-size:15px;color:var(--text);margin-bottom:2px}
+.lesson-row-label.need{color:var(--green-dark)} body.dark .lesson-row-label.need{color:var(--green)}
+.lesson-row-label.want{color:#C05A00} body.dark .lesson-row-label.want{color:var(--orange)}
+.lesson-row-text{font-size:13px;font-weight:700;color:var(--text-light);line-height:1.6}
+.lesson-tip{background:linear-gradient(135deg,#FFF9E6,#FFFBF0);border:2px solid var(--yellow);border-radius:12px;padding:12px 16px;margin-top:14px;font-size:13px;font-weight:700;color:var(--text);line-height:1.6}
+body.dark .lesson-tip{background:linear-gradient(135deg,#1A1500,#221A00);border-color:#6B5500;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="float-icon fi1">🍞</span>
+  <span class="float-icon fi2">🎮</span>
+  <span class="float-icon fi3">👟</span>
+  <span class="float-icon fi4">🍭</span>
+  <h1>Will ich's oder brauch ich's?</h1>
+  <p>Ziehe die Karte in die richtige Box!</p>
+  <a class="close-btn" id="close-btn" href="kleine-sparer.html">✕</a>
+</div>
+
+<!-- SCORE BAR (hidden until game starts) -->
+<div class="score-bar" id="scoreBar" style="display:none">
+  <div class="score-item">
+    <div class="score-num correct" id="numCorrect">0</div>
+    <div class="score-label">✅ Richtig</div>
+  </div>
+  <div class="score-item">
+    <div class="score-num total" id="numTotal">0 / 10</div>
+    <div class="score-label">Karten</div>
+  </div>
+  <div class="score-item">
+    <div class="score-num wrong" id="numWrong">0</div>
+    <div class="score-label">❌ Falsch</div>
+  </div>
+</div>
+
+<div class="game-wrap">
+
+  <!-- START SCREEN -->
+  <div id="phaseStart">
+    <div class="start-card">
+      <span class="start-emoji">🤔</span>
+      <div class="start-title">Will ich's oder brauch ich's?</div>
+      <div class="start-desc">Sortiere Dinge richtig – brauchst du das wirklich, oder wünschst du es dir nur?</div>
+
+      <div class="lesson-teaser">
+        <span class="lesson-teaser-icon">💡</span>
+        <div class="lesson-teaser-text">
+          <strong>Was du lernst:</strong> Bedürfnisse sind Dinge, die wir zum Leben brauchen. Wünsche sind Dinge, die schön wären – aber ohne die wir gut auskommen. Wer den Unterschied kennt, gibt sein Geld klüger aus!
+        </div>
+      </div>
+
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">✅</span><span><strong>Brauche ich:</strong> Dinge zum Leben – Essen, Kleidung, Schule.</span></div>
+        <div class="rule"><span class="rule-icon">⭐</span><span><strong>Wünsche ich mir:</strong> Schön, aber nicht nötig – Spielzeug, Süßigkeiten, Extras.</span></div>
+        <div class="rule"><span class="rule-icon">👆</span><span>Ziehe die Karte in die passende Box – oder tippe einfach auf eine Box.</span></div>
+        <div class="rule"><span class="rule-icon">🃏</span><span>Pro Spiel kommen <strong>20 verschiedene Karten</strong> – jede nur einmal!</span></div>
+      </div>
+      <button class="start-btn" onclick="startGame()">Los geht's! 🚀</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="phaseGame" style="display:none">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progressText">Karte 1 von 10</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- KARTE OBEN -->
+    <div class="card-stage">
+      <div class="item-card" id="itemCard">
+        <span class="item-emoji" id="itemEmoji">🍞</span>
+        <div class="item-name" id="itemName">Brot</div>
+        <div class="item-sub" id="itemSub">Zieh mich in die richtige Box!</div>
+      </div>
+    </div>
+
+    <!-- ZWEI BOXEN UNTEN -->
+    <div class="zones">
+      <div class="drop-zone need" id="zoneNeed">
+        <span class="dz-icon">✅</span>
+        <span class="dz-label">Brauche ich!</span>
+        <span class="dz-sub">Das braucht man zum Leben</span>
+      </div>
+      <div class="drop-zone want" id="zoneWant">
+        <span class="dz-icon">⭐</span>
+        <span class="dz-label">Wünsche ich mir</span>
+        <span class="dz-sub">Schön, aber nicht nötig</span>
+      </div>
+    </div>
+
+    <!-- FEEDBACK direkt unter den Boxen -->
+    <div class="toast" id="toast">
+      <span class="toast-emoji" id="toastEmoji">✅</span>
+      <div class="toast-text" id="toastText">Richtig!</div>
+      <div class="toast-explain" id="toastExplain"></div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="phaseResult" style="display:none"></div>
+
+</div>
+
+
+<script>
+// ── DATA ────────────────────────────────────────────────────
+const ALL_ITEMS = [
+  // ── BEDÜRFNISSE (need) ──────────────────────────────────
+  {emoji:'🍞', name:'Brot',              cat:'need', ex:'Essen ist ein Grundbedürfnis – ohne Nahrung geht es uns nicht gut.'},
+  {emoji:'💧', name:'Wasser',            cat:'need', ex:'Wasser braucht jeder Mensch zum Überleben.'},
+  {emoji:'👕', name:'T-Shirt',           cat:'need', ex:'Kleidung brauchen wir – auch wenn es nicht die teuerste Marke sein muss.'},
+  {emoji:'👟', name:'Schuhe',            cat:'need', ex:'Schuhe schützen unsere Füße – die brauchen wir wirklich.'},
+  {emoji:'📚', name:'Schulbücher',       cat:'need', ex:'Bildung ist wichtig – und Schulbücher gehören dazu.'},
+  {emoji:'🧥', name:'Winterjacke',       cat:'need', ex:'Im Winter brauchen wir warme Kleidung, um gesund zu bleiben.'},
+  {emoji:'🧴', name:'Shampoo',           cat:'need', ex:'Körperpflege gehört zu den täglichen Grundbedürfnissen.'},
+  {emoji:'💊', name:'Medizin',           cat:'need', ex:'Wenn wir krank sind, brauchen wir Medikamente.'},
+  {emoji:'🧼', name:'Seife',             cat:'need', ex:'Hygiene ist wichtig, um gesund zu bleiben.'},
+  {emoji:'🎒', name:'Schulranzen',       cat:'need', ex:'Für die Schule brauchen wir eine Tasche für unsere Sachen.'},
+  {emoji:'🥛', name:'Milch',             cat:'need', ex:'Gesunde Ernährung ist ein Grundbedürfnis.'},
+  {emoji:'🏠', name:'Zuhause',           cat:'need', ex:'Ein Dach über dem Kopf ist eines der wichtigsten Bedürfnisse.'},
+  {emoji:'🥦', name:'Gemüse',            cat:'need', ex:'Gesundes Essen hält uns fit und ist ein Grundbedürfnis.'},
+  {emoji:'🍎', name:'Obst',              cat:'need', ex:'Vitamine aus Obst brauchen wir, um gesund zu bleiben.'},
+  {emoji:'🛏️', name:'Bett',             cat:'need', ex:'Schlaf ist lebenswichtig – ein Platz zum Schlafen auch.'},
+  {emoji:'🧦', name:'Socken',            cat:'need', ex:'Kleidung schützt uns – auch die kleinen Dinge wie Socken.'},
+  {emoji:'🪥', name:'Zahnbürste',        cat:'need', ex:'Zähneputzen ist wichtig für unsere Gesundheit.'},
+  {emoji:'🧻', name:'Toilettenpapier',   cat:'need', ex:'Hygieneartikel des täglichen Bedarfs sind ein Grundbedürfnis.'},
+  {emoji:'🍳', name:'Kochtopf',          cat:'need', ex:'Zum Kochen von Essen brauchen wir Küchengeräte.'},
+  {emoji:'💡', name:'Strom',             cat:'need', ex:'Heizung und Licht sind in unserem Alltag notwendig.'},
+  {emoji:'🚿', name:'Dusche',            cat:'need', ex:'Sauberkeit und Körperhygiene sind Grundbedürfnisse.'},
+  {emoji:'🧢', name:'Mütze',             cat:'need', ex:'Im Winter schützen uns warme Kleidungsstücke vor Kälte.'},
+  {emoji:'📝', name:'Hefte & Stifte',    cat:'need', ex:'Schulmaterial ist für die Bildung notwendig.'},
+  {emoji:'🥚', name:'Eier',              cat:'need', ex:'Proteinreiche Nahrung gehört zu einer gesunden Ernährung.'},
+  {emoji:'🏥', name:'Arztbesuch',        cat:'need', ex:'Medizinische Versorgung ist ein wichtiges Grundbedürfnis.'},
+  {emoji:'🧣', name:'Schal',             cat:'need', ex:'Wärme im Winter ist keine Selbstverständlichkeit – Kleidung schützt uns.'},
+  {emoji:'🍚', name:'Reis',              cat:'need', ex:'Kohlenhydrate als Energiequelle sind Teil der Grundernährung.'},
+  {emoji:'🥩', name:'Fleisch',           cat:'need', ex:'Proteine sind wichtig für unseren Körper.'},
+  {emoji:'🚰', name:'Fließendes Wasser', cat:'need', ex:'Sauberes Wasser zum Waschen und Trinken ist lebensnotwendig.'},
+  {emoji:'📖', name:'Schulheft',         cat:'need', ex:'Zum Lernen in der Schule brauchen wir Hefte.'},
+  {emoji:'🧷', name:'Unterwäsche',       cat:'need', ex:'Grundlegende Kleidung wie Unterwäsche gehört zu den Bedürfnissen.'},
+  {emoji:'🪟', name:'Fenster & Dach',    cat:'need', ex:'Schutz vor Kälte und Regen ist ein Grundbedürfnis.'},
+  {emoji:'🔦', name:'Taschenlampe',      cat:'need', ex:'Sicherheit und Orientierung in der Dunkelheit sind wichtig.'},
+  {emoji:'🩹', name:'Pflaster',          cat:'need', ex:'Erste Hilfe bei Verletzungen ist ein Grundbedürfnis.'},
+  {emoji:'🫁', name:'Frische Luft',      cat:'need', ex:'Sauerstoff ist die wichtigste Grundlage des Lebens.'},
+  {emoji:'🥜', name:'Nüsse',             cat:'need', ex:'Nährstoffe und Proteine gehören zur gesunden Ernährung.'},
+  {emoji:'👓', name:'Brille',            cat:'need', ex:'Wer schlecht sieht, braucht eine Sehhilfe – das ist ein Bedürfnis.'},
+  {emoji:'🚌', name:'Busticket',         cat:'need', ex:'Mobilität zur Schule oder Arbeit ist oft notwendig.'},
+  {emoji:'🧺', name:'Wäsche waschen',    cat:'need', ex:'Saubere Kleidung ist ein Grundbedürfnis für Hygiene.'},
+  {emoji:'🥖', name:'Brötchen',          cat:'need', ex:'Regelmäßige Mahlzeiten sind ein Grundbedürfnis.'},
+  {emoji:'🧊', name:'Kühlschrank',       cat:'need', ex:'Lebensmittel frisch halten ist für die Gesundheit wichtig.'},
+  {emoji:'🛁', name:'Badewanne',         cat:'need', ex:'Körperhygiene ist ein tägliches Grundbedürfnis.'},
+  {emoji:'🕯️', name:'Kerze',            cat:'need', ex:'Licht ist wichtig für Sicherheit und Orientierung.'},
+  {emoji:'🥣', name:'Frühstück',         cat:'need', ex:'Regelmäßige Mahlzeiten geben uns Energie für den Tag.'},
+  {emoji:'🪑', name:'Stuhl & Tisch',     cat:'need', ex:'Möbel für Schlafen und Essen gehören zu einem Zuhause.'},
+  {emoji:'🌊', name:'Baden / Waschen',   cat:'need', ex:'Körperhygiene ist ein tägliches Grundbedürfnis.'},
+  {emoji:'🥗', name:'Salat',             cat:'need', ex:'Vitamineireiche Kost gehört zu einer ausgewogenen Ernährung.'},
+
+  // ── WÜNSCHE (want) ──────────────────────────────────────
+  {emoji:'🎮', name:'Spielekonsole',     cat:'want', ex:'Eine Konsole macht Spaß – aber ohne sie kann man gut leben.'},
+  {emoji:'🍭', name:'Gummibärchen',      cat:'want', ex:'Süßigkeiten sind lecker, aber kein Grundbedürfnis.'},
+  {emoji:'🎵', name:'Kopfhörer',         cat:'want', ex:'Musik hören ist schön – aber keine Notwendigkeit.'},
+  {emoji:'🦄', name:'Plüschtier',        cat:'want', ex:'Plüschtiere sind toll, aber nicht lebensnotwendig.'},
+  {emoji:'🍕', name:'Pizza bestellen',   cat:'want', ex:'Essen kann man kochen – Pizza bestellen ist ein Extra.'},
+  {emoji:'📱', name:'Neues Handy',       cat:'want', ex:'Das neueste Modell ist ein Wunsch, kein Bedürfnis.'},
+  {emoji:'🎨', name:'Bastelset',         cat:'want', ex:'Basteln macht Spaß – aber ein Grundbedürfnis ist es keins.'},
+  {emoji:'🚲', name:'Neues Fahrrad',     cat:'want', ex:'Ein Fahrrad ist praktisch – das allerneueste ist ein Wunsch.'},
+  {emoji:'🎠', name:'Freizeitpark',      cat:'want', ex:'Ausflüge machen Spaß – aber sie sind kein Grundbedürfnis.'},
+  {emoji:'🧸', name:'Lego-Set',          cat:'want', ex:'Mit Lego kann man super spielen – nötig ist es nicht.'},
+  {emoji:'🍦', name:'Eis',               cat:'want', ex:'Eis schmeckt super – es ist ein Genuss, kein Bedürfnis.'},
+  {emoji:'🎧', name:'Airpods',           cat:'want', ex:'Kabellose Ohrstöpsel sind cool – aber kein Grundbedürfnis.'},
+  {emoji:'👾', name:'Videospiel',        cat:'want', ex:'Spiele sind Unterhaltung – toll, aber nicht notwendig.'},
+  {emoji:'🛹', name:'Skateboard',        cat:'want', ex:'Sport macht Spaß – aber ein Skateboard ist kein Muss.'},
+  {emoji:'🎪', name:'Zirkus',            cat:'want', ex:'Ein Zirkusbesuch ist aufregend, aber kein Bedürfnis.'},
+  {emoji:'🍿', name:'Kino',              cat:'want', ex:'Filme schauen ist schön – aber kein Grundbedürfnis.'},
+  {emoji:'🧩', name:'Puzzle',            cat:'want', ex:'Puzzeln macht Spaß – notwendig ist es nicht.'},
+  {emoji:'🪀', name:'Yo-Yo',             cat:'want', ex:'Spielzeug ist schön – aber kein Bedürfnis.'},
+  {emoji:'🎁', name:'Überraschungsei',   cat:'want', ex:'Süßigkeiten und Spielzeug sind ein Genuss, kein Muss.'},
+  {emoji:'🏄', name:'Surfbrett',         cat:'want', ex:'Sport ist gesund – aber ein Surfbrett ist ein Luxus.'},
+  {emoji:'🎩', name:'Zauberset',         cat:'want', ex:'Zaubern lernen ist cool – aber kein Grundbedürfnis.'},
+  {emoji:'🖥️', name:'Gaming-PC',        cat:'want', ex:'Ein Spiele-Computer ist ein Wunsch, kein Bedürfnis.'},
+  {emoji:'🎡', name:'Rummelplatz',       cat:'want', ex:'Der Rummel macht Spaß – aber er ist kein Grundbedürfnis.'},
+  {emoji:'🪁', name:'Bogen & Pfeil',     cat:'want', ex:'Spielzeug macht Spaß – aber es ist nicht lebensnotwendig.'},
+  {emoji:'🏊', name:'Wasserpark',        cat:'want', ex:'Wasserparks sind toll – aber kein Bedürfnis.'},
+  {emoji:'🎤', name:'Mikrofon',          cat:'want', ex:'Singen macht Spaß – ein Mikrofon ist aber kein Muss.'},
+  {emoji:'🎬', name:'Filmkamera',        cat:'want', ex:'Videos drehen ist kreativ – aber keine Notwendigkeit.'},
+  {emoji:'🛼', name:'Rollschuhe',        cat:'want', ex:'Rollschuhe machen Spaß – sie sind aber kein Bedürfnis.'},
+  {emoji:'🎯', name:'Dartscheibe',       cat:'want', ex:'Spiele sind Freizeit – keine Grundbedürfnisse.'},
+  {emoji:'🧋', name:'Bubble Tea',        cat:'want', ex:'Ein Bubble Tea ist ein Genuss – kein Grundbedürfnis.'},
+  {emoji:'🪄', name:'Zauberstab',        cat:'want', ex:'Spielzeug ist schön – aber nicht lebensnotwendig.'},
+  {emoji:'🎸', name:'E-Gitarre',         cat:'want', ex:'Musik machen ist toll – aber eine E-Gitarre ist ein Wunsch.'},
+  {emoji:'🚀', name:'Raketen-Spielzeug', cat:'want', ex:'Cooles Spielzeug – aber kein Grundbedürfnis.'},
+  {emoji:'🛸', name:'Drohne',            cat:'want', ex:'Eine Drohne ist faszinierend – aber kein Bedürfnis.'},
+  {emoji:'🎀', name:'Haarschmuck',       cat:'want', ex:'Accessoires sind schön – aber kein Grundbedürfnis.'},
+  {emoji:'🪆', name:'Sammelfigur',       cat:'want', ex:'Sammlungen machen Spaß – aber sie sind kein Bedürfnis.'},
+  {emoji:'🏰', name:'Schloss-Spielzeug', cat:'want', ex:'Tolles Spielzeug – aber ohne geht es auch.'},
+  {emoji:'🎲', name:'Brettspiel',        cat:'want', ex:'Brettspiele sind toll – aber kein Grundbedürfnis.'},
+  {emoji:'🧲', name:'Magnet-Baukasten',  cat:'want', ex:'Kreatives Spielzeug – aber nicht lebensnotwendig.'},
+  {emoji:'🎠', name:'Karussell',         cat:'want', ex:'Karussell fahren macht Spaß – ist aber kein Bedürfnis.'},
+  {emoji:'🌈', name:'Wasserfarben',      cat:'want', ex:'Malen macht Spaß – Wasserfarben sind aber kein Muss.'},
+  {emoji:'🎻', name:'Geige',             cat:'want', ex:'Musik ist schön – eine Geige ist aber ein Wunsch.'},
+  {emoji:'🏆', name:'Pokal',             cat:'want', ex:'Pokale für Sammlungen sind schön – kein Bedürfnis.'},
+  {emoji:'🧜', name:'Meerjungfrau-Puppe',cat:'want', ex:'Spielzeug macht Spaß – lebensnotwendig ist es nicht.'},
+  {emoji:'🪩', name:'Discoball',         cat:'want', ex:'Partydeko ist toll – aber kein Grundbedürfnis.'},
+  {emoji:'🎠', name:'Riesenrad-Ticket',  cat:'want', ex:'Freizeitangebote sind schön – aber kein Bedürfnis.'},
+];
+
+const TOTAL = 20;
+let cards=[], round=0, correct=0, wrong=0;
+let answered = false;
+let _backUrl = 'kleine-sparer.html';
+
+const _p = new URLSearchParams(location.search);
+if (_p.get('from') === 'lernspiele') _backUrl = 'lernspiele.html';
+document.getElementById('close-btn').href = _backUrl;
+if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
+
+// ── UTILS ───────────────────────────────────────────────────
+function shuffle(a) {
+  const b=[...a];
+  for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
+  return b;
+}
+function pickCards() {
+  const needs = shuffle(ALL_ITEMS.filter(i=>i.cat==='need'));
+  const wants = shuffle(ALL_ITEMS.filter(i=>i.cat==='want'));
+  const h = Math.floor(TOTAL/2);
+  return shuffle([...needs.slice(0,h), ...wants.slice(0,TOTAL-h)]);
+}
+
+// ── GAME FLOW ────────────────────────────────────────────────
+function startGame() {
+  cards = pickCards();
+  round = 0; correct = 0; wrong = 0;
+  document.getElementById('phaseStart').style.display = 'none';
+  document.getElementById('phaseGame').style.display = 'block';
+  document.getElementById('scoreBar').style.display = 'flex';
+  updateScore();
+  showCard();
+}
+
+function showCard() {
+  if (round >= TOTAL) { showResult(); return; }
+  answered = false;
+
+  const c = cards[round];
+  document.getElementById('itemEmoji').textContent = c.emoji;
+  document.getElementById('itemName').textContent  = c.name;
+  document.getElementById('itemSub').textContent   = 'Zieh mich in die richtige Box!';
+
+  const pct = Math.round((round/TOTAL)*100);
+  document.getElementById('progressText').textContent = `Karte ${round+1} von ${TOTAL}`;
+  document.getElementById('progressPct').textContent  = pct+'%';
+  document.getElementById('progressBar').style.width  = pct+'%';
+
+  // animate card in
+  const card = document.getElementById('itemCard');
+  card.style.opacity = '1';
+  card.classList.remove('grabbed');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+
+  document.getElementById('zoneNeed').classList.remove('drag-over');
+  document.getElementById('zoneWant').classList.remove('drag-over');
+
+  initDrag();
+}
+
+function updateScore() {
+  document.getElementById('numCorrect').textContent = correct;
+  document.getElementById('numWrong').textContent   = wrong;
+  document.getElementById('numTotal').textContent   = round + ' / ' + TOTAL;
+}
+
+function answer(cat) {
+  if (answered) return;
+  answered = true;
+
+  const c = cards[round];
+  const ok = cat === c.cat;
+  if (ok) correct++; else wrong++;
+  round++;
+  updateScore();
+  showToast(ok, c.ex);
+
+  setTimeout(() => {
+    hideToast();
+    showCard();
+  }, 2000);
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+const OK_E=['🎉','✅','🌟','👏'], OK_T=['Richtig!','Super!','Genau!','Klasse!'];
+const NO_E=['😬','💭','🤔','❌'], NO_T=['Fast!','Ups!','Nochmal!','Knapp daneben!'];
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+
+function showToast(ok, ex) {
+  document.getElementById('toastEmoji').textContent   = ok ? rnd(OK_E) : rnd(NO_E);
+  document.getElementById('toastText').textContent    = ok ? rnd(OK_T) : rnd(NO_T);
+  document.getElementById('toastExplain').textContent = ex;
+  document.getElementById('toast').classList.add('show');
+}
+function hideToast() {
+  document.getElementById('toast').classList.remove('show');
+}
+
+// ── DRAG – exakt wie sparschwein-spiel.html ─────────────────
+function initDrag() {
+  // Karte klonen um alte Listener zu entfernen
+  const old = document.getElementById('itemCard');
+  const el  = old.cloneNode(true);
+  old.parentNode.replaceChild(el, old);
+
+  let ghost = null;
+
+  function start(cx, cy) {
+    if (answered) return;
+    ghost = document.createElement('div');
+    ghost.className = 'drag-ghost';
+    ghost.innerHTML = `<div class="drag-ghost-inner">
+      <span class="g-emoji">${el.querySelector('.item-emoji').textContent}</span>
+      <div class="g-name">${el.querySelector('.item-name').textContent}</div>
+    </div>`;
+    ghost.style.left = cx + 'px';
+    ghost.style.top  = cy + 'px';
+    document.body.appendChild(ghost);
+    el.classList.add('grabbed');
+  }
+
+  function move(cx, cy) {
+    if (!ghost) return;
+    ghost.style.left = cx + 'px';
+    ghost.style.top  = cy + 'px';
+    const rN = document.getElementById('zoneNeed').getBoundingClientRect();
+    const rW = document.getElementById('zoneWant').getBoundingClientRect();
+    document.getElementById('zoneNeed').classList.toggle('drag-over',
+      cx>=rN.left && cx<=rN.right && cy>=rN.top && cy<=rN.bottom);
+    document.getElementById('zoneWant').classList.toggle('drag-over',
+      cx>=rW.left && cx<=rW.right && cy>=rW.top && cy<=rW.bottom);
+  }
+
+  function end(cx, cy) {
+    if (ghost) { ghost.remove(); ghost = null; }
+    el.classList.remove('grabbed');
+    document.getElementById('zoneNeed').classList.remove('drag-over');
+    document.getElementById('zoneWant').classList.remove('drag-over');
+    if (answered) return;
+    const rN = document.getElementById('zoneNeed').getBoundingClientRect();
+    const rW = document.getElementById('zoneWant').getBoundingClientRect();
+    if      (cx>=rN.left && cx<=rN.right && cy>=rN.top && cy<=rN.bottom) answer('need');
+    else if (cx>=rW.left && cx<=rW.right && cy>=rW.top && cy<=rW.bottom) answer('want');
+    // sonst: nirgends gelandet – kein Zug, Karte bleibt
+  }
+
+  // TOUCH (wie sparschwein-spiel)
+  el.addEventListener('touchstart', e=>{ e.preventDefault(); const t=e.touches[0]; start(t.clientX,t.clientY); }, {passive:false});
+  el.addEventListener('touchmove',  e=>{ e.preventDefault(); const t=e.touches[0]; move(t.clientX,t.clientY); },  {passive:false});
+  el.addEventListener('touchend',   e=>{ e.preventDefault(); const t=e.changedTouches[0]; end(t.clientX,t.clientY); }, {passive:false});
+
+  // MOUSE (wie sparschwein-spiel)
+  el.addEventListener('mousedown', e=>{
+    e.preventDefault();
+    start(e.clientX, e.clientY);
+    const mm = ev => move(ev.clientX, ev.clientY);
+    const mu = ev => { end(ev.clientX, ev.clientY); document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); };
+    document.addEventListener('mousemove', mm);
+    document.addEventListener('mouseup',   mu);
+  });
+
+  // Tap auf Box (als Alternative zum Ziehen)
+  el.addEventListener('click', () => {
+    // Tap-Modus: Karte leuchtet auf, nächster Tap auf Box löst Antwort aus
+    el.style.boxShadow = '0 0 0 4px var(--orange)';
+  });
+}
+
+// Zonen-Klick (einmalig, answered-Guard schützt)
+document.getElementById('zoneNeed').addEventListener('click', ()=>{ if(!answered) answer('need'); });
+document.getElementById('zoneWant').addEventListener('click', ()=>{ if(!answered) answer('want'); });
+
+// ── RESULT ───────────────────────────────────────────────────
+function showResult() {
+  document.getElementById('phaseGame').style.display  = 'none';
+  document.getElementById('scoreBar').style.display   = 'none';
+  document.getElementById('phaseResult').style.display = 'block';
+
+  const pct = Math.round((correct/TOTAL)*100);
+  let emoji, title, sub;
+  if      (pct>=90) { emoji='🏆'; title='Weltmeister!';       sub='Du weißt genau was man wirklich braucht – und was man sich nur wünscht. Beeindruckend!' }
+  else if (pct>=70) { emoji='🌟'; title='Sehr gut!';           sub='Du hast die meisten Dinge richtig eingeordnet. Noch etwas üben und du bist Profi!' }
+  else if (pct>=50) { emoji='👍'; title='Gut gemacht!';        sub='Schon mehr als die Hälfte richtig! Weißt du noch welche Karten du falsch hattest?' }
+  else              { emoji='💪'; title='Nochmal versuchen?';  sub='Wünsche und Bedürfnisse zu unterscheiden ist gar nicht so einfach. Du schaffst das!' }
+
+  document.getElementById('phaseResult').innerHTML = `
+    <div class="result-card">
+      <span class="result-emoji">${emoji}</span>
+      <div class="result-title">${title}</div>
+      <div class="result-sub">${sub}</div>
+      <div class="result-big-grid">
+        <div class="result-big-item">
+          <span class="result-big-num c">${correct}</span>
+          <span class="result-big-label">✅ Richtig</span>
+        </div>
+        <div class="result-big-item">
+          <span class="result-big-num p">${pct}%</span>
+          <span class="result-big-label">🎯 Quote</span>
+        </div>
+        <div class="result-big-item">
+          <span class="result-big-num w">${wrong}</span>
+          <span class="result-big-label">❌ Falsch</span>
+        </div>
+      </div>
+      <button class="next-btn" onclick="restartGame()">🔄 Nochmal spielen</button><br>
+
+      <div class="lesson-box">
+        <div class="lesson-box-title">💡 Was du heute gelernt hast</div>
+        <div class="lesson-row">
+          <span class="lesson-row-icon">✅</span>
+          <div class="lesson-row-content">
+            <div class="lesson-row-label need">Bedürfnisse</div>
+            <div class="lesson-row-text">Das sind Dinge, die wir zum Leben wirklich brauchen – Essen, Wasser, Kleidung, ein Zuhause, Gesundheit und Bildung. Ohne diese Dinge können wir nicht gut leben.</div>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-row-icon">⭐</span>
+          <div class="lesson-row-content">
+            <div class="lesson-row-label want">Wünsche</div>
+            <div class="lesson-row-text">Das sind Dinge, die schön wären und Spaß machen – aber ohne die wir gut auskommen. Ein neues Spielzeug, Süßigkeiten oder eine Spielekonsole sind tolle Extras, kein Muss.</div>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-row-icon">💰</span>
+          <div class="lesson-row-content">
+            <div class="lesson-row-label">Warum ist das wichtig?</div>
+            <div class="lesson-row-text">Wenn wir Geld ausgeben, sollten wir zuerst an Bedürfnisse denken. Wünsche sind wunderbar – aber man kann sie sich erarbeiten und ansparen. Das macht sie noch schöner!</div>
+          </div>
+        </div>
+        <div class="lesson-tip">
+          💬 <strong>Tipp für zuhause:</strong> Wenn du dir etwas kaufen möchtest, frag dich: „Brauche ich das wirklich – oder wünsche ich es mir nur?" Wenn es ein Wunsch ist, schreib ihn auf eine Liste und warte eine Woche. Dann gilt: Hast du den Wunsch noch <em>und</em> das Geld dafür? Dann kauf es! Fehlt noch das Geld? Dann fang an zu sparen. Ist der Wunsch nach einer Woche nicht mehr so stark – dann lass es lieber sein. So gibst du dein Geld nur für Dinge aus, die dir wirklich wichtig sind.
+        </div>
+      </div>
+    </div>`;
+}
+
+function restartGame() {
+  document.getElementById('phaseResult').style.display = 'none';
+  document.getElementById('phaseResult').innerHTML = '';
+  startGame();
+}
+</script>
+</body>
+</html>
