@@ -361,6 +361,7 @@ const ALL_ITEMS = [
 const TOTAL = 20;
 let cards=[], round=0, correct=0, wrong=0;
 let answered = false;
+let streak = 0;
 let _backUrl = 'kleine-sparer.html';
 
 const _p = new URLSearchParams(location.search);
@@ -432,9 +433,14 @@ function answer(cat) {
 
   const c = cards[round];
   const ok = cat === c.cat;
-  if (ok) correct++; else wrong++;
+  if (ok) { correct++; streak++; } else { wrong++; streak = 0; }
   round++;
   updateScore();
+
+  if (ok && streak > 0 && streak % 5 === 0) {
+    showStreakBurst(streak);
+  }
+
   showToast(ok, c.ex);
 
   setTimeout(() => {
@@ -545,6 +551,8 @@ function showResult() {
   else if (pct>=50) { emoji='👍'; title='Gut gemacht!';        sub='Schon mehr als die Hälfte richtig! Weißt du noch welche Karten du falsch hattest?' }
   else              { emoji='💪'; title='Nochmal versuchen?';  sub='Wünsche und Bedürfnisse zu unterscheiden ist gar nicht so einfach. Du schaffst das!' }
 
+  if (pct >= 90) setTimeout(launchCelebration, 400);
+
   document.getElementById('phaseResult').innerHTML = `
     <div class="result-card">
       <span class="result-emoji">${emoji}</span>
@@ -599,7 +607,117 @@ function showResult() {
 function restartGame() {
   document.getElementById('phaseResult').style.display = 'none';
   document.getElementById('phaseResult').innerHTML = '';
+  streak = 0;
   startGame();
+}
+
+// ── STREAK BURST ─────────────────────────────────────────────
+function showStreakBurst(n) {
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+    background:linear-gradient(135deg,#FFD166,#FF9A3C);color:white;
+    font-family:'Fredoka One',cursive;font-size:28px;padding:18px 32px;
+    border-radius:50px;box-shadow:0 8px 32px rgba(255,154,60,0.5);
+    z-index:9999;pointer-events:none;text-align:center;
+    transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275)`;
+  el.textContent = `🔥 ${n} richtig in Folge!`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { el.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  setTimeout(() => {
+    el.style.transition = 'all 0.4s ease';
+    el.style.transform = 'translate(-50%,-60%) scale(0.8)';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+  }, 1400);
+}
+
+// ── CONFETTI + COINS ─────────────────────────────────────────
+function launchCelebration() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const CONFETTI_COLORS = ['#5BBF7A','#4AACDB','#FFD166','#FF9A3C','#FF6B9D','#9B7FE8'];
+  const particles = [];
+
+  // confetti
+  for (let i = 0; i < 120; i++) {
+    particles.push({
+      type: 'confetti',
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 4,
+      vy: 2 + Math.random() * 4,
+      rot: Math.random() * 360,
+      rotV: (Math.random() - 0.5) * 8,
+      w: 8 + Math.random() * 10,
+      h: 5 + Math.random() * 6,
+      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      opacity: 1
+    });
+  }
+  // coins
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      type: 'coin',
+      x: Math.random() * canvas.width,
+      y: -30 - Math.random() * 150,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 1.5 + Math.random() * 3,
+      rot: Math.random() * 360,
+      rotV: (Math.random() - 0.5) * 6,
+      size: 18 + Math.random() * 12,
+      opacity: 1
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      if (p.opacity <= 0) return;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rotV;
+      p.vy += 0.08; // gravity
+      if (p.y > canvas.height * 0.75) p.opacity -= 0.025;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+
+      if (p.type === 'confetti') {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      } else {
+        // coin circle with €
+        const grad = ctx.createRadialGradient(-p.size*0.2, -p.size*0.2, 1, 0, 0, p.size/2);
+        grad.addColorStop(0, '#FFE566');
+        grad.addColorStop(1, '#D4A017');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size/2, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#A07010';
+        ctx.font = `bold ${p.size*0.5}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('€', 0, 1);
+      }
+      ctx.restore();
+    });
+
+    frame++;
+    if (alive && frame < 300) requestAnimationFrame(draw);
+    else canvas.remove();
+  }
+  draw();
 }
 </script>
 </body>
