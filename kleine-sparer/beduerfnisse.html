@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="manifest" href="../assets/manifest.json">
+<meta name="theme-color" content="#5BBF7A">
+<title>Wünsche & Bedürfnisse – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#5BBF7A;--green-dark:#3D9E5F;--green-light:#E8F7EE;
+  --blue:#4AACDB;--blue-dark:#2A85B0;--blue-light:#E6F6FF;
+  --yellow:#FFD166;--orange:#FF9A3C;--pink:#FF6B9D;--purple:#9B7FE8;
+  --bg:#F0FAF5;--text:#2D3748;--text-light:#718096;
+  --surface:#FDFCFA;--surface2:#EEF5EF;--border:#E8F7EE;
+  --radius:20px;--shadow:0 6px 24px rgba(61,158,95,0.10);
+  --font-body:'Nunito',sans-serif;--font-display:'Fredoka One',cursive;
+}
+body.dark{
+  --bg:#0F1A14;--text:#E8F5EE;--text-light:#8EAAA0;
+  --surface:#1A2E22;--surface2:#243B2C;--border:#2A4035;
+  --green-light:#1C3528;--blue-light:#172838;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;transition:background 0.4s,color 0.4s}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:2px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:background 0.4s}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{width:36px;height:36px;object-fit:contain}
+.nav-logo span{font-family:var(--font-display);font-size:22px;background:linear-gradient(135deg,var(--green-dark),var(--blue-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-right{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.nav-back{background:var(--green-light);color:var(--green-dark);border:none;font-family:var(--font-body);font-weight:800;font-size:13px;padding:7px 16px;border-radius:50px;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px}
+.nav-back:hover{background:var(--green);color:white;transform:scale(1.05)}
+.lang-btn{border:2px solid var(--green);background:transparent;color:var(--green-dark);font-family:var(--font-body);font-weight:800;font-size:14px;padding:7px 18px;border-radius:50px;cursor:pointer;transition:all 0.2s;line-height:1}
+body.dark .lang-btn{color:var(--blue);border-color:var(--blue)}
+.lang-btn.active{background:var(--green);color:white;border-color:var(--green-dark);box-shadow:0 2px 8px rgba(91,191,122,0.4);transform:scale(1.1)}
+body.dark .lang-btn.active{background:var(--blue);color:white;border-color:var(--blue-dark)}
+.lang-btn:hover{transform:scale(1.15)}
+.dark-toggle{background:var(--surface2);border:2px solid var(--border);border-radius:50px;width:48px;height:26px;cursor:pointer;position:relative;transition:all 0.3s}
+.dark-toggle::before{content:'☀️';position:absolute;left:2px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:20px;text-align:center;transition:left 0.3s}
+body.dark .dark-toggle::before{content:'🌙';left:22px;background:#2A85B0}
+@media(max-width:480px){.nav-logo span{font-size:16px}.lang-btn{font-size:10px;padding:5px 8px}#dark-label{display:none}nav{padding:10px 12px}}
+@media(max-width:380px){.nav-back{display:none}}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#ECFDF5,#D1FAE5,#A7F3D0);padding:52px 20px 44px;text-align:center;position:relative;overflow:hidden;transition:background 0.4s}
+body.dark .hero{background:linear-gradient(135deg,#0A1F14,#102518,#142E1A)}
+.floating-icons{position:absolute;font-size:26px;animation:float 3s ease-in-out infinite;opacity:0.5}
+.fi1{top:18%;left:7%;animation-delay:0s}
+.fi2{top:25%;right:9%;animation-delay:0.6s}
+.fi3{bottom:22%;left:5%;animation-delay:1.2s;font-size:20px}
+.fi4{bottom:18%;right:7%;animation-delay:0.4s;font-size:22px}
+@media(max-width:600px){.fi1,.fi2,.fi3,.fi4{font-size:16px}}
+.hero-emoji{font-size:68px;display:block;margin:0 auto 12px;animation:bounceIn 0.8s cubic-bezier(0.34,1.56,0.64,1)}
+.hero-title{font-family:var(--font-display);font-size:38px;color:var(--text);margin-bottom:10px;animation:fadeUp 0.6s 0.1s both}
+@media(max-width:600px){.hero-title{font-size:26px}}
+.hero-sub{font-size:16px;color:var(--text-light);font-weight:600;max-width:500px;margin:0 auto;line-height:1.6;animation:fadeUp 0.6s 0.2s both}
+
+/* CONTENT */
+.content{max-width:800px;margin:0 auto;padding:30px 20px 60px}
+
+.info-box{background:var(--surface);border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:var(--shadow);border-left:5px solid var(--orange);animation:fadeUp 0.5s both;transition:background 0.4s}
+.info-box.blue{border-left-color:var(--blue)}
+.info-box h3{font-family:var(--font-display);font-size:22px;margin-bottom:10px}
+.info-box p{font-size:15px;color:var(--text-light);font-weight:600;line-height:1.7}
+
+.section-title{font-family:var(--font-display);font-size:22px;color:var(--text);margin:20px 0 10px;display:flex;align-items:center;gap:10px}
+
+/* BIG TWO COLUMNS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:560px){.two-col{grid-template-columns:1fr}}
+.col-card{border-radius:16px;padding:14px;box-shadow:var(--shadow);animation:fadeUp 0.5s both}
+.col-card.need{background:var(--green-light);border:2px solid var(--green)}
+.col-card.want{background:#FFF5E6;border:2px solid var(--orange)}
+body.dark .col-card.want{background:#2A1800}
+.col-card-title{font-family:var(--font-display);font-size:17px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.col-card.need .col-card-title{color:var(--green-dark)} body.dark .col-card.need .col-card-title{color:var(--green)}
+.col-card.want .col-card-title{color:#C05A00} body.dark .col-card.want .col-card-title{color:var(--orange)}
+.col-list{display:flex;flex-direction:column;gap:5px}
+.col-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);background:rgba(255,255,255,0.6);border-radius:10px;padding:6px 10px}
+body.dark .col-item{background:rgba(0,0,0,0.2)}
+.col-item span:first-child{font-size:16px;flex-shrink:0}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.step{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border-radius:16px;padding:18px;box-shadow:var(--shadow);animation:fadeUp 0.5s both;transition:background 0.4s}
+.step-num{color:white;font-family:var(--font-display);font-size:22px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-text h4{font-family:var(--font-display);font-size:18px;margin-bottom:4px}
+.step-text p{font-size:14px;color:var(--text-light);font-weight:600;line-height:1.6}
+
+/* EXAMPLE SCENARIO */
+.scenario{background:var(--surface);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:2px solid var(--border);animation:fadeUp 0.5s both;transition:background 0.4s}
+.scenario-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.scenario-emoji{font-size:26px}
+.scenario-title{font-family:var(--font-display);font-size:16px}
+.scenario-body{font-size:13px;color:var(--text-light);font-weight:600;line-height:1.6;margin-bottom:10px}
+.scenario-verdict{display:flex;align-items:center;gap:8px;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800}
+.scenario-verdict.need{background:var(--green-light);color:var(--green-dark)} body.dark .scenario-verdict.need{color:var(--green)}
+.scenario-verdict.want{background:#FFF5E6;color:#C05A00} body.dark .scenario-verdict.want{background:#2A1800;color:var(--orange)}
+.scenario-verdict-icon{font-size:18px;flex-shrink:0}
+
+/* FUN FACT */
+.fun-fact{background:linear-gradient(135deg,#FFF9E0,#FFF3CC);border-radius:20px;padding:20px;margin-bottom:20px;box-shadow:var(--shadow);animation:fadeUp 0.5s 0.2s both;border:2px solid var(--yellow)}
+body.dark .fun-fact{background:linear-gradient(135deg,#221A08,#2C2210);border-color:#8B7020}
+.fun-fact h3{font-family:var(--font-display);font-size:18px;color:#8B6200;margin-bottom:8px}
+body.dark .fun-fact h3{color:var(--yellow)}
+.fun-fact p{font-size:14px;color:var(--text-light);font-weight:600;line-height:1.6}
+
+/* WISH LIST TIP */
+.tip-box{background:linear-gradient(135deg,var(--blue-light),#E0F0FF);border:2px solid var(--blue);border-radius:20px;padding:22px;margin-bottom:20px;animation:fadeUp 0.5s both}
+body.dark .tip-box{background:linear-gradient(135deg,#172838,#0F2030);border-color:var(--blue)}
+.tip-box h3{font-family:var(--font-display);font-size:20px;color:var(--blue-dark);margin-bottom:10px}
+body.dark .tip-box h3{color:var(--blue)}
+.tip-box p{font-size:14px;font-weight:700;color:var(--text);line-height:1.7}
+.tip-steps{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.tip-step{display:flex;align-items:flex-start;gap:12px;font-size:14px;font-weight:700;color:var(--text);line-height:1.5}
+.tip-step-badge{background:var(--blue);color:white;font-family:var(--font-display);font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+.game-cta-box{background:linear-gradient(135deg,var(--green-light),var(--blue-light));border:2.5px dashed var(--green);border-radius:24px;padding:28px 24px;text-align:center;margin-bottom:20px;animation:fadeUp 0.5s 0.3s both}
+body.dark .game-cta-box{background:linear-gradient(135deg,#1C3528,#172838);border-color:var(--green)}
+.cta-emoji{font-size:56px;display:block;margin-bottom:8px;animation:wiggle 2s ease-in-out infinite}
+.game-cta-box h3{font-family:var(--font-display);font-size:22px;color:var(--green-dark);margin-bottom:6px}
+body.dark .game-cta-box h3{color:var(--green)}
+.game-cta-box p{font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:18px;line-height:1.5}
+.game-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:white;border:none;font-family:var(--font-body);font-weight:900;font-size:17px;padding:16px 36px;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 24px rgba(74,172,219,0.35);transition:all 0.2s;letter-spacing:0.3px}
+.game-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 32px rgba(74,172,219,0.5)}
+
+/* VORLESEN */
+.read-bar{background:linear-gradient(135deg,var(--blue-light),var(--green-light));border-radius:20px;padding:16px 20px;margin-bottom:20px;display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px solid var(--blue);animation:fadeUp 0.5s both}
+body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-color:var(--blue-dark)}
+.read-btn{background:linear-gradient(135deg,var(--green),var(--blue));color:white;border:none;width:52px;height:52px;border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(74,172,219,0.4);transition:all 0.2s;flex-shrink:0;padding:0}
+.read-btn:hover{transform:scale(1.1)}
+.read-btn.playing{animation:pulse 1.2s infinite}
+.read-label{font-size:14px;font-weight:700;color:var(--text-light)}
+.speed-btns{display:flex;gap:6px}
+.speed-btn{background:var(--surface);border:2px solid var(--border);color:var(--text);font-family:var(--font-body);font-weight:800;font-size:12px;padding:6px 12px;border-radius:50px;cursor:pointer;transition:all 0.2s}
+.speed-btn.active{background:var(--blue);border-color:var(--blue);color:white}
+@keyframes pulse{0%,100%{box-shadow:0 4px 16px rgba(74,172,219,0.4)}50%{box-shadow:0 4px 28px rgba(74,172,219,0.8)}}
+
+/* FOOTER */
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:24px;transition:background 0.4s}
+.footer-inner{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.footer-logo{display:flex;flex-direction:column;gap:2px}
+.footer-brand{font-family:'Fredoka One',cursive;font-size:18px;background:linear-gradient(135deg,var(--green-dark),var(--blue-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-copy{font-size:11px;color:var(--text-light);font-weight:600}
+.footer-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.footer-links a{font-size:13px;font-weight:700;color:var(--text-light);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--green)}
+.footer-divider{color:var(--text-light);font-size:13px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:center;text-align:center}.footer-logo{align-items:center}.footer-links{justify-content:center}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounceIn{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <span class="floating-icons fi1">🍞</span>
+  <span class="floating-icons fi2">🎮</span>
+  <span class="floating-icons fi3">✅</span>
+  <span class="floating-icons fi4">⭐</span>
+  <span class="hero-emoji">🤔</span>
+  <h1 class="hero-title">Wünsche & Bedürfnisse</h1>
+  <p class="hero-sub">Was brauchst du wirklich – und was wünschst du dir nur?</p>
+</section>
+
+<div class="content">
+
+  <!-- VORLESEN BAR -->
+  <div style="text-align:center;margin-bottom:20px">
+    <div class="read-bar" style="margin-bottom:0">
+      <button class="read-btn" id="readBtn" onclick="toggleRead()" title="Vorlesen">
+        <svg id="readIcon" width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,4 20,12 6,20"/></svg>
+      </button>
+      <span style="font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--text)">Vorlesen</span>
+      <span class="read-label">Geschwindigkeit:</span>
+      <div class="speed-btns">
+        <button class="speed-btn" onclick="setSpeed(0.7,this)">🐢 Langsam</button>
+        <button class="speed-btn active" onclick="setSpeed(1.0,this)">🐇 Normal</button>
+        <button class="speed-btn" onclick="setSpeed(1.4,this)">🚀 Schnell</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="info-box" id="readable-1">
+    <h3>🌍 Jeder Mensch hat Bedürfnisse</h3>
+    <p>Stell dir vor, du wärst auf einer einsamen Insel. Was würdest du unbedingt brauchen? Wasser zum Trinken, etwas zu essen, Kleidung wenn es kalt wird, und einen sicheren Platz zum Schlafen. Das sind <strong>Bedürfnisse</strong> – Dinge, ohne die wir nicht gut leben können. Daneben gibt es <strong>Wünsche</strong> – Dinge, die toll wären, aber keine Notwendigkeit sind. Den Unterschied zu kennen ist super wichtig, wenn du weißt wie du mit deinem Geld umgehst!</p>
+  </div>
+
+  <!-- ZWEI SPALTEN: BEDÜRFNIS vs. WUNSCH -->
+  <div class="section-title" id="readable-2">✅ Was ist was?</div>
+  <div class="two-col">
+    <div class="col-card need">
+      <div class="col-card-title">✅ Bedürfnisse</div>
+      <div class="col-list">
+        <div class="col-item"><span>🍞</span><span>Essen & Trinken</span></div>
+        <div class="col-item"><span>🏠</span><span>Ein Zuhause</span></div>
+        <div class="col-item"><span>👕</span><span>Kleidung</span></div>
+        <div class="col-item"><span>💊</span><span>Gesundheit</span></div>
+        <div class="col-item"><span>📚</span><span>Schule & Bildung</span></div>
+        <div class="col-item"><span>🧼</span><span>Hygiene</span></div>
+      </div>
+    </div>
+    <div class="col-card want">
+      <div class="col-card-title">⭐ Wünsche</div>
+      <div class="col-list">
+        <div class="col-item"><span>🎮</span><span>Spielekonsole</span></div>
+        <div class="col-item"><span>🍭</span><span>Süßigkeiten</span></div>
+        <div class="col-item"><span>👟</span><span>Markenschuhe</span></div>
+        <div class="col-item"><span>📱</span><span>Neues Handy</span></div>
+        <div class="col-item"><span>🎠</span><span>Freizeitpark</span></div>
+        <div class="col-item"><span>🧸</span><span>Spielzeug</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO BOX UNTERSCHIED -->
+  <div class="info-box blue" id="readable-3">
+    <h3>💡 Der wichtige Unterschied</h3>
+    <p>Bedürfnisse sind Dinge, die wir <strong>zum Leben brauchen</strong>. Ohne sie wären wir krank, hätten Hunger oder könnten nicht in die Schule gehen. Wünsche hingegen sind Dinge, die wir <strong>haben möchten</strong> – sie machen Spaß und sind schön, aber ohne sie kommen wir gut klar. Keiner sagt, dass Wünsche schlecht sind! Aber zuerst kommen immer die Bedürfnisse.</p>
+  </div>
+
+  <!-- BEISPIEL-SZENARIEN -->
+  <div class="section-title" id="readable-4">🔍 Schau mal genau hin!</div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <span class="scenario-emoji">👟</span>
+      <div class="scenario-title">Schuhe kaufen</div>
+    </div>
+    <div class="scenario-body">Emma braucht neue Schuhe für die Schule – ihre alten sind kaputt. Sie sieht aber auch coole Markenschuhe, die ihr viel besser gefallen, kosten aber dreimal so viel.</div>
+    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span>Neue Schuhe → <strong>Bedürfnis</strong></div>
+    <div style="margin-top:8px"></div>
+    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span>Die teuren Markenschuhe → <strong>Wunsch</strong></div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <span class="scenario-emoji">📱</span>
+      <div class="scenario-title">Ein neues Handy</div>
+    </div>
+    <div class="scenario-body">Luca hat ein Handy, das noch gut funktioniert. Aber sein Freund hat das neueste Modell und er findet es total cool. Sein altes Handy macht noch alles, was er braucht.</div>
+    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span>Das neue Handy → <strong>Wunsch</strong></div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <span class="scenario-emoji">💊</span>
+      <div class="scenario-title">Zum Arzt gehen</div>
+    </div>
+    <div class="scenario-body">Sofia hat seit zwei Tagen Halsschmerzen und Fieber. Sie braucht Medizin und einen Arztbesuch, auch wenn ihr das gar nicht so viel Spaß macht.</div>
+    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span>Arztbesuch & Medizin → <strong>Bedürfnis</strong></div>
+  </div>
+
+  <!-- WUNSCHLISTEN-TIPP -->
+  <div class="section-title">💰 Wünsche & Geld – was tun?</div>
+  <div class="tip-box" id="readable-5">
+    <h3>📝 Der Wunschlisten-Trick</h3>
+    <p>Wünsche sind toll – aber manchmal will man etwas kaufen, nur weil es gerade so verlockend aussieht. Probier mal diesen Trick:</p>
+    <div class="tip-steps">
+      <div class="tip-step"><div class="tip-step-badge">1</div><span>Schreib deinen Wunsch auf eine Liste und warte <strong>eine Woche</strong>.</span></div>
+      <div class="tip-step"><div class="tip-step-badge">2</div><span>Hast du den Wunsch noch <strong>und</strong> das Geld dafür? Dann kauf es! 🎉</span></div>
+      <div class="tip-step"><div class="tip-step-badge">3</div><span>Fehlt noch das Geld? Dann fang an zu <strong>sparen</strong>. 🐷</span></div>
+      <div class="tip-step"><div class="tip-step-badge">4</div><span>Ist der Wunsch nach einer Woche nicht mehr so stark? Dann <strong>lass es lieber</strong>. Das Geld bleibt dir erhalten!</span></div>
+    </div>
+  </div>
+
+  <!-- FRAGE AN DICH -->
+  <div class="info-box" style="border-left-color:var(--purple);animation-delay:0.2s" id="readable-6">
+    <h3>🤔 Frag dich selbst!</h3>
+    <p>Wenn du das nächste Mal etwas kaufen möchtest, stell dir diese eine Frage: <strong>„Brauche ich das wirklich – oder wünsche ich es mir nur?"</strong> Wenn es ein Wunsch ist, ist das völlig okay! Aber dann weißt du: das ist etwas, für das es sich lohnt zu sparen – und nicht etwas, das sofort sein muss.</p>
+  </div>
+
+  <!-- GAME CTA -->
+  <div class="game-cta-box">
+    <span class="cta-emoji">🎮</span>
+    <h3>Jetzt testen!</h3>
+    <p>Du hast gelernt, was Bedürfnisse und Wünsche sind. Jetzt kannst du dein Wissen im Spiel beweisen – sortiere 20 Karten in die richtige Box!</p>
+    <a class="game-btn" href="beduerfnisse-spiel.html">Zum Spiel →</a>
+  </div>
+
+  <!-- ZURÜCK BUTTONS -->
+  <div style="text-align:center;margin-top:8px;display:flex;flex-direction:column;gap:12px;align-items:center">
+    <a href="../elternbereich/elternbereich.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;padding:12px 28px;border-radius:50px;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">← Zurück zur Elternbereich-Übersicht</a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="kleine-sparer.html">← Kleine Sparer</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let dark = false, lang = 'de';
+
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    dark = true;
+    document.body.classList.add('dark');
+    const _l = document.getElementById('dark-label');
+    if (_l) _l.textContent = 'Dunkel';
+  }
+
+  const _savedLang = localStorage.getItem('piggyplant-lang');
+  if (_savedLang && _savedLang !== 'de') {
+    lang = _savedLang;
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _savedLang));
+    document.getElementById('btn-de').classList.toggle('active', _savedLang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', _savedLang === 'en');
+    document.documentElement.lang = _savedLang;
+  }
+
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('piggyplant-dark', dark);
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = dark ? (lang === 'de' ? 'Dunkel' : 'Dark') : (lang === 'de' ? 'Hell' : 'Light');
+  }
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+    const lbl = document.getElementById('dark-label');
+    if (lbl) lbl.textContent = dark ? (l === 'de' ? 'Dunkel' : 'Dark') : (l === 'de' ? 'Hell' : 'Light');
+  }
+
+  // TEXT-TO-SPEECH
+  const synth = window.speechSynthesis;
+  let utterance = null, isPlaying = false, speed = 1.0;
+
+  function getReadableText() {
+    const ids = ['readable-1','readable-2','readable-3','readable-4','readable-5','readable-6'];
+    return ids.map(id => { const el = document.getElementById(id); return el ? el.innerText : ''; }).join(' ');
+  }
+
+  function toggleRead() {
+    if (isPlaying) { synth.cancel(); isPlaying = false; updateReadBtn(); return; }
+    utterance = new SpeechSynthesisUtterance(getReadableText());
+    utterance.lang = lang === 'de' ? 'de-DE' : 'en-GB';
+    utterance.rate = speed;
+    utterance.onend = () => { isPlaying = false; updateReadBtn(); };
+    synth.speak(utterance);
+    isPlaying = true;
+    updateReadBtn();
+  }
+
+  function setSpeed(s, btn) {
+    speed = s;
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (isPlaying) { synth.cancel(); isPlaying = false; toggleRead(); }
+  }
+
+  function updateReadBtn() {
+    const btn = document.getElementById('readBtn');
+    const icon = document.getElementById('readIcon');
+    btn.classList.toggle('playing', isPlaying);
+    icon.innerHTML = isPlaying
+      ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+      : '<polygon points="6,4 20,12 6,20"/>';
+  }
+</script>
+</body>
+</html>
