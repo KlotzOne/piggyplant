@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Empfehlungen & Tools – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Nunito', sans-serif;
+    --font-display: 'Fredoka One', cursive;
+    --green: #5BBF7A; --green-dark: #3D9E5F; --green-light: #E8F7EE;
+    --blue: #4AACDB; --blue-light: #E6F6FF; --blue-dark: #2A85B0;
+    --yellow: #FFD166; --orange: #FF9A3C; --pink: #FF6B9D; --purple: #9B7FE8;
+    --bg: #F0FAF5; --text: #2D3748; --text-light: #718096;
+    --surface: #FDFCFA; --surface2: #EEF5EF; --border: #E8F7EE;
+    --radius: 20px; --shadow: 0 6px 24px rgba(0,0,0,0.09);
+  }
+  body.dark {
+    --bg: #0F1A14; --text: #E8F5EE; --text-light: #8EAAA0;
+    --surface: #1A2E22; --surface2: #243B2C; --border: #2A4035;
+    --green-light: #1C3528; --blue-light: #172838;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  /* NAV */
+  nav {
+    background:var(--surface); border-bottom:2px solid var(--border);
+    padding:10px 20px; display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06);
+    transition:background 0.4s;
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-logo img { width:36px; height:36px; object-fit:contain; }
+  .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  @media (max-width:480px) {
+    .nav-logo span { font-size:16px; }
+    .lang-btn { font-size:11px; padding:5px 10px; }
+    #dark-label { display:none; }
+  }
+  .nav-back {
+    background:var(--green-light); color:var(--green-dark); border:none;
+    font-family:var(--font-body); font-weight:800; font-size:13px;
+    padding:7px 16px; border-radius:50px; cursor:pointer; text-decoration:none;
+    transition:all 0.2s; display:inline-flex; align-items:center; gap:4px;
+  }
+  .nav-back:hover { background:var(--green); color:white; transform:scale(1.05); }
+  body.dark .nav-back { background:var(--surface2); color:var(--blue); }
+  body.dark .nav-back:hover { background:var(--blue-dark); color:white; }
+  .lang-btn {
+    border:2px solid var(--green); background:transparent; color:var(--green-dark);
+    font-family:var(--font-body); font-weight:800; font-size:14px;
+    padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1;
+  }
+  body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
+  body.dark .lang-btn.active { background:var(--blue); color:white; border-color:var(--blue-dark); box-shadow:0 2px 8px rgba(74,172,219,0.4); }
+  .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
+  .lang-btn:hover { transform:scale(1.15); }
+  .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #FEFCE8, #FEF9C3, #FDE68A);
+    padding: 52px 20px 44px; text-align: center; position: relative; overflow: hidden;
+  }
+  body.dark .hero { background: linear-gradient(135deg, #1E1A08, #2A2410, #332C12); }
+  .floating-icons { position:absolute; font-size:32px; opacity:0.18; animation:float 3s ease-in-out infinite; pointer-events:none; }
+  .fi1{top:12%;left:6%;animation-delay:0s}
+  .fi2{top:18%;right:8%;animation-delay:0.7s}
+  .fi3{bottom:20%;left:12%;animation-delay:1.2s}
+  .fi4{bottom:14%;right:6%;animation-delay:0.4s}
+  .hero-emoji { font-size:72px; display:block; margin-bottom:16px; animation:fadeUp 0.5s both; }
+  .hero-title { font-family:var(--font-display); font-size:clamp(28px,6vw,42px); color:var(--text); animation:fadeUp 0.5s 0.1s both; margin-bottom:10px; }
+  .hero-sub { font-size:16px; font-weight:700; color:var(--text-light); max-width:520px; margin:0 auto; animation:fadeUp 0.5s 0.2s both; line-height:1.6; }
+
+  /* AFFILIATE BANNER */
+  .affiliate-banner {
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: 14px; padding: 14px 20px; margin: 28px auto 0;
+    max-width: 700px; font-size: 13px; font-weight: 700;
+    color: var(--text-light); line-height: 1.5; animation: fadeUp 0.5s 0.3s both;
+  }
+  body.dark .affiliate-banner { border-color: var(--border); }
+
+  /* MAIN */
+  .main { max-width: 800px; margin: 0 auto; padding: 40px 20px 60px; }
+
+  /* SECTION */
+  section { margin-bottom: 48px; }
+  .section-anchor { display: block; height: 80px; margin-top: -80px; visibility: hidden; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px; animation: fadeUp 0.5s both;
+  }
+  .section-icon { font-size: 40px; }
+  .section-title { font-family: var(--font-display); font-size: 26px; color: var(--text); }
+  .section-lead { font-size: 15px; font-weight: 600; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+
+  /* PRODUCT GRID */
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+
+  /* PRODUCT CARD – PLACEHOLDER */
+  .product-card {
+    background: var(--surface); border: 2px dashed var(--border);
+    border-radius: 18px; padding: 22px 18px; text-align: center;
+    animation: fadeUp 0.5s both; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover { border-color: var(--green); box-shadow: var(--shadow); }
+  .product-card.live { border-style: solid; }
+  .product-placeholder-emoji { font-size: 40px; margin-bottom: 10px; display: block; opacity: 0.4; }
+  .product-placeholder-text {
+    font-size: 13px; font-weight: 700; color: var(--text-light);
+    font-style: italic; line-height: 1.5;
+  }
+
+  /* PRODUCT CARD – LIVE (für später) */
+  .product-card.live .product-placeholder-emoji { opacity: 1; }
+  .product-name { font-family: var(--font-display); font-size: 16px; color: var(--text); margin: 8px 0 4px; }
+  .product-desc { font-size: 13px; font-weight: 600; color: var(--text-light); line-height: 1.5; margin-bottom: 12px; }
+  .product-tag {
+    display: inline-block; font-size: 11px; font-weight: 800;
+    padding: 3px 10px; border-radius: 50px; margin-bottom: 12px;
+  }
+  .tag-amazon { background: #FFF3CD; color: #92400E; }
+  .tag-etsy   { background: #FFE4E6; color: #9F1239; }
+  .tag-depot  { background: #EEF2FF; color: #3730A3; }
+  .tag-konto  { background: #ECFDF5; color: #065F46; }
+  .tag-buch   { background: #F5F3FF; color: #5B21B6; }
+  .tag-spiel  { background: #FFF7ED; color: #92400E; }
+  body.dark .tag-amazon { background: #2A1E08; color: #FCD34D; }
+  body.dark .tag-etsy   { background: #2A0A10; color: #FCA5A5; }
+  body.dark .tag-depot  { background: #1A1A35; color: #A5B4FC; }
+  body.dark .tag-konto  { background: #102518; color: #6EE7B7; }
+  body.dark .tag-buch   { background: #1E1830; color: #C4B5FD; }
+  body.dark .tag-spiel  { background: #1E1208; color: #FCD34D; }
+  .product-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green); color: white;
+    font-family: var(--font-display); font-size: 14px;
+    padding: 8px 18px; border-radius: 50px; text-decoration: none;
+    transition: all 0.2s; box-shadow: 0 3px 10px rgba(91,191,122,0.3);
+  }
+  .product-link:hover { background: var(--green-dark); transform: translateY(-2px); }
+  .product-link.depot-link { background: #4338CA; box-shadow: 0 3px 10px rgba(67,56,202,0.3); }
+  .product-link.depot-link:hover { background: #3730A3; }
+
+  /* DISCLAIMER */
+  .disclaimer-box {
+    background: var(--surface2); border-radius: 14px; padding: 16px 20px;
+    font-size: 13px; font-weight: 700; color: var(--text-light); line-height: 1.6;
+    margin-top: 16px; border-left: 4px solid var(--orange);
+  }
+
+  /* SOURCE NOTE */
+  .source-note { font-size:12px; font-weight:700; color:var(--text-light); margin-top:10px; }
+
+  /* FOOTER */
+  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--text-light); font-size:13px; }
+  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-back" href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="floating-icons fi1">⭐</span>
+  <span class="floating-icons fi2">📚</span>
+  <span class="floating-icons fi3">🐷</span>
+  <span class="floating-icons fi4">📈</span>
+  <span class="hero-emoji">⭐</span>
+  <h1 class="hero-title" data-de="Empfehlungen & Tools" data-en="Recommendations & Tools">Empfehlungen & Tools</h1>
+  <p class="hero-sub" data-de="Sorgfältig ausgewählte Produkte und Anbieter, die wir für eure Finanzbildungs-Reise empfehlen. Alles von uns geprüft – ehrlich und unabhängig." data-en="Carefully selected products and providers we recommend for your financial literacy journey. All reviewed by us – honestly and independently.">Sorgfältig ausgewählte Produkte und Anbieter, die wir für eure Finanzbildungs-Reise empfehlen. Alles von uns geprüft – ehrlich und unabhängig.</p>
+  <div class="affiliate-banner">
+    <span data-de="* Einige Links auf dieser Seite sind Affiliate-Links. Wenn ihr darüber kauft oder ein Konto eröffnet, erhalten wir eine kleine Provision – für euch entstehen keine Mehrkosten. Diese Einnahmen helfen uns, Piggyplant kostenlos zu halten. Unsere Empfehlungen sind davon unabhängig." data-en="* Some links on this page are affiliate links. If you buy through them or open an account, we receive a small commission – at no extra cost to you. These earnings help us keep Piggyplant free. Our recommendations are independent of this.">* Einige Links auf dieser Seite sind Affiliate-Links. Wenn ihr darüber kauft oder ein Konto eröffnet, erhalten wir eine kleine Provision – für euch entstehen keine Mehrkosten. Diese Einnahmen helfen uns, Piggyplant kostenlos zu halten. Unsere Empfehlungen sind davon unabhängig.</span>
+  </div>
+</section>
+
+<div class="main">
+
+  <!-- SECTION 1: Sparschweine -->
+  <section>
+    <span class="section-anchor" id="sparschweine"></span>
+    <div class="section-header">
+      <span class="section-icon">🐷</span>
+      <h2 class="section-title" data-de="Sparschweine" data-en="Piggy Banks">Sparschweine</h2>
+    </div>
+    <p class="section-lead" data-de="Das erste Sparschwein ist ein besonderer Moment. Wir haben Modelle herausgesucht, die Kinder wirklich ansprechen – von klassisch bis kreativ, von Amazon bis Etsy." data-en="The first piggy bank is a special moment. We've picked models that really appeal to children – from classic to creative, from Amazon to Etsy.">Das erste Sparschwein ist ein besonderer Moment. Wir haben Modelle herausgesucht, die Kinder wirklich ansprechen – von klassisch bis kreativ, von Amazon bis Etsy.</p>
+
+    <div class="product-grid">
+      <!-- AFFILIATE: Amazon Sparschwein 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🐷</span>
+        <p class="product-placeholder-text" data-de="Amazon-Empfehlung folgt" data-en="Amazon recommendation coming soon">Amazon-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Amazon Sparschwein 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🐷</span>
+        <p class="product-placeholder-text" data-de="Amazon-Empfehlung folgt" data-en="Amazon recommendation coming soon">Amazon-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Etsy Sparschwein -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🎨</span>
+        <p class="product-placeholder-text" data-de="Etsy-Empfehlung folgt (personalisierbar)" data-en="Etsy recommendation coming soon (personalizable)">Etsy-Empfehlung folgt (personalisierbar)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Bücher -->
+  <section>
+    <span class="section-anchor" id="buecher"></span>
+    <div class="section-header">
+      <span class="section-icon">📚</span>
+      <h2 class="section-title" data-de="Bücher zur Finanzbildung" data-en="Financial Education Books">Bücher zur Finanzbildung</h2>
+    </div>
+    <p class="section-lead" data-de="Bücher für Kinder, die Geld spielerisch erklären – und Bücher für Eltern, die ihre Kinder auf dem Weg begleiten wollen." data-en="Books for children that explain money playfully – and books for parents who want to accompany their children on the journey.">Bücher für Kinder, die Geld spielerisch erklären – und Bücher für Eltern, die ihre Kinder auf dem Weg begleiten wollen.</p>
+
+    <div class="product-grid">
+      <!-- AFFILIATE: Kinderbuch 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📖</span>
+        <p class="product-placeholder-text" data-de="Kinderbuch-Empfehlung folgt" data-en="Children's book recommendation coming soon">Kinderbuch-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Kinderbuch 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📖</span>
+        <p class="product-placeholder-text" data-de="Kinderbuch-Empfehlung folgt" data-en="Children's book recommendation coming soon">Kinderbuch-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Elternbuch -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📗</span>
+        <p class="product-placeholder-text" data-de="Elternbuch-Empfehlung folgt" data-en="Parent book recommendation coming soon">Elternbuch-Empfehlung folgt</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Spiele & Lernmaterial -->
+  <section>
+    <span class="section-anchor" id="spiele"></span>
+    <div class="section-header">
+      <span class="section-icon">🎮</span>
+      <h2 class="section-title" data-de="Spiele & Lernmaterial" data-en="Games & Learning Materials">Spiele & Lernmaterial</h2>
+    </div>
+    <p class="section-lead" data-de="Brettspiele, Kartenspiele und Lernsets, die Finanzbildung in Spielform bringen – für Familienabende oder den Schulranzen." data-en="Board games, card games and learning sets that bring financial education in game form – for family evenings or the schoolbag.">Brettspiele, Kartenspiele und Lernsets, die Finanzbildung in Spielform bringen – für Familienabende oder den Schulranzen.</p>
+
+    <div class="product-grid">
+      <!-- AFFILIATE: Spiel 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🎲</span>
+        <p class="product-placeholder-text" data-de="Spiel-Empfehlung folgt" data-en="Game recommendation coming soon">Spiel-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Spiel 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🃏</span>
+        <p class="product-placeholder-text" data-de="Spiel-Empfehlung folgt" data-en="Game recommendation coming soon">Spiel-Empfehlung folgt</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: Jugendkonten & Prepaid -->
+  <section>
+    <span class="section-anchor" id="konten"></span>
+    <div class="section-header">
+      <span class="section-icon">💳</span>
+      <h2 class="section-title" data-de="Jugendkonten & Prepaid-Karten" data-en="Youth Accounts & Prepaid Cards">Jugendkonten & Prepaid-Karten</h2>
+    </div>
+    <p class="section-lead" data-de="Ab ca. 10 Jahren macht ein eigenes Konto Sinn. Hier sind die Anbieter, die wir nach Sicherheit, Kosten und pädagogischem Mehrwert verglichen haben." data-en="From around age 10, having your own account makes sense. Here are the providers we've compared for safety, costs and educational value.">Ab ca. 10 Jahren macht ein eigenes Konto Sinn. Hier sind die Anbieter, die wir nach Sicherheit, Kosten und pädagogischem Mehrwert verglichen haben.</p>
+
+    <div class="product-grid">
+      <!-- AFFILIATE: Jugendkonto 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🏦</span>
+        <p class="product-placeholder-text" data-de="Konto-Empfehlung folgt" data-en="Account recommendation coming soon">Konto-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Prepaid-Karte -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">💳</span>
+        <p class="product-placeholder-text" data-de="Prepaid-Karten-Empfehlung folgt" data-en="Prepaid card recommendation coming soon">Prepaid-Karten-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Konto 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">🏦</span>
+        <p class="product-placeholder-text" data-de="Konto-Empfehlung folgt" data-en="Account recommendation coming soon">Konto-Empfehlung folgt</p>
+      </div>
+    </div>
+
+    <div class="disclaimer-box" data-de="⚠️ Hinweis: Dies ist kein Finanzprodukt-Vergleich im regulierten Sinne. Alle Angaben ohne Gewähr. Eltern sollten Konditionen eigenständig prüfen, bevor sie ein Konto eröffnen." data-en="⚠️ Note: This is not a regulated financial product comparison. All information without guarantee. Parents should independently review terms before opening an account.">⚠️ Hinweis: Dies ist kein Finanzprodukt-Vergleich im regulierten Sinne. Alle Angaben ohne Gewähr. Eltern sollten Konditionen eigenständig prüfen, bevor sie ein Konto eröffnen.</div>
+  </section>
+
+  <!-- SECTION 5: Kinderdepots & ETF-Sparpläne -->
+  <section>
+    <span class="section-anchor" id="depots"></span>
+    <div class="section-header">
+      <span class="section-icon">📈</span>
+      <h2 class="section-title" data-de="Kinderdepots & ETF-Sparpläne" data-en="Children's Depots & ETF Savings Plans">Kinderdepots & ETF-Sparpläne</h2>
+    </div>
+    <p class="section-lead" data-de="Für das Investment-Schwein braucht ihr ein Depot. Wir haben die bekanntesten Anbieter für Kinderdepots und Juniordepots verglichen – nach Kosten, Einsteigerfreundlichkeit und Sparplan-Optionen." data-en="For the investment pig you need a depot. We've compared the most well-known providers for children's and junior depots – by cost, beginner-friendliness and savings plan options.">Für das Investment-Schwein braucht ihr ein Depot. Wir haben die bekanntesten Anbieter für Kinderdepots und Juniordepots verglichen – nach Kosten, Einsteigerfreundlichkeit und Sparplan-Optionen.</p>
+
+    <div class="product-grid">
+      <!-- AFFILIATE: Depot 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📈</span>
+        <p class="product-placeholder-text" data-de="Depot-Empfehlung folgt" data-en="Depot recommendation coming soon">Depot-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Depot 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📊</span>
+        <p class="product-placeholder-text" data-de="Depot-Empfehlung folgt" data-en="Depot recommendation coming soon">Depot-Empfehlung folgt</p>
+      </div>
+      <!-- AFFILIATE: Depot 3 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">💹</span>
+        <p class="product-placeholder-text" data-de="Depot-Empfehlung folgt" data-en="Depot recommendation coming soon">Depot-Empfehlung folgt</p>
+      </div>
+    </div>
+
+    <div class="disclaimer-box" data-de="⚠️ Hinweis: Dies ist keine Anlageberatung. Investitionen in ETFs und Aktien unterliegen Kursschwankungen und können im Wert fallen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren." data-en="⚠️ Note: This is not investment advice. Investments in ETFs and equities are subject to price fluctuations and can fall in value. Parents should inform themselves independently before opening a depot.">⚠️ Hinweis: Dies ist keine Anlageberatung. Investitionen in ETFs und Aktien unterliegen Kursschwankungen und können im Wert fallen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren.</div>
+    <p class="source-note" data-de="Orientierung: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018" data-en="Reference: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018">Orientierung: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018</p>
+  </section>
+
+  <!-- SECTION 6: Lernplattformen & Apps -->
+  <section>
+    <span class="section-anchor" id="apps"></span>
+    <div class="section-header">
+      <span class="section-icon">📱</span>
+      <h2 class="section-title" data-de="Lernplattformen & Apps" data-en="Learning Platforms & Apps">Lernplattformen & Apps</h2>
+    </div>
+    <p class="section-lead" data-de="Weitere digitale Tools und Apps, die Finanzbildung für Kinder und Jugendliche ergänzen können – kostenlos oder kostenpflichtig." data-en="Further digital tools and apps that can supplement financial education for children and young people – free or paid.">Weitere digitale Tools und Apps, die Finanzbildung für Kinder und Jugendliche ergänzen können – kostenlos oder kostenpflichtig.</p>
+
+    <div class="product-grid">
+      <!-- App/Plattform 1 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">📱</span>
+        <p class="product-placeholder-text" data-de="App-Empfehlung folgt" data-en="App recommendation coming soon">App-Empfehlung folgt</p>
+      </div>
+      <!-- App/Plattform 2 -->
+      <div class="product-card">
+        <span class="product-placeholder-emoji">💻</span>
+        <p class="product-placeholder-text" data-de="Plattform-Empfehlung folgt" data-en="Platform recommendation coming soon">Plattform-Empfehlung folgt</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let dark = false, lang = 'de';
+
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    dark = true;
+    document.body.classList.add('dark');
+    const _l = document.getElementById('dark-label');
+    if (_l) _l.textContent = 'Dunkel';
+  }
+
+  const _savedLang = localStorage.getItem('piggyplant-lang');
+  if (_savedLang && _savedLang !== 'de') {
+    lang = _savedLang;
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _savedLang));
+    document.getElementById('btn-de').classList.toggle('active', _savedLang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', _savedLang === 'en');
+    document.documentElement.lang = _savedLang;
+  }
+
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('piggyplant-dark', dark);
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = dark ? (lang === 'de' ? 'Dunkel' : 'Dark') : (lang === 'de' ? 'Hell' : 'Light');
+  }
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+    const lbl = document.getElementById('dark-label');
+    if (lbl) lbl.textContent = dark ? (l === 'de' ? 'Dunkel' : 'Dark') : (l === 'de' ? 'Hell' : 'Light');
+  }
+</script>
+</body>
+</html>

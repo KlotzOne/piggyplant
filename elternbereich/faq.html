@@ -1,1 +1,718 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Häufige Fragen – Piggyplant Elternbereich</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body:'Nunito',sans-serif; --font-display:'Fredoka One',cursive;
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-light:#E6F6FF; --blue-dark:#2A85B0;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+    --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+    --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+    --radius:20px; --shadow:0 6px 24px rgba(0,0,0,0.09);
+  }
+  body.dark {
+    --bg:#0F1A14; --text:#E8F5EE; --text-light:#8EAAA0;
+    --surface:#1A2E22; --surface2:#243B2C; --border:#2A4035;
+    --green-light:#1C3528; --blue-light:#172838;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;transition:background 0.4s,color 0.4s}
 
+  nav{background:var(--surface);border-bottom:2px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:background 0.4s}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .nav-logo img{width:36px;height:36px;object-fit:contain}
+  .nav-logo span{font-family:var(--font-display);font-size:22px;background:linear-gradient(135deg,var(--green-dark),var(--blue-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .nav-right{display:flex;gap:6px;align-items:center;flex-shrink:0}
+  @media(max-width:480px){.nav-logo span{font-size:16px}.lang-btn{font-size:10px;padding:5px 8px}#dark-label{display:none}nav{padding:10px 12px}}
+  .lang-btn{border:2px solid var(--green);background:transparent;color:var(--green-dark);font-family:var(--font-body);font-weight:800;font-size:14px;padding:7px 18px;border-radius:50px;cursor:pointer;transition:all 0.2s;line-height:1}
+  body.dark .lang-btn{color:var(--blue);border-color:var(--blue)}
+  body.dark .lang-btn.active{background:var(--blue);color:white;border-color:var(--blue-dark);box-shadow:0 2px 8px rgba(74,172,219,0.4)}
+  .lang-btn.active{background:var(--green);color:white;border-color:var(--green-dark);box-shadow:0 2px 8px rgba(91,191,122,0.4);transform:scale(1.1)}
+  .lang-btn:hover{transform:scale(1.15)}
+  .dark-toggle{background:var(--surface2);border:2px solid var(--border);border-radius:50px;width:48px;height:26px;cursor:pointer;position:relative;transition:all 0.3s}
+  .dark-toggle::before{content:'☀️';position:absolute;left:2px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:20px;text-align:center;transition:left 0.3s}
+  body.dark .dark-toggle::before{content:'🌙';left:22px;background:#2A85B0}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes bounceIn{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+  .hero{background:linear-gradient(135deg,#ECFDF5,#D1FAE5,#A7F3D0);padding:52px 20px 44px;text-align:center;position:relative;overflow:hidden;transition:background 0.4s}
+  body.dark .hero{background:linear-gradient(135deg,#0A1F14,#102518,#142E1A)}
+  .floating-icons{position:absolute;font-size:26px;animation:float 3s ease-in-out infinite;opacity:0.5}
+  .fi1{top:18%;left:7%;animation-delay:0s}.fi2{top:25%;right:9%;animation-delay:0.6s}.fi3{bottom:22%;left:5%;animation-delay:1.2s;font-size:20px}.fi4{bottom:18%;right:7%;animation-delay:0.4s;font-size:22px}
+  @media(max-width:600px){.fi1,.fi2,.fi3,.fi4{font-size:16px}}
+  .hero-emoji{font-size:68px;display:block;margin:0 auto 12px;animation:bounceIn 0.8s cubic-bezier(0.34,1.56,0.64,1)}
+  .hero-title{font-family:var(--font-display);font-size:38px;color:var(--text);margin-bottom:10px;animation:fadeUp 0.6s 0.1s both}
+  @media(max-width:600px){.hero-title{font-size:26px}}
+  .hero-sub{font-size:16px;color:var(--text-light);font-weight:600;max-width:500px;margin:0 auto;line-height:1.6;animation:fadeUp 0.6s 0.2s both}
+
+  .content{max-width:760px;margin:0 auto;padding:48px 24px 64px}
+  .section-title{font-family:var(--font-display);font-size:26px;color:var(--text);margin-bottom:8px}
+  .section-lead{font-size:16px;color:var(--text-light);font-weight:600;line-height:1.7;margin-bottom:24px}
+  section+section{margin-top:56px}
+
+  .faq-block-title{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:20px;color:var(--text);margin-bottom:12px;padding:14px 20px;border-radius:16px;background:var(--surface);border:2px solid var(--border)}
+  body.dark .faq-block-title{background:var(--surface2)}
+
+  .faq-item{border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 2px 12px rgba(0,0,0,0.06);animation:fadeUp 0.5s both}
+  .faq-item:nth-child(1){animation-delay:0.05s}.faq-item:nth-child(2){animation-delay:0.10s}.faq-item:nth-child(3){animation-delay:0.15s}.faq-item:nth-child(4){animation-delay:0.20s}
+  .faq-question{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);padding:16px 20px;cursor:pointer;user-select:none;transition:background 0.2s;border:none;width:100%;text-align:left}
+  .faq-question:hover{background:var(--green-light)}
+  body.dark .faq-question{background:var(--surface)}
+  body.dark .faq-question:hover{background:var(--surface2)}
+  .faq-q-text{font-family:var(--font-body);font-size:15px;font-weight:800;color:var(--text);line-height:1.4;flex:1}
+  .faq-chevron{font-size:14px;color:var(--green-dark);transition:transform 0.3s;flex-shrink:0}
+  body.dark .faq-chevron{color:var(--green)}
+  .faq-item.open .faq-chevron{transform:rotate(180deg)}
+  .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;background:var(--surface);border-top:1px solid var(--border)}
+  body.dark .faq-answer{background:var(--surface);border-color:var(--border)}
+  .faq-item.open .faq-answer{max-height:900px;padding:20px 20px 22px}
+
+  .faq-text{font-size:15px;font-weight:600;color:var(--text-light);line-height:1.8;margin-bottom:10px}
+  .faq-text strong{color:var(--text);font-weight:800}
+
+  /* HIGHLIGHT BOXES */
+  .hl{border-radius:12px;padding:14px 16px;margin:10px 0;display:flex;gap:12px;align-items:flex-start}
+  .hl-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+  .hl-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.6}
+  .hl-text strong{font-weight:800}
+  .hl.green{background:var(--green-light)} body.dark .hl.green{background:var(--surface2)}
+  .hl.green .hl-text strong{color:var(--green-dark)} body.dark .hl.green .hl-text strong{color:var(--green)}
+  .hl.blue{background:var(--blue-light)} body.dark .hl.blue{background:#172838}
+  .hl.blue .hl-text strong{color:var(--blue-dark)} body.dark .hl.blue .hl-text strong{color:var(--blue)}
+  .hl.yellow{background:#FEFCE8} body.dark .hl.yellow{background:#2A2008}
+  .hl.yellow .hl-text strong{color:#854D0E} body.dark .hl.yellow .hl-text strong{color:#FCD34D}
+  .hl.red{background:#FEF0F5} body.dark .hl.red{background:#2A1020}
+  .hl.red .hl-text strong{color:#9D174D} body.dark .hl.red .hl-text strong{color:#FF6B9D}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+  .step{display:flex;gap:12px;align-items:flex-start}
+  .step-num{width:26px;height:26px;border-radius:50%;background:var(--green);color:white;font-family:var(--font-display);font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  body.dark .step-num{background:var(--green-dark)}
+  .step-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.6;padding-top:3px}
+  .step-text strong{color:var(--green-dark)} body.dark .step-text strong{color:var(--green)}
+
+  /* MINI TABLE */
+  .mini-table{width:100%;border-collapse:collapse;margin:10px 0;border-radius:10px;overflow:hidden}
+  .mini-table th{background:var(--green);color:white;font-family:var(--font-display);font-size:13px;padding:8px 12px;text-align:left;font-weight:400}
+  .mini-table td{background:var(--surface2);padding:8px 12px;font-size:13px;font-weight:700;color:var(--text);border-bottom:1px solid var(--border)}
+  .mini-table tr:last-child td{border-bottom:none}
+  .mini-table td:last-child{color:var(--green-dark)}
+  body.dark .mini-table th{background:var(--green-dark)}
+  body.dark .mini-table td{background:var(--surface2)}
+  body.dark .mini-table td:last-child{color:var(--green)}
+
+  /* TAG + SOURCE */
+  .faq-tag{display:inline-block;font-size:11px;font-weight:800;padding:4px 12px;border-radius:50px;margin-top:4px;background:var(--green-light);color:var(--green-dark);text-decoration:none;transition:opacity 0.2s}
+  .faq-tag:hover{opacity:0.8}
+  body.dark .faq-tag{background:var(--surface2);color:var(--green)}
+  .faq-tag.blue{background:var(--blue-light);color:var(--blue-dark)}
+  body.dark .faq-tag.blue{background:#172838;color:var(--blue)}
+  .src{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--text-light);background:var(--surface2);border-radius:50px;padding:3px 10px;margin-top:10px}
+  body.dark .src{background:var(--border)}
+
+  /* GAME TILES */
+  .game-tile{border-radius:16px;padding:20px;text-align:center;transition:transform 0.2s}
+  .game-tile:hover{transform:translateY(-3px)}
+  .game-tile-title{font-family:'Fredoka One',sans-serif;font-size:16px;margin-bottom:6px}
+  .game-tile-sub{font-family:'Nunito',sans-serif;font-size:13px;color:var(--text-light);font-weight:600}
+  .gt-green{background:var(--green-light);border:2px solid var(--green)} .gt-green .game-tile-title{color:var(--green-dark)}
+  .gt-blue{background:var(--blue-light);border:2px solid var(--blue)} .gt-blue .game-tile-title{color:var(--blue-dark)}
+  .gt-yellow{background:#FEFCE8;border:2px solid #EAB308} .gt-yellow .game-tile-title{color:#854D0E}
+  .gt-pink{background:#FEF0F5;border:2px solid #FF6B9D} .gt-pink .game-tile-title{color:#9D174D}
+  body.dark .gt-green{background:#1C3528;border-color:var(--green)}
+  body.dark .gt-blue{background:#172838;border-color:var(--blue)}
+  body.dark .gt-yellow{background:#2A2008;border-color:#EAB308} body.dark .gt-yellow .game-tile-title{color:#FCD34D}
+  body.dark .gt-pink{background:#2A1020;border-color:#FF6B9D} body.dark .gt-pink .game-tile-title{color:#FF6B9D}
+
+  .footer{background:var(--surface);border-top:1px solid var(--border);padding:24px;transition:background 0.4s}
+  .footer-inner{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+  .footer-brand{font-family:'Fredoka One',cursive;font-size:18px;background:linear-gradient(135deg,var(--green-dark),var(--blue-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .footer-copy{font-size:11px;color:var(--text-light);font-weight:600}
+  .footer-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .footer-links a{font-size:13px;font-weight:700;color:var(--text-light);text-decoration:none;transition:color 0.2s}
+  .footer-links a:hover{color:var(--green)}
+  .footer-divider{color:var(--text-light);font-size:13px}
+  @media(max-width:600px){.footer-inner{flex-direction:column;align-items:center;text-align:center}.footer-links{justify-content:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <span class="floating-icons fi1">❓</span>
+  <span class="floating-icons fi2">💡</span>
+  <span class="floating-icons fi3">🐷</span>
+  <span class="floating-icons fi4">💰</span>
+  <span class="hero-emoji">🙋</span>
+  <h1 class="hero-title" data-de="Häufige Fragen" data-en="Frequently Asked Questions">Häufige Fragen</h1>
+  <p class="hero-sub" data-de="Die wichtigsten Eltern-Fragen rund ums Taschengeld – kurz, ehrlich und ohne Fachjargon." data-en="The most important parent questions about pocket money – brief, honest and jargon-free.">Die wichtigsten Eltern-Fragen rund ums Taschengeld – kurz, ehrlich und ohne Fachjargon.</p>
+</section>
+
+<div class="content">
+
+  <!-- BLOCK 1 -->
+  <section>
+    <div class="faq-block-title">💰 <span data-de="Beträge & Alter" data-en="Amounts & Age">Beträge & Alter</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie viel Taschengeld ist für mein Kind angemessen?" data-en="How much pocket money is right for my child?">Wie viel Taschengeld ist für mein Kind angemessen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Es gibt keine universell richtige Zahl – aber gut begründete Richtwerte, auf die sich Forschung und Verbraucherverbände weitgehend einigen:" data-en="There's no universally correct figure – but well-founded guidelines that research and consumer organisations broadly agree on:">Es gibt keine universell richtige Zahl – aber gut begründete Richtwerte, auf die sich Forschung und Verbraucherverbände weitgehend einigen:</p>
+        <table class="mini-table">
+          <tr><th data-de="Alter" data-en="Age">Alter</th><th data-de="Empfehlung" data-en="Guideline">Empfehlung</th></tr>
+          <tr><td data-de="Unter 6 Jahre" data-en="Under 6">Unter 6 Jahre</td><td>1–2 € / Woche</td></tr>
+          <tr><td>6–9 Jahre</td><td>2–4 € / Woche</td></tr>
+          <tr><td>10–11 Jahre</td><td>15–25 € / Monat</td></tr>
+          <tr><td>12–13 Jahre</td><td>20–30 € / Monat</td></tr>
+          <tr><td>14–15 Jahre</td><td>25–45 € / Monat</td></tr>
+          <tr><td>16–17 Jahre</td><td>40–60 € / Monat</td></tr>
+        </table>
+        <div class="hl green">
+          <span class="hl-icon">💡</span>
+          <span class="hl-text" data-de="<strong>Wichtiger als der Betrag:</strong> Verlässlichkeit. Ein kleineres Taschengeld das pünktlich kommt ist wertvoller als ein höheres das unregelmäßig fließt." data-en="<strong>More important than the amount:</strong> reliability. A smaller pocket money that arrives on time is worth more than a higher amount that flows irregularly."><strong>Wichtiger als der Betrag:</strong> Verlässlichkeit. Ein kleineres Taschengeld das pünktlich kommt ist wertvoller als ein höheres das unregelmäßig fließt.</span>
+        </div>
+        <a class="faq-tag" href="taschengeld.html" data-de="→ Zur vollständigen Taschengeld-Tabelle" data-en="→ Full pocket money table">→ Zur vollständigen Taschengeld-Tabelle</a><br>
+        <span class="src">📚 Verbraucherzentrale · BZgA · Geld und Haushalt</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Ab wann sollte ich mit Taschengeld anfangen?" data-en="When should I start giving pocket money?">Ab wann sollte ich mit Taschengeld anfangen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Spätestens mit dem Schuleintritt – also mit 6–7 Jahren. Zu diesem Zeitpunkt können Kinder Zahlen einordnen, Preise vergleichen und erste Konsequenzen von Kaufentscheidungen begreifen." data-en="At the latest when starting school – i.e. at 6–7 years. At this point children can categorise numbers, compare prices and understand the first consequences of purchasing decisions.">Spätestens mit dem Schuleintritt – also mit 6–7 Jahren. Zu diesem Zeitpunkt können Kinder Zahlen einordnen, Preise vergleichen und erste Konsequenzen von Kaufentscheidungen begreifen.</p>
+        <div class="hl yellow">
+          <span class="hl-icon">🌱</span>
+          <span class="hl-text" data-de="<strong>Früher ist auch möglich:</strong> Schon ab 4–5 Jahren macht ein eigenes Sparschwein Sinn. Kinder lernen so, dass Geld einen Wert hat – auch bevor sie richtig rechnen können." data-en="<strong>Earlier is also possible:</strong> From age 4–5, having their own piggy bank makes sense. Children learn that money has value – even before they can properly count."><strong>Früher ist auch möglich:</strong> Schon ab 4–5 Jahren macht ein eigenes Sparschwein Sinn. Kinder lernen so, dass Geld einen Wert hat – auch bevor sie richtig rechnen können.</span>
+        </div>
+        <span class="src">📚 Whitebread & Bingham, University of Cambridge (2013)</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wöchentlich oder monatlich auszahlen?" data-en="Pay weekly or monthly?">Wöchentlich oder monatlich auszahlen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-de="<strong>Bis ca. 9 Jahre: wöchentlich.</strong> Kurze Zeiträume sind für Kinder besser planbar. Bargeld macht das Sparen greifbar – sie sehen wie der Geldbeutel voller oder leerer wird." data-en="<strong>Up to about age 9: weekly.</strong> Shorter timeframes are easier for children to plan around. Cash makes saving tangible – they see the wallet getting fuller or emptier."><strong>Bis ca. 9 Jahre: wöchentlich.</strong> Kurze Zeiträume sind für Kinder besser planbar. Bargeld macht das Sparen greifbar – sie sehen wie der Geldbeutel voller oder leerer wird.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-de="<strong>Ab 10–11 Jahren: monatlich.</strong> Die meisten Familien stellen in diesem Alter um – kein Zufall. Kinder können nun abstraktes Denken anwenden und größere Zeiträume planen." data-en="<strong>From age 10–11: monthly.</strong> Most families switch at this age – no coincidence. Children can now apply abstract thinking and plan for longer periods."><strong>Ab 10–11 Jahren: monatlich.</strong> Die meisten Familien stellen in diesem Alter um – kein Zufall. Kinder können nun abstraktes Denken anwenden und größere Zeiträume planen.</div>
+          </div>
+        </div>
+        <span class="src">📚 AID:A Survey 2023 · Geld und Haushalt</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Soll ich das Taschengeld jedes Jahr erhöhen?" data-en="Should I increase pocket money every year?">Soll ich das Taschengeld jedes Jahr erhöhen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Ja – wachsende Kinder haben wachsende Bedürfnisse. Der beste Zeitpunkt ist ein fester Anlass, zum Beispiel Geburtstag oder Schuljahresbeginn." data-en="Yes – growing children have growing needs. The best time is a fixed occasion, for example a birthday or the start of the school year.">Ja – wachsende Kinder haben wachsende Bedürfnisse. Der beste Zeitpunkt ist ein fester Anlass, zum Beispiel Geburtstag oder Schuljahresbeginn.</p>
+        <div class="hl blue">
+          <span class="hl-icon">📅</span>
+          <span class="hl-text" data-de="<strong>Tipp:</strong> Macht die Erhöhung zur Routine, nicht zur Verhandlung. 'Dieses Jahr bist du 10 – ab jetzt gibt es X € im Monat' ist klarer als ein offenes Aushandeln." data-en="<strong>Tip:</strong> Make the increase a routine, not a negotiation. 'This year you're 10 – from now on you get X € a month' is clearer than open negotiation."><strong>Tipp:</strong> Macht die Erhöhung zur Routine, nicht zur Verhandlung. 'Dieses Jahr bist du 10 – ab jetzt gibt es X € im Monat' ist klarer als ein offenes Aushandeln.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 2 -->
+  <section>
+    <div class="faq-block-title">🚫 <span data-de="Regeln & Grenzen" data-en="Rules & Limits">Regeln & Grenzen</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Darf ich das Taschengeld kürzen wenn das Kind sich schlecht benimmt?" data-en="Can I cut pocket money when my child misbehaves?">Darf ich das Taschengeld kürzen wenn das Kind sich schlecht benimmt?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="hl red">
+          <span class="hl-icon">⛔</span>
+          <span class="hl-text" data-de="<strong>Klare Antwort: Nein.</strong> Taschengeld ist kein Erziehungsmittel, sondern ein Lernbudget. Wer es kürzt, nimmt dem Kind genau den Übungsraum für Finanzkompetenz." data-en="<strong>Clear answer: No.</strong> Pocket money is not a parenting tool but a learning budget. Cutting it removes exactly the practice space for financial literacy."><strong>Klare Antwort: Nein.</strong> Taschengeld ist kein Erziehungsmittel, sondern ein Lernbudget. Wer es kürzt, nimmt dem Kind genau den Übungsraum für Finanzkompetenz.</span>
+        </div>
+        <p class="faq-text" style="margin-top:12px;" data-de="Fehlverhalten wird besser durch andere Konsequenzen adressiert – die nichts mit Geld zu tun haben. Das Einbehalten von Taschengeld untergräbt außerdem das Vertrauen: Das Kind lernt, dass es sich nicht auf feste Absprachen verlassen kann." data-en="Misbehaviour is better addressed through other consequences – ones that have nothing to do with money. Withholding pocket money also undermines trust: the child learns they can't rely on fixed agreements.">Fehlverhalten wird besser durch andere Konsequenzen adressiert – die nichts mit Geld zu tun haben. Das Einbehalten von Taschengeld untergräbt außerdem das Vertrauen: Das Kind lernt, dass es sich nicht auf feste Absprachen verlassen kann.</p>
+        <span class="src">📚 Verbraucherzentrale Bundesverband · BZgA</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Sollte ich Taschengeld an Haushaltsaufgaben knüpfen?" data-en="Should I link pocket money to household chores?">Sollte ich Taschengeld an Haushaltsaufgaben knüpfen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Nein. Normale Mithilfe im Haushalt gehört zum Familienleben – sie sollte nicht vergütet werden. Kinder die Geld nur für Hilfe bekommen, lernen: Ich tue etwas nur wenn ich dafür bezahlt werde." data-en="No. Normal household help is part of family life – it should not be paid for. Children who only get money for helping learn: I only do something when I'm paid for it.">Nein. Normale Mithilfe im Haushalt gehört zum Familienleben – sie sollte nicht vergütet werden. Kinder die Geld nur für Hilfe bekommen, lernen: Ich tue etwas nur wenn ich dafür bezahlt werde.</p>
+        <div class="hl green">
+          <span class="hl-icon">✅</span>
+          <span class="hl-text" data-de="<strong>Ausnahme:</strong> Besondere Zusatzdienste wie den Garten umgraben oder das Auto waschen können separat und vorab vereinbart vergütet werden – klar getrennt vom Taschengeld. Das vermittelt das Prinzip 'Arbeit gegen Lohn'." data-en="<strong>Exception:</strong> Special extra services like digging the garden or washing the car can be separately and pre-agreed remunerated – clearly separate from pocket money. This conveys the 'work for pay' principle."><strong>Ausnahme:</strong> Besondere Zusatzdienste wie den Garten umgraben oder das Auto waschen können separat und vorab vereinbart vergütet werden – klar getrennt vom Taschengeld. Das vermittelt das Prinzip 'Arbeit gegen Lohn'.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Was mache ich wenn mein Kind ständig um einen Vorschuss bittet?" data-en="What do I do when my child constantly asks for an advance?">Was mache ich wenn mein Kind ständig um einen Vorschuss bittet?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Vorschüsse sollten die Ausnahme bleiben – die Lernkurve kommt erst, wenn das Geld wirklich alle ist." data-en="Advances should remain the exception – the learning curve only comes when the money is truly gone.">Vorschüsse sollten die Ausnahme bleiben – die Lernkurve kommt erst, wenn das Geld wirklich alle ist.</p>
+        <div class="hl blue">
+          <span class="hl-icon">🤝</span>
+          <span class="hl-text" data-de="<strong>Ab ca. 12 Jahren:</strong> Kleine Kredite mit klarem Rückzahlplan können sinnvoll sein. Das Kind lernt: Leihen ist eine Verpflichtung. Limit: maximal das Doppelte des monatlichen Taschengeldes. Konsequent zurückfordern." data-en="<strong>From around age 12:</strong> Small loans with a clear repayment plan can make sense. The child learns: borrowing is an obligation. Limit: no more than double the monthly pocket money. Consistently reclaim it."><strong>Ab ca. 12 Jahren:</strong> Kleine Kredite mit klarem Rückzahlplan können sinnvoll sein. Das Kind lernt: Leihen ist eine Verpflichtung. Limit: maximal das Doppelte des monatlichen Taschengeldes. Konsequent zurückfordern.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Darf ich kontrollieren wofür das Kind das Geld ausgibt?" data-en="Am I allowed to monitor what my child spends money on?">Darf ich kontrollieren wofür das Kind das Geld ausgibt?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Taschengeld steht dem Kind zur freien Verfügung – das ist der pädagogische Kern. Kontrolle und Bewertung unterlaufen genau den Lerneffekt den Taschengeld haben soll." data-en="Pocket money is at the child's free disposal – that's the pedagogical core. Control and evaluation undermine exactly the learning effect pocket money is supposed to have.">Taschengeld steht dem Kind zur freien Verfügung – das ist der pädagogische Kern. Kontrolle und Bewertung unterlaufen genau den Lerneffekt den Taschengeld haben soll.</p>
+        <div class="hl green">
+          <span class="hl-icon">💬</span>
+          <span class="hl-text" data-de="<strong>Was stattdessen hilft:</strong> Offene Gespräche aus echtem Interesse. 'Was hast du heute gekauft? Bist du zufrieden damit?' Kinder die regelmäßig über Käufe sprechen, geben im Schnitt weniger impulsiv aus." data-en="<strong>What helps instead:</strong> Open conversations out of genuine interest. 'What did you buy today? Are you happy with it?' Children who regularly talk about purchases spend less impulsively on average."><strong>Was stattdessen hilft:</strong> Offene Gespräche aus echtem Interesse. 'Was hast du heute gekauft? Bist du zufrieden damit?' Kinder die regelmäßig über Käufe sprechen, geben im Schnitt weniger impulsiv aus.</span>
+        </div>
+        <span class="src">📚 PISA 2022 Financial Literacy, OECD</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 3 -->
+  <section>
+    <div class="faq-block-title">😰 <span data-de="Typische Problemsituationen" data-en="Typical problem situations">Typische Problemsituationen</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Mein Kind gibt alles sofort aus – was tun?" data-en="My child spends everything immediately – what to do?">Mein Kind gibt alles sofort aus – was tun?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Das ist völlig normal und gehört zum Lernprozess. Kinder müssen die Erfahrung machen, dass das Geld weg ist – und dann warten." data-en="This is completely normal and part of the learning process. Children need to experience that money is gone – and then wait.">Das ist völlig normal und gehört zum Lernprozess. Kinder müssen die Erfahrung machen, dass das Geld weg ist – und dann warten.</p>
+        <div class="hl red">
+          <span class="hl-icon">🚫</span>
+          <span class="hl-text" data-de="<strong>Nicht nachschießen</strong> wenn das Taschengeld aufgebraucht ist. Genau dieser Moment des Wartens ist der Lernmoment." data-en="<strong>Don't top up</strong> when pocket money is spent. Exactly this moment of waiting is the learning moment."><strong>Nicht nachschießen</strong> wenn das Taschengeld aufgebraucht ist. Genau dieser Moment des Wartens ist der Lernmoment.</span>
+        </div>
+        <p class="faq-text" style="margin-top:10px;" data-de="Was hilft: ein konkretes Sparziel das das Kind selbst gewählt hat. Wer auf etwas spart das er wirklich will, lernt Impulskontrolle aus eigenem Antrieb." data-en="What helps: a concrete savings goal the child chose themselves. Someone saving for something they really want learns impulse control of their own accord.">Was hilft: ein konkretes Sparziel das das Kind selbst gewählt hat. Wer auf etwas spart das er wirklich will, lernt Impulskontrolle aus eigenem Antrieb.</p>
+        <a class="faq-tag" href="../kleine-sparer/sparziel.html" data-de="→ Sparziel-Bereich für Kinder" data-en="→ Savings goal area for children">→ Sparziel-Bereich für Kinder</a>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Mein Kind vergleicht sich mit anderen die mehr bekommen." data-en="My child compares themselves to others who get more.">Mein Kind vergleicht sich mit anderen die mehr bekommen.</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Das kennt fast jede Familie. Ruhig bleiben und die Gefühle ernst nehmen ist der erste Schritt." data-en="Almost every family knows this. Staying calm and taking the feelings seriously is the first step.">Das kennt fast jede Familie. Ruhig bleiben und die Gefühle ernst nehmen ist der erste Schritt.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text" data-de="Zuhören ohne sofort zu rechtfertigen: <strong>'Ich verstehe, dass das unfair wirkt.'</strong>" data-en="Listen without immediately justifying: <strong>'I understand that seems unfair.'</strong>">Zuhören ohne sofort zu rechtfertigen: <strong>'Ich verstehe, dass das unfair wirkt.'</strong></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text" data-de="Kurz erklären, ohne Details: <strong>'In unserer Familie passt dieser Betrag zu uns.'</strong>" data-en="Explain briefly: <strong>'In our family this amount suits us.'</strong>">Kurz erklären, ohne Details: <strong>'In unserer Familie passt dieser Betrag zu uns.'</strong></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text" data-de="Auf eigene Stärken lenken: Was hat das Kind schon gespart? Worauf ist es stolz?" data-en="Redirect to own strengths: What has the child already saved? What are they proud of?">Auf eigene Stärken lenken: Was hat das Kind schon gespart? Worauf ist es stolz?</div></div>
+        </div>
+        <span class="src">📚 Bundeszentrale für gesundheitliche Aufklärung (BZgA)</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wir haben gerade wenig Geld – wie gehe ich damit um?" data-en="We don't have much money right now – how do I handle this?">Wir haben gerade wenig Geld – wie gehe ich damit um?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="hl green">
+          <span class="hl-icon">🎯</span>
+          <span class="hl-text" data-de="<strong>Verlässlichkeit schlägt Höhe.</strong> Ein kleines aber pünktliches Taschengeld ist wertvoller als ein höheres das unregelmäßig kommt. Auch 2 € pro Woche ermöglichen echte Lernprozesse." data-en="<strong>Reliability beats amount.</strong> A small but punctual pocket money is worth more than a higher amount that comes irregularly. Even €2 per week enables genuine learning processes."><strong>Verlässlichkeit schlägt Höhe.</strong> Ein kleines aber pünktliches Taschengeld ist wertvoller als ein höheres das unregelmäßig kommt. Auch 2 € pro Woche ermöglichen echte Lernprozesse.</span>
+        </div>
+        <p class="faq-text" style="margin-top:10px;" data-de="Sprecht offen und altersgerecht mit dem Kind über die Situation – ohne Details die überfordern. Kinder vertragen Ehrlichkeit besser als Ungewissheit." data-en="Talk openly and age-appropriately with the child about the situation – without overwhelming details. Children cope with honesty better than uncertainty.">Sprecht offen und altersgerecht mit dem Kind über die Situation – ohne Details die überfordern. Kinder vertragen Ehrlichkeit besser als Ungewissheit.</p>
+        <span class="src">📚 Geld und Haushalt – Beratungsdienst des Deutschen Sparkassen- und Giroverbands</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Mein Kind verliert ständig sein Geld." data-en="My child keeps losing their money.">Mein Kind verliert ständig sein Geld.</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Auch das gehört zum Lernprozess. Die natürliche Konsequenz – kein Ersatz – klingt hart, ist aber pädagogisch richtig." data-en="This is also part of the learning process. The natural consequence – no replacement – sounds harsh, but is pedagogically correct.">Auch das gehört zum Lernprozess. Die natürliche Konsequenz – kein Ersatz – klingt hart, ist aber pädagogisch richtig.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text" data-de="<strong>Eigene Geldbörse</strong> die das Kind selbst aussucht – steigert die emotionale Bindung und Aufmerksamkeit." data-en="<strong>Their own wallet</strong> the child chooses – increases emotional attachment and attention."><strong>Eigene Geldbörse</strong> die das Kind selbst aussucht – steigert die emotionale Bindung und Aufmerksamkeit.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text" data-de="<strong>Fester Aufbewahrungsort</strong> zu Hause – immer derselbe Platz, immer dieselbe Routine." data-en="<strong>Fixed storage spot</strong> at home – always the same place, always the same routine."><strong>Fester Aufbewahrungsort</strong> zu Hause – immer derselbe Platz, immer dieselbe Routine.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text" data-de="<strong>Ab 12 Jahren:</strong> Jugendkonto als Alternative – digitales Geld kann nicht verloren gehen." data-en="<strong>From age 12:</strong> Youth account as alternative – digital money can't be lost."><strong>Ab 12 Jahren:</strong> Jugendkonto als Alternative – digitales Geld kann nicht verloren gehen.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 4 -->
+  <section>
+    <div class="faq-block-title">📱 <span data-de="Digital & Konto" data-en="Digital & Accounts">Digital & Konto</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Ab wann ist ein Jugendkonto sinnvoll?" data-en="From what age is a youth account sensible?">Ab wann ist ein Jugendkonto sinnvoll?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Ab ca. 12 Jahren – aber erst nachdem das Kind Erfahrung mit Bargeld gesammelt hat. Sichtbares Geld schärft das Verständnis für Wert und Konsequenzen von Käufen." data-en="From around age 12 – but only after the child has gained experience with cash. Visible money sharpens understanding of value and the consequences of purchases.">Ab ca. 12 Jahren – aber erst nachdem das Kind Erfahrung mit Bargeld gesammelt hat. Sichtbares Geld schärft das Verständnis für Wert und Konsequenzen von Käufen.</p>
+        <div class="hl blue">
+          <span class="hl-icon">🏦</span>
+          <span class="hl-text" data-de="<strong>Worauf achten?</strong> Kein Überziehungsrahmen, Push-Benachrichtigungen, DSGVO-konform, kostenlos. Die Einrichtung immer gemeinsam mit dem Kind machen – das ist schon eine Lektion." data-en="<strong>What to look for?</strong> No overdraft, push notifications, GDPR-compliant, free. Always set it up together with the child – that itself is already a lesson."><strong>Worauf achten?</strong> Kein Überziehungsrahmen, Push-Benachrichtigungen, DSGVO-konform, kostenlos. Die Einrichtung immer gemeinsam mit dem Kind machen – das ist schon eine Lektion.</span>
+        </div>
+        <a class="faq-tag blue" href="empfehlungen.html#konten" data-de="→ Unsere Konten-Empfehlungen" data-en="→ Our account recommendations">→ Unsere Konten-Empfehlungen</a>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie schütze ich mein Kind vor In-App-Käufen und Abo-Fallen?" data-en="How do I protect my child from in-app purchases and subscription traps?">Wie schütze ich mein Kind vor In-App-Käufen und Abo-Fallen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text" data-de="<strong>Klare Absprachen:</strong> Käufe über ein bestimmtes Limit nur mit Rücksprache." data-en="<strong>Clear agreements:</strong> purchases above a certain limit only with consultation."><strong>Klare Absprachen:</strong> Käufe über ein bestimmtes Limit nur mit Rücksprache.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text" data-de="<strong>Prepaid statt Kreditkarte</strong> – Kinder können nur ausgeben was aufgeladen ist." data-en="<strong>Prepaid instead of credit card</strong> – children can only spend what's loaded."><strong>Prepaid statt Kreditkarte</strong> – Kinder können nur ausgeben was aufgeladen ist.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text" data-de="<strong>Offen über Mechanismen sprechen</strong> – Warum kosten Lootboxen Geld? Was steckt hinter 'kostenlosen' Spielen? Medienkompetenz ist Finanzkompetenz." data-en="<strong>Talk openly about mechanisms</strong> – Why do loot boxes cost money? What's behind 'free' games? Media literacy is financial literacy."><strong>Offen über Mechanismen sprechen</strong> – Warum kosten Lootboxen Geld? Was steckt hinter 'kostenlosen' Spielen? Medienkompetenz ist Finanzkompetenz.</div></div>
+        </div>
+        <span class="src">📚 Verbraucherzentrale · klicksafe.de</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Soll das Taschengeld bar oder digital ausgezahlt werden?" data-en="Should pocket money be paid in cash or digitally?">Soll das Taschengeld bar oder digital ausgezahlt werden?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Der Weg ist klar: zuerst bar, dann schrittweise digital." data-en="The path is clear: cash first, then gradually digital.">Der Weg ist klar: zuerst bar, dann schrittweise digital.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text" data-de="🪙 <strong>Bargeld</strong> – Kinder sehen und spüren wie Geld weniger wird." data-en="🪙 <strong>Cash</strong> – children see and feel money decreasing.">🪙 <strong>Bargeld</strong> – Kinder sehen und spüren wie Geld weniger wird.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text" data-de="📱 <strong>Taschengeld-App</strong> als Brücke – ab ca. 9–10 Jahren." data-en="📱 <strong>Pocket money app</strong> as a bridge – from around age 9–10.">📱 <strong>Taschengeld-App</strong> als Brücke – ab ca. 9–10 Jahren.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text" data-de="🏦 <strong>Jugendkonto mit Debitkarte</strong> – ab ca. 12 Jahren." data-en="🏦 <strong>Youth account with debit card</strong> – from around age 12.">🏦 <strong>Jugendkonto mit Debitkarte</strong> – ab ca. 12 Jahren.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 5 -->
+  <section>
+    <div class="faq-block-title">🏠 <span data-de="Besondere Situationen" data-en="Special situations">Besondere Situationen</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wir leben getrennt – wie regeln wir das Taschengeld?" data-en="We live separately – how do we handle pocket money?">Wir leben getrennt – wie regeln wir das Taschengeld?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Widersprüchliche Regeln in zwei Haushalten verwirren Kinder und laden zum Taktieren ein. Konsistenz ist das Ziel." data-en="Contradictory rules in two households confuse children and invite tactical behaviour. Consistency is the goal.">Widersprüchliche Regeln in zwei Haushalten verwirren Kinder und laden zum Taktieren ein. Konsistenz ist das Ziel.</p>
+        <div class="hl blue">
+          <span class="hl-icon">🤝</span>
+          <span class="hl-text" data-de="<strong>Idealfall:</strong> Ein Elternteil zahlt, beide halten dieselben Grundregeln ein. Falls das schwierig ist: zumindest die Höhe abstimmen und dem Kind klar erklären, wie es in beiden Häusern funktioniert." data-en="<strong>Ideal case:</strong> one parent pays, both maintain the same basic rules. If that's difficult: at least coordinate the amount and clearly explain to the child how it works in both households."><strong>Idealfall:</strong> Ein Elternteil zahlt, beide halten dieselben Grundregeln ein. Falls das schwierig ist: zumindest die Höhe abstimmen und dem Kind klar erklären, wie es in beiden Häusern funktioniert.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Mein Kind verdient selbst Geld – braucht es noch Taschengeld?" data-en="My child earns their own money – do they still need pocket money?">Mein Kind verdient selbst Geld – braucht es noch Taschengeld?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Ja – beides hat unterschiedliche Funktionen. Taschengeld ist die verlässliche Basis, eigenes Einkommen schafft zusätzliche Spielräume und neue Lernfelder." data-en="Yes – both have different functions. Pocket money is the reliable base; own income creates additional scope and new learning fields.">Ja – beides hat unterschiedliche Funktionen. Taschengeld ist die verlässliche Basis, eigenes Einkommen schafft zusätzliche Spielräume und neue Lernfelder.</p>
+        <div class="hl red">
+          <span class="hl-icon">⚠️</span>
+          <span class="hl-text" data-de="<strong>Wichtig:</strong> Den Zuverdienst nicht auf das Taschengeld anrechnen – das würde den Anreiz zum Arbeiten untergraben und ist pädagogisch kontraproduktiv." data-en="<strong>Important:</strong> Don't deduct earnings from pocket money – this would undermine the incentive to work and is pedagogically counterproductive."><strong>Wichtig:</strong> Den Zuverdienst nicht auf das Taschengeld anrechnen – das würde den Anreiz zum Arbeiten untergraben und ist pädagogisch kontraproduktiv.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie erkläre ich meinem Kind warum wir weniger geben als andere?" data-en="How do I explain to my child why we give less than others?">Wie erkläre ich meinem Kind warum wir weniger geben als andere?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Ehrlich und ohne Scham. Kinder vertragen altersgerechte Erklärungen viel besser als ausweichende Antworten." data-en="Honestly and without shame. Children cope with age-appropriate explanations much better than evasive answers.">Ehrlich und ohne Scham. Kinder vertragen altersgerechte Erklärungen viel besser als ausweichende Antworten.</p>
+        <div class="hl green">
+          <span class="hl-icon">💬</span>
+          <span class="hl-text" data-de="<strong>Einfache Formulierungen helfen:</strong> 'In unserer Familie haben wir dafür diesen Betrag – das passt zu uns.' Offene Gespräche über Geld stärken langfristig die Finanzkompetenz – unabhängig von der Höhe." data-en="<strong>Simple phrases help:</strong> 'In our family we have this amount for that – it suits us.' Open conversations about money strengthen financial literacy in the long run – regardless of the amount."><strong>Einfache Formulierungen helfen:</strong> 'In unserer Familie haben wir dafür diesen Betrag – das passt zu uns.' Offene Gespräche über Geld stärken langfristig die Finanzkompetenz – unabhängig von der Höhe.</span>
+        </div>
+        <span class="src">📚 PISA 2022 Financial Literacy, OECD</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 6: Geld verstehen -->
+  <section>
+    <div class="faq-block-title">🧠 <span data-de="Geld verstehen & erklären" data-en="Understanding & explaining money">Geld verstehen & erklären</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Muss Taschengeld versteuert werden?" data-en="Does pocket money need to be taxed?">Muss Taschengeld versteuert werden?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="hl green">
+          <span class="hl-icon">✅</span>
+          <span class="hl-text" data-de="<strong>Klare Antwort: Nein.</strong> Taschengeld gilt steuerrechtlich als Schenkung im Rahmen des Familienunterhalts und ist vollständig steuerfrei – unabhängig von der Höhe." data-en="<strong>Clear answer: No.</strong> Pocket money is treated as a gift within family maintenance for tax purposes and is completely tax-free – regardless of the amount."><strong>Klare Antwort: Nein.</strong> Taschengeld gilt steuerrechtlich als Schenkung im Rahmen des Familienunterhalts und ist vollständig steuerfrei – unabhängig von der Höhe.</span>
+        </div>
+        <p class="faq-text" style="margin-top:10px;" data-de="Auch größere Geschenke zu Geburtstag oder Weihnachten sind steuerfrei, solange sie den Freibetrag für Schenkungen nicht übersteigen. Dieser liegt zwischen Eltern und Kindern bei 400.000 € alle zehn Jahre – das ist im Alltag kein relevantes Thema." data-en="Larger gifts for birthdays or Christmas are also tax-free as long as they don't exceed the gift allowance. Between parents and children this is €400,000 every ten years – not a relevant issue in everyday life.">Auch größere Geschenke zu Geburtstag oder Weihnachten sind steuerfrei, solange sie den Freibetrag für Schenkungen nicht übersteigen. Dieser liegt zwischen Eltern und Kindern bei 400.000 € alle zehn Jahre – das ist im Alltag kein relevantes Thema.</p>
+        <span class="src">📚 § 13 ErbStG · Bundeszentralamt für Steuern</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie erkläre ich meinem Kind was Inflation ist?" data-en="How do I explain inflation to my child?">Wie erkläre ich meinem Kind was Inflation ist?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Abstrakte Wirtschaftsbegriffe werden für Kinder greifbar, wenn sie an echte Erlebnisse geknüpft sind." data-en="Abstract economic concepts become tangible for children when they're linked to real experiences.">Abstrakte Wirtschaftsbegriffe werden für Kinder greifbar, wenn sie an echte Erlebnisse geknüpft sind.</p>
+        <div class="hl yellow">
+          <span class="hl-icon">🍫</span>
+          <span class="hl-text" data-de="<strong>Einfaches Beispiel:</strong> 'Weißt du noch, dass das Eis früher 1,50 € gekostet hat? Jetzt kostet es 2 €. Das Eis ist dasselbe – aber das Geld kann weniger kaufen als früher. Das nennt man Inflation.'" data-en="<strong>Simple example:</strong> 'Remember when the ice cream used to cost €1.50? Now it costs €2. The ice cream is the same – but money can buy less than before. That's called inflation.'"><strong>Einfaches Beispiel:</strong> 'Weißt du noch, dass das Eis früher 1,50 € gekostet hat? Jetzt kostet es 2 €. Das Eis ist dasselbe – aber das Geld kann weniger kaufen als früher. Das nennt man Inflation.'</span>
+        </div>
+        <p class="faq-text" style="margin-top:10px;" data-de="Ab ca. 10 Jahren können Kinder auch verstehen warum gespartes Geld auf dem Konto an Wert verliert – und warum es sich lohnen kann, Geld anders anzulegen. Das ist eine natürliche Brücke zum Thema Sparen und Investieren." data-en="From around age 10, children can also understand why saved money in an account loses value – and why it can be worthwhile to invest money differently. This is a natural bridge to the topic of saving and investing.">Ab ca. 10 Jahren können Kinder auch verstehen warum gespartes Geld auf dem Konto an Wert verliert – und warum es sich lohnen kann, Geld anders anzulegen. Das ist eine natürliche Brücke zum Thema Sparen und Investieren.</p>
+        <span class="src">📚 Bundeszentrale für politische Bildung · klicksafe.de</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie erkläre ich meinem Kind den Unterschied zwischen Wünschen und Bedürfnissen?" data-en="How do I explain the difference between wants and needs to my child?">Wie erkläre ich meinem Kind den Unterschied zwischen Wünschen und Bedürfnissen?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Das ist einer der grundlegendsten Bausteine für Finanzkompetenz – und lässt sich spielerisch einführen." data-en="This is one of the most fundamental building blocks for financial literacy – and can be introduced playfully.">Das ist einer der grundlegendsten Bausteine für Finanzkompetenz – und lässt sich spielerisch einführen.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-de="<strong>Bedürfnis:</strong> Was brauche ich wirklich? (Essen, Kleidung, Schule). Diese Dinge bezahlen die Eltern." data-en="<strong>Need:</strong> What do I really need? (Food, clothing, school). Parents pay for these things."><strong>Bedürfnis:</strong> Was brauche ich wirklich? (Essen, Kleidung, Schule). Diese Dinge bezahlen die Eltern.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-de="<strong>Wunsch:</strong> Was würde ich gerne haben? (Spielzeug, Süßigkeiten, Spiele). Dafür ist das Taschengeld da." data-en="<strong>Want:</strong> What would I like to have? (Toys, sweets, games). That's what pocket money is for."><strong>Wunsch:</strong> Was würde ich gerne haben? (Spielzeug, Süßigkeiten, Spiele). Dafür ist das Taschengeld da.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text" data-de="<strong>Übung im Alltag:</strong> Beim Einkaufen gemeinsam fragen: 'Ist das ein Bedürfnis oder ein Wunsch?' – ohne Wertung, nur als Denkübung." data-en="<strong>Practice in daily life:</strong> Ask together while shopping: 'Is that a need or a want?' – without judgement, just as a thinking exercise."><strong>Übung im Alltag:</strong> Beim Einkaufen gemeinsam fragen: 'Ist das ein Bedürfnis oder ein Wunsch?' – ohne Wertung, nur als Denkübung.</div>
+          </div>
+        </div>
+        <a class="faq-tag" href="../kleine-sparer/beduerfnisse.html" data-de="→ Lernseite: Wünsche & Bedürfnisse" data-en="→ Learn: Wants & Needs">→ Lernseite: Wünsche & Bedürfnisse</a>
+        <br><span class="src">📚 Verbraucherzentrale · BZgA Finanzkompetenz</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCK 7: Geschenke & Investieren -->
+  <section>
+    <div class="faq-block-title">🎁 <span data-de="Geschenke, Sparbuch & Depot" data-en="Gifts, savings book & depot">Geschenke, Sparbuch & Depot</span></div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Wie handhabe ich Geburtstags- oder Weihnachtsgeld? Zählt das zum Taschengeld?" data-en="How do I handle birthday or Christmas money? Does it count as pocket money?">Wie handhabe ich Geburtstags- oder Weihnachtsgeld? Zählt das zum Taschengeld?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Nein – Geschenkgeld und Taschengeld sind zwei verschiedene Dinge und sollten klar getrennt bleiben." data-en="No – gift money and pocket money are two different things and should remain clearly separate.">Nein – Geschenkgeld und Taschengeld sind zwei verschiedene Dinge und sollten klar getrennt bleiben.</p>
+        <div class="hl green">
+          <span class="hl-icon">🎂</span>
+          <span class="hl-text" data-de="<strong>Empfehlung:</strong> Das Kind entscheidet selbst was mit dem Geschenkgeld passiert – ausgeben, sparen oder beides. Eltern können einen Vorschlag machen ('Möchtest du einen Teil für deinen großen Wunsch zurücklegen?'), aber die Entscheidung liegt beim Kind." data-en="<strong>Recommendation:</strong> The child decides what happens with the gift money – spend it, save it or both. Parents can make a suggestion ('Would you like to put part of it aside for your big wish?'), but the decision lies with the child."><strong>Empfehlung:</strong> Das Kind entscheidet selbst was mit dem Geschenkgeld passiert – ausgeben, sparen oder beides. Eltern können einen Vorschlag machen ('Möchtest du einen Teil für deinen großen Wunsch zurücklegen?'), aber die Entscheidung liegt beim Kind.</span>
+        </div>
+        <p class="faq-text" style="margin-top:10px;" data-de="Wichtig: Das Geschenkgeld niemals auf das laufende Taschengeld anrechnen. Das wäre ein doppelter Eingriff in die finanzielle Autonomie des Kindes." data-en="Important: never offset gift money against the ongoing pocket money. That would be a double interference in the child's financial autonomy.">Wichtig: Das Geschenkgeld niemals auf das laufende Taschengeld anrechnen. Das wäre ein doppelter Eingriff in die finanzielle Autonomie des Kindes.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Mein Kind bekommt von Oma & Opa immer extra Geld – was tun?" data-en="My child always gets extra money from grandma & grandpa – what to do?">Mein Kind bekommt von Oma & Opa immer extra Geld – was tun?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Das ist häufiger als man denkt und kann für Kinder verwirrend sein – besonders wenn die Großeltern anderes Kaufverhalten belohnen als die Eltern." data-en="This is more common than you'd think and can be confusing for children – especially when grandparents reward different spending behaviour than parents.">Das ist häufiger als man denkt und kann für Kinder verwirrend sein – besonders wenn die Großeltern anderes Kaufverhalten belohnen als die Eltern.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-de="<strong>Mit den Großeltern sprechen</strong> – nicht verbietend, sondern erklärend: 'Wir möchten dass sie lernen mit Geld umzugehen. Kannst du das beim nächsten Geburtstag bündeln?'" data-en="<strong>Talk to grandparents</strong> – not prohibiting, but explaining: 'We want them to learn to handle money. Could you bundle that at the next birthday?'"><strong>Mit den Großeltern sprechen</strong> – nicht verbietend, sondern erklärend: 'Wir möchten dass sie lernen mit Geld umzugehen. Kannst du das beim nächsten Geburtstag bündeln?'</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-de="<strong>Mit dem Kind besprechen</strong> wie mit dem Extra-Geld umgegangen wird – als Chance für ein Spargespräch, nicht als Kontrolle." data-en="<strong>Discuss with the child</strong> how to handle the extra money – as an opportunity for a savings conversation, not as control."><strong>Mit dem Kind besprechen</strong> wie mit dem Extra-Geld umgegangen wird – als Chance für ein Spargespräch, nicht als Kontrolle.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text" data-de="<strong>Nicht verbieten.</strong> Das Kind hat ein Recht auf Geschenke. Struktur und Gespräch helfen mehr als Verbote." data-en="<strong>Don't prohibit it.</strong> The child has a right to gifts. Structure and conversation help more than prohibitions."><strong>Nicht verbieten.</strong> Das Kind hat ein Recht auf Geschenke. Struktur und Gespräch helfen mehr als Verbote.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Ab wann sollte mein Kind ein eigenes Sparbuch oder Depot haben?" data-en="From what age should my child have their own savings account or depot?">Ab wann sollte mein Kind ein eigenes Sparbuch oder Depot haben?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text" data-de="<strong>Sparbuch ab ca. 6 Jahren:</strong> Gut geeignet als greifbarer Einstieg – das Kind sieht seinen Kontostand wachsen. Allerdings: Bei niedrigen Zinsen wächst das Geld kaum." data-en="<strong>Savings book from around age 6:</strong> Well suited as a tangible introduction – the child sees their balance grow. However: with low interest rates the money barely grows."><strong>Sparbuch ab ca. 6 Jahren:</strong> Gut geeignet als greifbarer Einstieg – das Kind sieht seinen Kontostand wachsen. Allerdings: Bei niedrigen Zinsen wächst das Geld kaum.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text" data-de="<strong>Tagesgeldkonto oder Kinderdepot ab ca. 12–14 Jahren:</strong> Jetzt können Jugendliche verstehen wie Zinsen und Kurse funktionieren – und erste eigene Entscheidungen treffen." data-en="<strong>Overnight money account or children's depot from around age 12–14:</strong> Now teenagers can understand how interest and prices work – and make first independent decisions."><strong>Tagesgeldkonto oder Kinderdepot ab ca. 12–14 Jahren:</strong> Jetzt können Jugendliche verstehen wie Zinsen und Kurse funktionieren – und erste eigene Entscheidungen treffen.</div>
+          </div>
+        </div>
+        <!-- TODO: Link zu Depot/ETF-Seite eintragen sobald diese Seite gebaut ist -->
+        <div class="hl blue">
+          <span class="hl-icon">📈</span>
+          <span class="hl-text" data-de="<strong>ETF-Sparplan für Kinder:</strong> Viele Eltern legen bereits ab der Geburt monatlich kleine Beträge in einen ETF-Sparplan an. Wie das funktioniert, worauf man achten sollte und welche Anbieter empfehlenswert sind – dazu kommt bald ein eigener Ratgeber auf Piggyplant." data-en="<strong>ETF savings plan for children:</strong> Many parents invest small monthly amounts in an ETF savings plan from birth. How this works, what to look out for, and which providers are recommended – a dedicated guide is coming soon to Piggyplant."><strong>ETF-Sparplan für Kinder:</strong> Viele Eltern legen bereits ab der Geburt monatlich kleine Beträge in einen ETF-Sparplan an. Wie das funktioniert, worauf man achten sollte und welche Anbieter empfehlenswert sind – dazu kommt bald ein eigener Ratgeber auf Piggyplant.</span>
+        </div>
+        <span class="src">📚 Stiftung Warentest · Finanztest</span>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text" data-de="Ab wann macht ein Kinderdepot oder ETF-Sparplan Sinn?" data-en="From what age does a children's depot or ETF savings plan make sense?">Ab wann macht ein Kinderdepot oder ETF-Sparplan Sinn?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-text" data-de="Technisch gesehen: sofort ab Geburt – denn je früher ein ETF-Sparplan startet, desto länger arbeitet der Zinseszins-Effekt. Die Frage ist weniger das Alter des Kindes als die eigene Bereitschaft als Elternteil." data-en="Technically: immediately from birth – because the earlier an ETF savings plan starts, the longer the compound interest effect works. The question is less about the child's age than about your own readiness as a parent.">Technisch gesehen: sofort ab Geburt – denn je früher ein ETF-Sparplan startet, desto länger arbeitet der Zinseszins-Effekt. Die Frage ist weniger das Alter des Kindes als die eigene Bereitschaft als Elternteil.</p>
+        <div class="hl yellow">
+          <span class="hl-icon">⏰</span>
+          <span class="hl-text" data-de="<strong>Rechenbeispiel:</strong> 50 € pro Monat ab Geburt bei 7 % Jahresrendite ergeben mit 18 Jahren rund 19.000 €. Wer erst mit 10 Jahren anfängt, kommt auf ca. 10.000 €. Der Unterschied: 8 Jahre Laufzeit." data-en="<strong>Calculation example:</strong> €50 per month from birth at 7% annual return yields around €19,000 at age 18. Starting at age 10 gives around €10,000. The difference: 8 years of duration."><strong>Rechenbeispiel:</strong> 50 € pro Monat ab Geburt bei 7 % Jahresrendite ergeben mit 18 Jahren rund 19.000 €. Wer erst mit 10 Jahren anfängt, kommt auf ca. 10.000 €. Der Unterschied: 8 Jahre Laufzeit.</span>
+        </div>
+        <!-- TODO: Link zu Depot/ETF-Ratgeber-Seite eintragen sobald diese gebaut ist (geplant für elternbereich/) -->
+        <div class="hl blue" style="margin-top:10px;">
+          <span class="hl-icon">🔗</span>
+          <span class="hl-text" data-de="Einen ausführlichen Ratgeber zu Kinderdepots, Anbietern und steuerlichen Aspekten findest du bald hier auf Piggyplant. Wir arbeiten daran." data-en="A detailed guide to children's depots, providers and tax aspects is coming soon here on Piggyplant. We're working on it.">Einen ausführlichen Ratgeber zu Kinderdepots, Anbietern und steuerlichen Aspekten findest du bald hier auf Piggyplant. Wir arbeiten daran.</span>
+        </div>
+        <span class="src">📚 Stiftung Warentest · Finanztip.de</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="margin-top:56px;">
+    <h2 class="section-title" data-de="🐷 Direkt ausprobieren" data-en="🐷 Try it directly">🐷 Direkt ausprobieren</h2>
+    <p class="section-lead" data-de="Theorie ist gut – gemeinsames Ausprobieren ist besser. Schaut euch die Spiele am besten erst zusammen an, bevor eure Kinder alleine loslegen." data-en="Theory is good – trying together is better. Best look at the games together first before your children start on their own.">Theorie ist gut – gemeinsames Ausprobieren ist besser. Schaut euch die Spiele am besten erst zusammen an, bevor eure Kinder alleine loslegen.</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px;">
+      <a href="../kleine-sparer/sparziel-rechner.html" style="text-decoration:none;">
+        <div class="game-tile gt-green"><div style="font-size:36px;margin-bottom:8px;">🎯</div><div class="game-tile-title" data-de="Sparziel-Rechner" data-en="Savings Goal Calculator">Sparziel-Rechner</div><div class="game-tile-sub" data-de="Wie lange bis zum Wunsch?" data-en="How long until the wish?">Wie lange bis zum Wunsch?</div></div>
+      </a>
+      <a href="../kleine-sparer/wunsch-sparer.html" style="text-decoration:none;">
+        <div class="game-tile gt-blue"><div style="font-size:36px;margin-bottom:8px;">⭐</div><div class="game-tile-title" data-de="Wunsch-Sparer" data-en="Wish Saver">Wunsch-Sparer</div><div class="game-tile-sub" data-de="Sparziel spielerisch verfolgen" data-en="Track savings goals playfully">Sparziel spielerisch verfolgen</div></div>
+      </a>
+      <a href="../kleine-sparer/einkaufen-spiel.html" style="text-decoration:none;">
+        <div class="game-tile gt-yellow"><div style="font-size:36px;margin-bottom:8px;">🛒</div><div class="game-tile-title" data-de="Einkaufen-Spiel" data-en="Shopping Game">Einkaufen-Spiel</div><div class="game-tile-sub" data-de="Mit Budget haushalten" data-en="Managing a budget">Mit Budget haushalten</div></div>
+      </a>
+      <a href="../kleine-sparer/sparschwein-spiel.html" style="text-decoration:none;">
+        <div class="game-tile gt-pink"><div style="font-size:36px;margin-bottom:8px;">🐷</div><div class="game-tile-title" data-de="Sparschwein-Spiel" data-en="Piggy Bank Game">Sparschwein-Spiel</div><div class="game-tile-sub" data-de="Münzen sammeln & sparen" data-en="Collect coins & save">Münzen sammeln & sparen</div></div>
+      </a>
+      <a href="../kleine-sparer/beduerfnisse-spiel.html" style="text-decoration:none;">
+        <div class="game-tile gt-green"><div style="font-size:36px;margin-bottom:8px;">🤔</div><div class="game-tile-title" data-de="Will ich's oder brauch ich's?" data-en="Want or Need?">Will ich's oder brauch ich's?</div><div class="game-tile-sub" data-de="Wünsche & Bedürfnisse sortieren" data-en="Sort wants & needs">Wünsche & Bedürfnisse sortieren</div></div>
+      </a>
+    </div>
+    <div style="text-align:center;">
+      <a href="elternbereich.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#5BBF7A,#4AACDB);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;padding:12px 28px;border-radius:50px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        ← <span data-de="Zurück zur Elternbereich-Übersicht" data-en="Back to Parents' Corner overview">Zurück zur Elternbereich-Übersicht</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Piggyplant</div>
+      <div class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</div>
+    </div>
+    <div class="footer-links">
+      <a href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    btn.closest('section').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    document.body.classList.add('dark');
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = 'Dunkel';
+  }
+  const _sl = localStorage.getItem('piggyplant-lang');
+  if (_sl && _sl !== 'de') {
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _sl));
+    document.getElementById('btn-de').classList.toggle('active', _sl === 'de');
+    document.getElementById('btn-en').classList.toggle('active', _sl === 'en');
+    document.documentElement.lang = _sl;
+  }
+
+  function toggleDark() {
+    const d = !document.body.classList.contains('dark');
+    document.body.classList.toggle('dark', d);
+    localStorage.setItem('piggyplant-dark', d);
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = d ? 'Dunkel' : 'Hell';
+  }
+  function setLang(l) {
+    localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+  }
+</script>
+</body>
+</html>

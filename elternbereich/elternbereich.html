@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Elternbereich – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Nunito', sans-serif;
+    --font-display: 'Fredoka One', cursive;
+    --green: #5BBF7A; --green-dark: #3D9E5F; --green-light: #E8F7EE;
+    --blue: #4AACDB; --blue-light: #E6F6FF; --blue-dark: #2A85B0;
+    --yellow: #FFD166; --orange: #FF9A3C; --pink: #FF6B9D; --purple: #9B7FE8;
+    --teal: #2DD4BF; --indigo: #6366F1;
+    --bg: #F0FAF5; --text: #2D3748; --text-light: #718096;
+    --surface: #FDFCFA; --surface2: #EEF5EF; --border: #E8F7EE;
+    --radius: 20px; --shadow: 0 6px 24px rgba(0,0,0,0.09);
+  }
+  body.dark {
+    --bg: #0F1A14; --text: #E8F5EE; --text-light: #8EAAA0;
+    --surface: #1A2E22; --surface2: #243B2C; --border: #2A4035;
+    --green-light: #1C3528; --blue-light: #172838;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  /* NAV */
+  nav {
+    background:var(--surface); border-bottom:2px solid var(--border);
+    padding:10px 20px; display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06);
+    transition:background 0.4s;
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-logo img { width:36px; height:36px; object-fit:contain; }
+  .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  @media (max-width:480px) {
+    .nav-logo span { font-size:16px; }
+    .lang-btn { font-size:11px; padding:5px 10px; }
+    #dark-label { display:none; }
+  }
+  .lang-btn {
+    border:2px solid var(--green); background:transparent; color:var(--green-dark);
+    font-family:var(--font-body); font-weight:800; font-size:14px;
+    padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1;
+  }
+  body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
+  body.dark .lang-btn.active { background:var(--blue); color:white; border-color:var(--blue-dark); box-shadow:0 2px 8px rgba(74,172,219,0.4); }
+  .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
+  .lang-btn:hover { transform:scale(1.15); }
+  .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #EEF2FF, #E0F2FE, #EDE9FE);
+    padding: 56px 20px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  body.dark .hero { background: linear-gradient(135deg, #13152A, #0E1E30, #1A1428); }
+  .floating-icons { position:absolute; font-size:26px; animation:float 3s ease-in-out infinite; opacity:0.5; }
+  .fi1 { top:18%; left:7%; animation-delay:0s; }
+  .fi2 { top:25%; right:9%; animation-delay:0.6s; }
+  .fi3 { bottom:22%; left:5%; animation-delay:1.2s; font-size:20px; }
+  .fi4 { bottom:18%; right:7%; animation-delay:0.4s; font-size:22px; }
+  @media (max-width:600px) {
+    .fi1,.fi2,.fi3,.fi4 { font-size:16px; }
+  }
+  .hero-emoji { font-size:72px; display:block; margin:0 auto 12px; animation:bounceIn 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+  .hero-title { font-family:var(--font-display); font-size:40px; color:var(--text); margin-bottom:10px; animation:fadeUp 0.6s 0.1s both; }
+  @media (max-width:600px) { .hero-title { font-size:28px; } }
+  .hero-sub { font-size:17px; color:var(--text-light); font-weight:600; max-width:480px; margin:0 auto; line-height:1.6; animation:fadeUp 0.6s 0.2s both; }
+
+  /* BADGE */
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border-radius: 50px; padding: 8px 20px;
+    font-size: 13px; font-weight: 800; color: var(--indigo);
+    box-shadow: 0 2px 12px rgba(99,102,241,0.15);
+    margin-top: 20px; animation: fadeUp 0.6s 0.3s both;
+  }
+  body.dark .hero-badge { background: var(--surface2); color: var(--blue); }
+
+  /* CARDS */
+  .cards-wrap {
+    max-width: 1000px; margin: 0 auto; padding: 48px 20px 64px;
+    display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+  }
+  .topic-card {
+    flex: 0 1 calc(33.333% - 14px); min-width: 220px;
+    border-radius: 20px; padding: 32px 24px;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+    text-decoration: none; display: block; animation: fadeUp 0.6s both;
+  }
+  @media (max-width: 720px) { .topic-card { flex: 0 1 calc(50% - 10px); min-width: 0; } }
+  @media (max-width: 480px) { .topic-card { flex: 0 1 100%; } }
+  .topic-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 48px rgba(0,0,0,0.13); }
+  .topic-card::before {
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:120px; height:120px; border-radius:50%; opacity:0.12; transition:transform 0.4s;
+  }
+  .topic-card:hover::before { transform:scale(2.2); }
+
+  /* Card colors */
+  .topic-card:nth-child(1) { animation-delay:0.1s; background:linear-gradient(135deg,#EEF2FF,#DDD6FE); }
+  .topic-card:nth-child(1)::before { background:#6366F1; }
+  .topic-card:nth-child(2) { animation-delay:0.15s; background:linear-gradient(135deg,#ECFDF5,#D1FAE5); }
+  .topic-card:nth-child(2)::before { background:#5BBF7A; }
+  .topic-card:nth-child(3) { animation-delay:0.2s; background:linear-gradient(135deg,#E0F2FE,#BAE6FD); }
+  .topic-card:nth-child(3)::before { background:#4AACDB; }
+  .topic-card:nth-child(4) { animation-delay:0.25s; background:linear-gradient(135deg,#FFF7ED,#FFEDD5); }
+  .topic-card:nth-child(4)::before { background:#FF9A3C; }
+  .topic-card:nth-child(5) { animation-delay:0.3s; background:linear-gradient(135deg,#FDF2F8,#FCE7F3); }
+  .topic-card:nth-child(5)::before { background:#FF6B9D; }
+  .topic-card:nth-child(6) { animation-delay:0.35s; background:linear-gradient(135deg,#FEFCE8,#FEF9C3); }
+  .topic-card:nth-child(6)::before { background:#EAB308; }
+
+  body.dark .topic-card:nth-child(1) { background:linear-gradient(135deg,#1A1A35,#22204A); }
+  body.dark .topic-card:nth-child(2) { background:linear-gradient(135deg,#102518,#162E1E); }
+  body.dark .topic-card:nth-child(3) { background:linear-gradient(135deg,#0E1E2E,#122638); }
+  body.dark .topic-card:nth-child(4) { background:linear-gradient(135deg,#221808,#2C2010); }
+  body.dark .topic-card:nth-child(5) { background:linear-gradient(135deg,#2A1020,#381828); }
+  body.dark .topic-card:nth-child(6) { background:linear-gradient(135deg,#1E1A08,#2A2410); }
+
+  .topic-emoji { font-size:48px; display:block; margin-bottom:14px; transition:transform 0.3s; }
+  .topic-card:hover .topic-emoji { transform:scale(1.2) rotate(-5deg); }
+  .topic-title { font-family:var(--font-display); font-size:20px; color:var(--text); margin-bottom:6px; }
+  .topic-desc { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.5; }
+  .topic-arrow {
+    display:inline-flex; align-items:center; gap:4px;
+    margin-top:14px; font-size:13px; font-weight:800;
+    color:var(--green-dark); opacity:0; transform:translateX(-4px);
+    transition:all 0.2s;
+  }
+  body.dark .topic-arrow { color:var(--blue); }
+  .topic-card:hover .topic-arrow { opacity:1; transform:translateX(0); }
+
+  /* FOOTER */
+  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--text-light); font-size:13px; }
+  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="floating-icons fi1">📚</span>
+  <span class="floating-icons fi2">💡</span>
+  <span class="floating-icons fi3">🌱</span>
+  <span class="floating-icons fi4">❤️</span>
+  <span class="hero-emoji">👨‍👩‍👧‍👦</span>
+  <h1 class="hero-title" data-de="Elternbereich" data-en="Parents' Corner">Elternbereich</h1>
+  <p class="hero-sub" data-de="Alles was ihr braucht, um Kindern den Umgang mit Geld spielerisch beizubringen." data-en="Everything you need to teach your children about money in a playful way.">Alles was ihr braucht, um Kindern den Umgang mit Geld spielerisch beizubringen.</p>
+  <span class="hero-badge">✨ <span data-de="Tipps & Wissen für Eltern" data-en="Tips & knowledge for parents">Tipps & Wissen für Eltern</span></span>
+</section>
+
+<!-- CARDS -->
+<div class="cards-wrap">
+
+  <a class="topic-card" href="piggyplant-nutzen.html">
+    <span class="topic-emoji">🗺️</span>
+    <div class="topic-title" data-de="So nutzt ihr Piggyplant" data-en="How to use Piggyplant">So nutzt ihr Piggyplant</div>
+    <div class="topic-desc" data-de="Ein kurzer Überblick über alle Bereiche und wie ihr gemeinsam loslegt." data-en="A quick overview of all areas and how to get started together.">Ein kurzer Überblick über alle Bereiche und wie ihr gemeinsam loslegt.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+  <a class="topic-card" href="taschengeld.html">
+    <span class="topic-emoji">💰</span>
+    <div class="topic-title" data-de="Taschengeld-Ratgeber" data-en="Pocket Money Guide">Taschengeld-Ratgeber</div>
+    <div class="topic-desc" data-de="Altersgerechte Beträge, wann anfangen und wie ihr es sinnvoll begleitet." data-en="Age-appropriate amounts, when to start and how to guide your child.">Altersgerechte Beträge, wann anfangen und wie ihr es sinnvoll begleitet.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+  <a class="topic-card" href="geld-reden.html">
+    <span class="topic-emoji">💬</span>
+    <div class="topic-title" data-de="Mit Kindern über Geld reden" data-en="Talking About Money">Mit Kindern über Geld reden</div>
+    <div class="topic-desc" data-de="Praktische Gesprächseinstiege und Antworten auf typische Kinderfragen." data-en="Practical conversation starters and answers to typical children's questions.">Praktische Gesprächseinstiege und Antworten auf typische Kinderfragen.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+  <a class="topic-card" href="faq.html">
+    <span class="topic-emoji">❓</span>
+    <div class="topic-title" data-de="Häufige Fragen" data-en="FAQ">Häufige Fragen</div>
+    <div class="topic-desc" data-de="Antworten auf die meistgestellten Fragen rund um Piggyplant und Finanzbildung." data-en="Answers to the most common questions about Piggyplant and financial literacy.">Antworten auf die meistgestellten Fragen rund um Piggyplant und Finanzbildung.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+  <a class="topic-card" href="diy.html">
+    <span class="topic-emoji">✂️</span>
+    <div class="topic-title" data-de="DIY Ecke" data-en="DIY Corner">DIY Ecke</div>
+    <div class="topic-desc" data-de="Bastelvorlagen zum Ausdrucken und Aufgaben-Ideen für zuhause." data-en="Printable craft templates and activity ideas for home.">Bastelvorlagen zum Ausdrucken und Aufgaben-Ideen für zuhause.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+  <a class="topic-card" href="empfehlungen.html">
+    <span class="topic-emoji">⭐</span>
+    <div class="topic-title" data-de="Empfehlungen & Tools" data-en="Recommendations & Tools">Empfehlungen & Tools</div>
+    <div class="topic-desc" data-de="Sparschweine, Bücher, Jugendkonten, Depots – unsere geprüften Empfehlungen für den Start." data-en="Piggy banks, books, youth accounts, depots – our vetted recommendations to get started.">Sparschweine, Bücher, Jugendkonten, Depots – unsere geprüften Empfehlungen für den Start.</div>
+    <span class="topic-arrow" data-de="Mehr erfahren →" data-en="Learn more →">Mehr erfahren →</span>
+  </a>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let dark = false, lang = 'de';
+
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    dark = true;
+    document.body.classList.add('dark');
+    const _l = document.getElementById('dark-label');
+    if (_l) _l.textContent = 'Dunkel';
+  }
+
+  const _savedLang = localStorage.getItem('piggyplant-lang');
+  if (_savedLang && _savedLang !== 'de') {
+    lang = _savedLang;
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _savedLang));
+    document.getElementById('btn-de').classList.toggle('active', _savedLang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', _savedLang === 'en');
+    document.documentElement.lang = _savedLang;
+  }
+
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('piggyplant-dark', dark);
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = dark ? (lang === 'de' ? 'Dunkel' : 'Dark') : (lang === 'de' ? 'Hell' : 'Light');
+  }
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+    const lbl = document.getElementById('dark-label');
+    if (lbl) lbl.textContent = dark ? (l === 'de' ? 'Dunkel' : 'Dark') : (l === 'de' ? 'Hell' : 'Light');
+  }
+</script>
+</body>
+</html>

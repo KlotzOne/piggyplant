@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Taschengeld-Ratgeber – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Nunito', sans-serif;
+    --font-display: 'Fredoka One', cursive;
+    --green: #5BBF7A; --green-dark: #3D9E5F; --green-light: #E8F7EE;
+    --blue: #4AACDB; --blue-light: #E6F6FF; --blue-dark: #2A85B0;
+    --yellow: #FFD166; --orange: #FF9A3C; --pink: #FF6B9D; --purple: #9B7FE8;
+    --bg: #F0FAF5; --text: #2D3748; --text-light: #718096;
+    --surface: #FDFCFA; --surface2: #EEF5EF; --border: #E8F7EE;
+    --radius: 20px; --shadow: 0 6px 24px rgba(0,0,0,0.09);
+  }
+  body.dark {
+    --bg: #0F1A14; --text: #E8F5EE; --text-light: #8EAAA0;
+    --surface: #1A2E22; --surface2: #243B2C; --border: #2A4035;
+    --green-light: #1C3528; --blue-light: #172838;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+
+  /* NAV */
+  nav {
+    background:var(--surface); border-bottom:2px solid var(--border);
+    padding:10px 20px; display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06);
+    transition:background 0.4s;
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-logo img { width:36px; height:36px; object-fit:contain; }
+  .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  @media (max-width:480px) {
+    .nav-logo span { font-size:16px; }
+    .lang-btn { font-size:10px; padding:5px 8px; }
+    #dark-label { display:none; }
+    nav { padding: 10px 12px; }
+  }
+  .lang-btn {
+    border:2px solid var(--green); background:transparent; color:var(--green-dark);
+    font-family:var(--font-body); font-weight:800; font-size:14px;
+    padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1;
+  }
+  body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
+  body.dark .lang-btn.active { background:var(--blue); color:white; border-color:var(--blue-dark); box-shadow:0 2px 8px rgba(74,172,219,0.4); }
+  .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
+  .lang-btn:hover { transform:scale(1.15); }
+  .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #ECFDF5, #D1FAE5, #A7F3D0);
+    padding: 52px 20px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  body.dark .hero { background: linear-gradient(135deg, #0A1F14, #102518, #142E1A); }
+  .floating-icons { position:absolute; font-size:26px; animation:float 3s ease-in-out infinite; opacity:0.5; }
+  .fi1 { top:18%; left:7%; animation-delay:0s; }
+  .fi2 { top:25%; right:9%; animation-delay:0.6s; }
+  .fi3 { bottom:22%; left:5%; animation-delay:1.2s; font-size:20px; }
+  .fi4 { bottom:18%; right:7%; animation-delay:0.4s; font-size:22px; }
+  @media (max-width:600px) { .fi1,.fi2,.fi3,.fi4 { font-size:16px; } }
+  .hero-emoji { font-size:68px; display:block; margin:0 auto 12px; animation:bounceIn 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+  .hero-title { font-family:var(--font-display); font-size:38px; color:var(--text); margin-bottom:10px; animation:fadeUp 0.6s 0.1s both; }
+  @media (max-width:600px) { .hero-title { font-size:26px; } }
+  .hero-sub { font-size:16px; color:var(--text-light); font-weight:600; max-width:500px; margin:0 auto; line-height:1.6; animation:fadeUp 0.6s 0.2s both; }
+
+  /* CONTENT */
+  .content { max-width: 760px; margin: 0 auto; padding: 48px 24px 64px; }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-family: var(--font-display); font-size: 26px; color: var(--text);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-lead {
+    font-size: 16px; color: var(--text-light); font-weight: 600;
+    line-height: 1.7; margin-bottom: 24px;
+  }
+  section + section { margin-top: 56px; }
+
+  /* TASCHENGELD TABLE */
+  .tg-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow); margin-bottom: 16px;
+    animation: fadeUp 0.6s 0.2s both;
+  }
+  .tg-table th {
+    background: var(--green); color: white;
+    font-family: var(--font-display); font-size: 15px;
+    padding: 14px 18px; text-align: left; font-weight: 400;
+  }
+  .tg-table td {
+    background: var(--surface); padding: 13px 18px;
+    font-size: 15px; font-weight: 700; color: var(--text);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .tg-table tr:last-child td { border-bottom: none; }
+  .tg-table tr:hover td { background: var(--green-light); }
+  body.dark .tg-table tr:hover td { background: var(--surface2); }
+  .tg-table td:last-child { color: var(--green-dark); font-size: 17px; }
+  body.dark .tg-table td:last-child { color: var(--green); }
+  .tg-table .age-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-light); color: var(--green-dark);
+    padding: 3px 10px; border-radius: 50px; font-size: 13px;
+  }
+  body.dark .tg-table .age-badge { background: var(--surface2); color: var(--green); }
+
+  /* SOURCE NOTE */
+  .source-note {
+    font-size: 12px; color: var(--text-light); font-weight: 600;
+    text-align: right; margin-top: -8px; margin-bottom: 8px;
+  }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--blue-light); border-left: 4px solid var(--blue);
+    border-radius: 12px; padding: 18px 20px;
+    font-size: 15px; font-weight: 700; color: var(--text);
+    line-height: 1.7; margin-top: 20px;
+    animation: fadeUp 0.6s 0.3s both;
+  }
+  body.dark .info-box { background: var(--surface2); border-color: var(--blue-dark); }
+  .info-box strong { color: var(--blue-dark); }
+  body.dark .info-box strong { color: var(--blue); }
+
+  /* SOURCE INLINE */
+  .source-inline {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700; color: var(--text-light);
+    background: var(--surface2); border-radius: 50px;
+    padding: 2px 10px; margin-top: 6px; vertical-align: middle;
+  }
+  body.dark .source-inline { background: var(--surface2); }
+
+  /* SOURCES SECTION */
+  .sources-box {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 24px; margin-top: 56px;
+    animation: fadeUp 0.6s 0.2s both;
+  }
+  .sources-title { font-family: var(--font-display); font-size: 18px; color: var(--text-light); margin-bottom: 16px; }
+  .sources-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .sources-list li { font-size: 13px; font-weight: 600; color: var(--text-light); line-height: 1.6; display: flex; gap: 10px; }
+  .sources-list li::before { content: '[' attr(data-num) ']'; font-weight: 800; color: var(--green-dark); flex-shrink: 0; }
+  body.dark .sources-list li::before { color: var(--green); }
+  .sources-list a { color: var(--blue-dark); text-decoration: none; }
+  .sources-list a:hover { text-decoration: underline; }
+  body.dark .sources-list a { color: var(--blue); }
+
+  /* AGE GROUP BLOCKS */
+  .age-group { margin-bottom: 16px; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); animation: fadeUp 0.6s both; }
+  .age-group:nth-child(1) { animation-delay: 0.1s; }
+  .age-group:nth-child(2) { animation-delay: 0.18s; }
+  .age-group:nth-child(3) { animation-delay: 0.26s; }
+  .age-group:nth-child(4) { animation-delay: 0.34s; }
+  .age-group-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 22px; cursor: pointer; user-select: none; transition: filter 0.2s;
+  }
+  .age-group-header:hover { filter: brightness(0.96); }
+  .age-group.g5  .age-group-header { background: linear-gradient(135deg, #FFF0F5, #FFE4EE); }
+  .age-group.g7  .age-group-header { background: linear-gradient(135deg, #FFFBEA, #FFF3CC); }
+  .age-group.g9  .age-group-header { background: linear-gradient(135deg, #E8F7EE, #D4F0DF); }
+  .age-group.g11 .age-group-header { background: linear-gradient(135deg, #E6F6FF, #D0EEFF); }
+  body.dark .age-group.g5  .age-group-header { background: linear-gradient(135deg, #2A1520, #3A1A28); }
+  body.dark .age-group.g7  .age-group-header { background: linear-gradient(135deg, #221A08, #2C2210); }
+  body.dark .age-group.g9  .age-group-header { background: linear-gradient(135deg, #102518, #162E1E); }
+  body.dark .age-group.g11 .age-group-header { background: linear-gradient(135deg, #0E1E2E, #122638); }
+  .age-group-emoji { font-size: 36px; flex-shrink: 0; }
+  .age-group-label { flex: 1; }
+  .age-group-badge {
+    display: inline-block; font-family: var(--font-display); font-size: 14px;
+    padding: 3px 12px; border-radius: 50px; margin-bottom: 2px; color: white;
+  }
+  .g5  .age-group-badge { background: #FF6B9D; }
+  .g7  .age-group-badge { background: #E09000; }
+  .g9  .age-group-badge { background: var(--green-dark); }
+  .g11 .age-group-badge { background: var(--blue-dark); }
+  .age-group-subtitle { font-size: 13px; font-weight: 700; color: var(--text-light); }
+  .age-group-chevron { font-size: 18px; color: var(--text-light); transition: transform 0.3s; flex-shrink: 0; }
+  .age-group.open .age-group-chevron { transform: rotate(180deg); }
+  .age-group-body {
+    background: var(--surface); border-top: 1.5px solid var(--border);
+    padding: 0 22px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .age-group.open .age-group-body { max-height: 700px; padding: 20px 22px; }
+  .tip-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .tip-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.6; }
+  .tip-list li .tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .tip-list li span { color: var(--text-light); font-weight: 600; }
+
+  /* PIGGY CARDS – ACCORDION */
+  .piggy-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .piggy-card { border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); animation: fadeUp 0.6s both; }
+  .piggy-card:nth-child(1) { animation-delay: 0.1s; }
+  .piggy-card:nth-child(2) { animation-delay: 0.2s; }
+  .piggy-card:nth-child(3) { animation-delay: 0.3s; }
+  .piggy-pink  { border: 1.5px solid #FFCCE0; }
+  .piggy-green { border: 1.5px solid #A7F3D0; }
+  .piggy-blue  { border: 1.5px solid #C7D2FE; }
+  body.dark .piggy-pink  { border-color: #5A2A40; }
+  body.dark .piggy-green { border-color: #1E4A2A; }
+  body.dark .piggy-blue  { border-color: #3A3870; }
+
+  .piggy-card-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 22px; cursor: pointer; user-select: none; transition: filter 0.2s;
+  }
+  .piggy-card-header:hover { filter: brightness(0.96); }
+  .piggy-pink  .piggy-card-header { background: linear-gradient(135deg, #FFF0F5, #FFE4EE); }
+  .piggy-green .piggy-card-header { background: linear-gradient(135deg, #ECFDF5, #D1FAE5); }
+  .piggy-blue  .piggy-card-header { background: linear-gradient(135deg, #EEF2FF, #E0E7FF); }
+  body.dark .piggy-pink  .piggy-card-header { background: linear-gradient(135deg, #2A1520, #3A1A28); }
+  body.dark .piggy-green .piggy-card-header { background: linear-gradient(135deg, #102518, #162E1E); }
+  body.dark .piggy-blue  .piggy-card-header { background: linear-gradient(135deg, #1A1A35, #22204A); }
+
+  .piggy-emoji { font-size: 40px; flex-shrink: 0; }
+  .piggy-card-label { flex: 1; }
+  .piggy-card-title { font-family: var(--font-display); font-size: 20px; color: var(--text); }
+  .piggy-card-when { font-size: 12px; font-weight: 800; margin-top: 2px; }
+  .piggy-pink  .piggy-card-when { color: #C05070; }
+  .piggy-green .piggy-card-when { color: var(--green-dark); }
+  .piggy-blue  .piggy-card-when { color: #4338CA; }
+  body.dark .piggy-pink  .piggy-card-when { color: #FF9BBB; }
+  body.dark .piggy-green .piggy-card-when { color: var(--green); }
+  body.dark .piggy-blue  .piggy-card-when { color: #A5B4FC; }
+  .piggy-chevron { font-size: 16px; color: var(--text-light); transition: transform 0.3s; flex-shrink: 0; }
+  .piggy-card.open .piggy-chevron { transform: rotate(180deg); }
+
+  .piggy-card-body {
+    background: var(--surface); border-top: 1.5px solid var(--border);
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+    padding: 0 22px;
+  }
+  .piggy-card.open .piggy-card-body { max-height: 600px; padding: 20px 22px; }
+
+  .piggy-card-text { font-size: 14px; font-weight: 600; color: var(--text-light); line-height: 1.7; margin-bottom: 14px; }
+  .piggy-tip { font-size: 13px; font-weight: 700; color: var(--text); background: var(--surface2); border-radius: 10px; padding: 10px 14px; line-height: 1.5; }
+
+  .piggy-rec-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px; font-size: 13px; font-weight: 800;
+    color: var(--green-dark); text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .piggy-rec-link:hover { gap: 10px; }
+  body.dark .piggy-rec-link { color: var(--green); }
+
+  /* TRANSITION GRID */
+  .transition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  @media (max-width: 600px) { .transition-grid { grid-template-columns: 1fr; } }
+  .transition-card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 22px 20px;
+    box-shadow: var(--shadow); animation: fadeUp 0.5s both;
+  }
+  .transition-card:nth-child(1) { animation-delay: 0.1s; }
+  .transition-card:nth-child(2) { animation-delay: 0.18s; }
+  .transition-card:nth-child(3) { animation-delay: 0.26s; }
+  .transition-card:nth-child(4) { animation-delay: 0.34s; }
+  .transition-icon { font-size: 32px; margin-bottom: 10px; }
+  .transition-title { font-family: var(--font-display); font-size: 18px; color: var(--text); margin-bottom: 8px; }
+  .transition-text { font-size: 14px; font-weight: 600; color: var(--text-light); line-height: 1.7; }
+
+  /* RULE HIGHLIGHT */
+  .rule-box {
+    background: linear-gradient(135deg, var(--green-light), var(--blue-light));
+    border-radius: 16px; padding: 24px; margin-top: 24px;
+    animation: fadeUp 0.6s 0.2s both;
+  }
+  body.dark .rule-box { background: linear-gradient(135deg, var(--surface2), #172838); }
+  .rule-box-title { font-family: var(--font-display); font-size: 20px; color: var(--green-dark); margin-bottom: 12px; }
+  body.dark .rule-box-title { color: var(--green); }
+  .rule-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .rule-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  .rule-list li::before { content: '✅'; flex-shrink: 0; margin-top: 1px; }
+
+  /* LINK TO KIDS */
+  .kids-link-box {
+    background: var(--surface); border-radius: 20px; padding: 28px 24px;
+    box-shadow: var(--shadow); text-align: center; margin-top: 20px;
+    border: 2px dashed var(--green);
+    animation: fadeUp 0.6s 0.2s both;
+  }
+  body.dark .kids-link-box { border-color: var(--blue-dark); }
+  .kids-link-box p { font-size: 16px; font-weight: 700; color: var(--text-light); margin: 8px 0 16px; line-height: 1.6; }
+  .kids-link-box a {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green); color: white;
+    font-family: var(--font-display); font-size: 17px;
+    padding: 12px 28px; border-radius: 50px; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(91,191,122,0.35);
+    transition: all 0.2s;
+  }
+  .kids-link-box a:hover { background: var(--green-dark); transform: translateY(-2px) scale(1.04); }
+
+  /* GAME TILES */
+  .game-tile { border-radius:16px; padding:20px; text-align:center; transition:transform 0.2s; }
+  .game-tile:hover { transform:translateY(-3px); }
+  .game-tile-title { font-family:'Fredoka One',sans-serif; font-size:16px; margin-bottom:6px; }
+  .game-tile-sub { font-family:'Nunito',sans-serif; font-size:13px; color:var(--text-light); font-weight:600; }
+  .game-tile-green { background:var(--green-light); border:2px solid var(--green); }
+  .game-tile-green .game-tile-title { color:var(--green-dark); }
+  .game-tile-blue { background:var(--blue-light); border:2px solid var(--blue); }
+  .game-tile-blue .game-tile-title { color:var(--blue-dark); }
+  .game-tile-yellow { background:#FEFCE8; border:2px solid #EAB308; }
+  .game-tile-yellow .game-tile-title { color:#854D0E; }
+  .game-tile-pink { background:#FEF0F5; border:2px solid #FF6B9D; }
+  .game-tile-pink .game-tile-title { color:#9D174D; }
+  body.dark .game-tile-green { background:#1C3528; border-color:var(--green); }
+  body.dark .game-tile-blue { background:#172838; border-color:var(--blue); }
+  body.dark .game-tile-yellow { background:#2A2008; border-color:#EAB308; }
+  body.dark .game-tile-yellow .game-tile-title { color:#FCD34D; }
+  body.dark .game-tile-pink { background:#2A1020; border-color:#FF6B9D; }
+  body.dark .game-tile-pink .game-tile-title { color:#FF6B9D; }
+  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--text-light); font-size:13px; }
+  @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="floating-icons fi1">🪙</span>
+  <span class="floating-icons fi2">💶</span>
+  <span class="floating-icons fi3">⭐</span>
+  <span class="floating-icons fi4">🎯</span>
+  <span class="hero-emoji">💰</span>
+  <h1 class="hero-title" data-de="Taschengeld-Ratgeber" data-en="Pocket Money Guide">Taschengeld-Ratgeber</h1>
+  <p class="hero-sub" data-de="Wie viel, ab wann und wie ihr das Taschengeld sinnvoll begleitet – alle Antworten auf einen Blick." data-en="How much, when to start and how to guide pocket money wisely – all answers at a glance.">Wie viel, ab wann und wie ihr das Taschengeld sinnvoll begleitet – alle Antworten auf einen Blick.</p>
+</section>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SECTION 1: Beträge -->
+  <section>
+    <h2 class="section-title" data-de="💶 Altersgerechte Beträge" data-en="💶 Age-appropriate amounts">💶 Altersgerechte Beträge</h2>
+    <p class="section-lead" data-de="Taschengeld ist kein Geschenk – es ist ein Übungsraum. Kinder lernen dabei, eigene Entscheidungen zu treffen, Prioritäten zu setzen und auch aus Fehlern zu lernen. Die folgende Tabelle orientiert sich an den Empfehlungen des Deutschen Jugendinstituts (DJI) 2025. Es sind Richtwerte, keine Vorgaben – wichtiger als der genaue Betrag ist, dass er verlässlich und regelmäßig kommt. Keine Sorge, wenn ihr noch nie Taschengeld gegeben habt: Jeder Zeitpunkt ist ein guter Anfang." data-en="Pocket money isn't a gift – it's a practice space. Children learn to make their own decisions, set priorities and learn from mistakes. The following table is based on the 2025 recommendations of the German Youth Institute (DJI). These are guidelines, not rules – more important than the exact amount is that it arrives reliably and regularly. Don't worry if you've never given pocket money before: any moment is a good time to start.">Taschengeld ist kein Geschenk – es ist ein Übungsraum. Kinder lernen dabei, eigene Entscheidungen zu treffen, Prioritäten zu setzen und auch aus Fehlern zu lernen. Die folgende Tabelle orientiert sich an den Empfehlungen des Deutschen Jugendinstituts (DJI) 2025. Es sind Richtwerte, keine Vorgaben – wichtiger als der genaue Betrag ist, dass er verlässlich und regelmäßig kommt. Keine Sorge, wenn ihr noch nie Taschengeld gegeben habt: Jeder Zeitpunkt ist ein guter Anfang.</p>
+
+    <table class="tg-table">
+      <thead>
+        <tr>
+          <th data-de="Alter" data-en="Age">Alter</th>
+          <th data-de="Empfehlung pro Woche" data-en="Per week">Empfehlung pro Woche</th>
+          <th data-de="Pro Monat (ca.)" data-en="Per month (approx.)">Pro Monat (ca.)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="age-badge">Unter 6 Jahre</span></td>
+          <td>1,00 – 2,00 €</td>
+          <td>4 – 8 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">6 – 7 Jahre</span></td>
+          <td>2,00 – 3,00 €</td>
+          <td>8 – 12 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">8 – 9 Jahre</span></td>
+          <td>3,00 – 4,00 €</td>
+          <td>12 – 16 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">10 – 11 Jahre</span></td>
+          <td data-de="→ Monatlich empfohlen" data-en="→ Monthly recommended">→ Monatlich empfohlen</td>
+          <td>15 – 25 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">12 – 13 Jahre</span></td>
+          <td data-de="→ Monatlich empfohlen" data-en="→ Monthly recommended">→ Monatlich empfohlen</td>
+          <td>20 – 30 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">14 – 15 Jahre</span></td>
+          <td data-de="→ Monatlich empfohlen" data-en="→ Monthly recommended">→ Monatlich empfohlen</td>
+          <td>25 – 45 €</td>
+        </tr>
+        <tr>
+          <td><span class="age-badge">16 – 17 Jahre</span></td>
+          <td data-de="→ Monatlich empfohlen" data-en="→ Monthly recommended">→ Monatlich empfohlen</td>
+          <td>40 – 60 € *</td>
+        </tr>
+        <tr class="table-row-18">
+          <td><span class="age-badge" data-de="Ab 18 Jahre" data-en="From 18">Ab 18 Jahre</span></td>
+          <td data-de="→ Monatlich empfohlen" data-en="→ Monthly recommended">→ Monatlich empfohlen</td>
+          <td>55 – 75 € *</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px; display:flex; flex-direction:column; gap:4px;">
+      <p class="source-note">
+        <span data-de="Quelle: " data-en="Source: ">Quelle: </span>
+        <a href="https://www.dji.de/themen/jugend/taschengeld.html" target="_blank" rel="noopener" style="color:var(--blue-dark);text-decoration:none;font-weight:800;" data-de="DJI: Taschengeld und Gelderziehung (2025)" data-en="DJI: Pocket Money and Financial Education (2025)">DJI: Taschengeld und Gelderziehung (2025)</a>
+      </p>
+      <p class="source-note" data-de="* ab 16 Jahren für Jugendliche, die wirtschaftlich noch von den Eltern abhängig sind (z.B. Schüler:innen)" data-en="* from age 16 for young people still economically dependent on parents (e.g. pupils)">* ab 16 Jahren für Jugendliche, die wirtschaftlich noch von den Eltern abhängig sind (z.B. Schüler:innen)</p>
+    </div>
+
+    <div class="info-box">
+      💡 <strong data-de="Wöchentlich oder monatlich?" data-en="Weekly or monthly?">Wöchentlich oder monatlich?</strong>
+      <span data-de=" Bis ca. 9 Jahre ist wöchentliches Taschengeld empfehlenswert – Bargeld macht Beträge für Kinder greifbar und das Sparen konkret erlebbar. Der Übergang zur monatlichen Zahlung vollzieht sich laut DJI empirisch um das zehnte Lebensjahr: Bei 11-Jährigen zahlen bereits 57 % der Familien monatlich. Ab diesem Alter lernen Kinder so, größere Zeiträume zu überblicken und eigenverantwortlich einzuteilen." data-en=" Up to about age 9, weekly pocket money is recommended – cash makes amounts tangible and saving a concrete experience. According to the DJI, the transition to monthly payments happens empirically around age 10: among 11-year-olds, 57% of families already pay monthly. From this age, children learn to manage longer periods independently and take responsibility for their budget."> Bis ca. 9 Jahre ist wöchentliches Taschengeld empfehlenswert – Bargeld macht Beträge für Kinder greifbar und das Sparen konkret erlebbar. Der Übergang zur monatlichen Zahlung vollzieht sich laut DJI empirisch um das zehnte Lebensjahr: Bei 11-Jährigen zahlen bereits 57 % der Familien monatlich. Ab diesem Alter lernen Kinder so, größere Zeiträume zu überblicken und eigenverantwortlich einzuteilen.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Goldene Regeln -->
+  <section>
+    <h2 class="section-title" data-de="📋 Die goldenen Regeln" data-en="📋 The golden rules">📋 Die goldenen Regeln</h2>
+    <p class="section-lead" data-de="Pädagogische Fachleute sind sich einig: Nicht der Betrag entscheidet, sondern wie Taschengeld gegeben wird. Diese Grundsätze stammen aus der Verbraucher- und Familienbildung." data-en="Educational experts agree: it's not the amount that matters, but how pocket money is given. These principles come from consumer and family education research.">Pädagogische Fachleute sind sich einig: Nicht der Betrag entscheidet, sondern wie Taschengeld gegeben wird. Diese Grundsätze stammen aus der Verbraucher- und Familienbildung.</p>
+
+    <div class="rule-box">
+      <div class="rule-box-title" data-de="So macht's Sinn" data-en="What works">So macht's Sinn</div>
+      <ul class="rule-list">
+        <li data-de="Regelmäßig und pünktlich auszahlen – ohne dass das Kind darum bitten muss. Verlässlichkeit ist die Grundvoraussetzung dafür, dass Kinder überhaupt planen und budgetieren lernen." data-en="Pay regularly and on time – without the child having to ask. Reliability is the basic prerequisite for children to learn to plan and budget.">Regelmäßig und pünktlich auszahlen – ohne dass das Kind darum bitten muss. Verlässlichkeit ist die Grundvoraussetzung dafür, dass Kinder überhaupt planen und budgetieren lernen.</li>
+        <li data-de="Nicht als Belohnung oder Strafe einsetzen – Taschengeld ist kein Erziehungsmittel, sondern ein Lernfeld. Wer es kürzt, weil das Kind frech war, nimmt ihm genau den Übungsraum, den es braucht." data-en="Don't use as reward or punishment – pocket money is not a parenting tool but a learning space. Cutting it as punishment removes the very practice space the child needs.">Nicht als Belohnung oder Strafe einsetzen – Taschengeld ist kein Erziehungsmittel, sondern ein Lernfeld. Wer es kürzt, weil das Kind frech war, nimmt ihm genau den Übungsraum, den es braucht.</li>
+        <li data-de="Eigenständigkeit zulassen – auch wenn das Kind das Geld 'falsch' ausgibt. Laut DJI-Studie erreichen Jugendliche, die eigenständig über ihre Ausgaben entscheiden dürfen, deutlich höhere Werte in der Finanzkompetenz." data-en="Allow independence – even if the child spends money 'wrong'. According to the DJI study, young people who can decide independently about their spending achieve significantly higher financial literacy scores.">Eigenständigkeit zulassen – auch wenn das Kind das Geld 'falsch' ausgibt. Laut DJI-Studie erreichen Jugendliche, die eigenständig über ihre Ausgaben entscheiden dürfen, deutlich höhere Werte in der Finanzkompetenz.</li>
+        <li data-de="Haushaltshilfe ist kein Taschengeld – normale Mithilfe im Haushalt gehört zum Familienleben und sollte nicht vergütet werden. Besondere Zusatzdienste können separat vereinbart werden, getrennt vom Taschengeld." data-en="Household chores are not pocket money – normal help around the house is part of family life and should not be paid for. Special extra services can be agreed separately, distinct from pocket money.">Haushaltshilfe ist kein Taschengeld – normale Mithilfe im Haushalt gehört zum Familienleben und sollte nicht vergütet werden. Besondere Zusatzdienste können separat vereinbart werden, getrennt vom Taschengeld.</li>
+        <li data-de="Keine Vorschüsse (oder sehr bewusst einsetzen) – ab ca. 12 Jahren sind kleine, überschaubare Kredite mit klarem Rückzahlplan möglich, um Verantwortung zu üben. Wer sich Geld leiht, muss später mehr zurückzahlen." data-en="No advances (or use very consciously) – from around age 12, small manageable loans with a clear repayment plan are possible to practise responsibility. Anyone who borrows money has to pay back more later.">Keine Vorschüsse (oder sehr bewusst einsetzen) – ab ca. 12 Jahren sind kleine, überschaubare Kredite mit klarem Rückzahlplan möglich, um Verantwortung zu üben. Wer sich Geld leiht, muss später mehr zurückzahlen.</li>
+        <li data-de="Über Geld sprechen – nicht zur Kontrolle, sondern aus Interesse. Kinder, mit denen regelmäßig über Käufe, Wünsche und Werbung gesprochen wird, geben laut DJI-Studie im Schnitt weniger impulsiv aus." data-en="Talk about money – not to control, but out of genuine interest. According to the DJI study, children who regularly discuss purchases, wishes and advertising spend less impulsively on average.">Über Geld sprechen – nicht zur Kontrolle, sondern aus Interesse. Kinder, mit denen regelmäßig über Käufe, Wünsche und Werbung gesprochen wird, geben laut DJI-Studie im Schnitt weniger impulsiv aus.</li>
+        <li data-de="Sparziele gemeinsam besprechen – ein konkretes Ziel motiviert viel stärker als abstrakte Sparappelle. Piggyplant hilft dabei 🐷" data-en="Discuss savings goals together – a concrete goal motivates far more than abstract calls to save. Piggyplant helps with this 🐷">Sparziele gemeinsam besprechen – ein konkretes Ziel motiviert viel stärker als abstrakte Sparappelle. Piggyplant hilft dabei 🐷</li>
+      </ul>
+    </div>
+    <p class="source-note" style="margin-top:12px;" data-de="Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · PISA 2022 (OECD)" data-en="Source: Chabursky/Langmeyer (2025): Pocket Money and Financial Education, DJI · PISA 2022 (OECD)">Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · PISA 2022 (OECD)</p>
+  </section>
+
+  <!-- SECTION 3: Sparschwein -->
+  <section>
+    <h2 class="section-title" data-de="🐷 Zeit für das erste Sparschwein" data-en="🐷 Time for the first piggy bank">🐷 Zeit für das erste Sparschwein</h2>
+    <p class="section-lead" data-de="Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen zwei Schweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben." data-en="A piggy bank is more than a container – it's a child's first real financial tool. But not all piggy banks are the same. We recommend two at different points, each with a very different job.">Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen zwei Schweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben.</p>
+
+    <div class="piggy-cards">
+
+      <div class="piggy-card piggy-pink open">
+        <div class="piggy-card-header" onclick="togglePiggy(this)">
+          <span class="piggy-emoji">🐷</span>
+          <div class="piggy-card-label">
+            <div class="piggy-card-title" data-de="Das Genuss-Schwein" data-en="The Treat Pig">Das Genuss-Schwein</div>
+            <div class="piggy-card-when" data-de="Ab ca. 5 – 6 Jahren" data-en="From around age 5 – 6">Ab ca. 5 – 6 Jahren</div>
+          </div>
+          <span class="piggy-chevron">▼</span>
+        </div>
+        <div class="piggy-card-body">
+          <p class="piggy-card-text" data-de="Das erste Sparschwein hat nur eine Aufgabe: Kindern beibringen, dass Geld auch Freude machen darf. Es wird mit dem wöchentlichen Taschengeld gefüttert – und wenn genug drin ist, darf sich das Kind damit etwas Kleines gönnen. Kein Ziel, kein Druck. Nur das Gefühl: Ich hab gespart und darf jetzt." data-en="The first piggy bank has just one job: teaching children that money is allowed to bring joy. It gets filled with the weekly pocket money – and when there's enough in it, the child gets to treat themselves to something small. No goal, no pressure. Just the feeling: I saved and now I get to.">Das erste Sparschwein hat nur eine Aufgabe: Kindern beibringen, dass Geld auch Freude machen darf. Es wird mit dem wöchentlichen Taschengeld gefüttert – und wenn genug drin ist, darf sich das Kind damit etwas Kleines gönnen. Kein Ziel, kein Druck. Nur das Gefühl: Ich hab gespart und darf jetzt.</p>
+          <div class="piggy-tip" data-de="💡 Tipp: Das Kind das Sparschwein selbst aussuchen lassen – das steigert die Verbindung und damit die Motivation." data-en="💡 Tip: Let the child choose the piggy bank themselves – this increases their connection to it and their motivation.">💡 Tipp: Das Kind das Sparschwein selbst aussuchen lassen – das steigert die Verbindung und damit die Motivation.</div>
+          <a class="piggy-rec-link" href="empfehlungen.html#sparschweine" data-de="⭐ Unsere Sparschwein-Empfehlungen →" data-en="⭐ Our piggy bank recommendations →">⭐ Unsere Sparschwein-Empfehlungen →</a>
+        </div>
+      </div>
+
+      <div class="piggy-card piggy-green">
+        <div class="piggy-card-header" onclick="togglePiggy(this)">
+          <span class="piggy-emoji">🎯</span>
+          <div class="piggy-card-label">
+            <div class="piggy-card-title" data-de="Das Ziel-Schwein" data-en="The Goal Pig">Das Ziel-Schwein</div>
+            <div class="piggy-card-when" data-de="Ab ca. 7 – 8 Jahren" data-en="From around age 7 – 8">Ab ca. 7 – 8 Jahren</div>
+          </div>
+          <span class="piggy-chevron">▼</span>
+        </div>
+        <div class="piggy-card-body">
+          <p class="piggy-card-text" data-de="Wenn das Kind erste Rechenerfahrungen hat und anfängt, sich konkrete Wünsche zu merken, kommt das zweite Schwein ins Spiel. Es hat ein klares Ziel – zum Beispiel ein Buch, ein Spiel oder ein Ausflug. Ein Bild des Wunschobjekts am Schwein macht das Ziel greifbar. Mit dem Piggyplant-Sparrechner lässt sich gemeinsam ausrechnen, wie viele Wochen es noch dauert." data-en="When the child has first maths experience and starts remembering specific wishes, the second pig comes into play. It has a clear goal – for example a book, a game or a trip. A picture of the wish item on the pig makes the goal tangible. With the Piggyplant savings calculator you can work out together how many weeks it will still take.">Wenn das Kind erste Rechenerfahrungen hat und anfängt, sich konkrete Wünsche zu merken, kommt das zweite Schwein ins Spiel. Es hat ein klares Ziel – zum Beispiel ein Buch, ein Spiel oder ein Ausflug. Ein Bild des Wunschobjekts am Schwein macht das Ziel greifbar. Mit dem Piggyplant-Sparrechner lässt sich gemeinsam ausrechnen, wie viele Wochen es noch dauert.</p>
+          <div class="piggy-tip" data-de="💡 Tipp: Nicht zu früh einführen. Wenn das Kind noch nicht wirklich rechnen kann, bleibt das 'Ziel' abstrakt und wirkt eher demotivierend." data-en="💡 Tip: Don't introduce it too early. If the child can't really calculate yet, the 'goal' stays abstract and can actually feel demotivating.">💡 Tipp: Nicht zu früh einführen. Wenn das Kind noch nicht wirklich rechnen kann, bleibt das 'Ziel' abstrakt und wirkt eher demotivierend.</div>
+          <a class="piggy-rec-link" href="empfehlungen.html#sparschweine" data-de="⭐ Unsere Sparschwein-Empfehlungen →" data-en="⭐ Our piggy bank recommendations →">⭐ Unsere Sparschwein-Empfehlungen →</a>
+        </div>
+      </div>
+
+      <div class="piggy-card piggy-blue">
+        <div class="piggy-card-header" onclick="togglePiggy(this)">
+          <span class="piggy-emoji">📈</span>
+          <div class="piggy-card-label">
+            <div class="piggy-card-title" data-de="Das Investment-Schwein" data-en="The Investment Pig">Das Investment-Schwein</div>
+            <div class="piggy-card-when" data-de="Ab ca. 12 – 13 Jahren" data-en="From around age 12 – 13">Ab ca. 12 – 13 Jahren</div>
+          </div>
+          <span class="piggy-chevron">▼</span>
+        </div>
+        <div class="piggy-card-body">
+          <p class="piggy-card-text" data-de="Ab diesem Alter können Kinder abstrakt genug denken, um zu verstehen, dass Geld für sie arbeiten kann – nicht nur warten. Das Investment-Schwein sammelt einen kleinen Teil des Taschengeldes, der nicht ausgegeben, sondern angelegt wird. Das Ziel ist nicht der Betrag, sondern das Prinzip: Wer früh anfängt, profitiert vom Zinseszins-Effekt über viele Jahre." data-en="From this age, children can think abstractly enough to understand that money can work for them – not just wait. The investment pig collects a small portion of pocket money that isn't spent but invested. The goal isn't the amount, but the principle: those who start early benefit from the compound interest effect over many years.">Ab diesem Alter können Kinder abstrakt genug denken, um zu verstehen, dass Geld für sie arbeiten kann – nicht nur warten. Das Investment-Schwein sammelt einen kleinen Teil des Taschengeldes, der nicht ausgegeben, sondern angelegt wird. Das Ziel ist nicht der Betrag, sondern das Prinzip: Wer früh anfängt, profitiert vom Zinseszins-Effekt über viele Jahre.</p>
+          <p class="piggy-card-text" data-de="Wann leeren? Einmal im Jahr – z.B. zum Geburtstag oder Jahreswechsel. Eltern zahlen den Betrag dann gemeinsam mit dem Kind auf ein Juniordepot oder Tagesgeldkonto ein. Wichtig: Das Kind sollte den Vorgang bewusst miterleben und verstehen, was mit dem Geld passiert." data-en="When to empty it? Once a year – e.g. on a birthday or at the turn of the year. Parents then pay the amount together with the child into a junior investment account or savings account. Important: the child should consciously experience the process and understand what happens to the money.">Wann leeren? Einmal im Jahr – z.B. zum Geburtstag oder Jahreswechsel. Eltern zahlen den Betrag dann gemeinsam mit dem Kind auf ein Juniordepot oder Tagesgeldkonto ein. Wichtig: Das Kind sollte den Vorgang bewusst miterleben und verstehen, was mit dem Geld passiert.</p>
+          <div class="piggy-tip" data-de="💡 Tipp: Auch kleine Beträge zählen. 5 € im Monat über 5 Jahre bei 5 % Rendite ergeben rund 340 € – ein starkes Argument für den frühen Einstieg." data-en="💡 Tip: Even small amounts count. €5 per month over 5 years at 5% return gives around €340 – a strong argument for starting early.">💡 Tipp: Auch kleine Beträge zählen. 5 € im Monat über 5 Jahre bei 5 % Rendite ergeben rund 340 € – ein starkes Argument für den frühen Einstieg.</div>
+          <a class="piggy-rec-link" href="empfehlungen.html#depots" data-de="⭐ Unsere Depot-Empfehlungen →" data-en="⭐ Our depot recommendations →">⭐ Unsere Depot-Empfehlungen →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-box" style="margin-top:20px;">
+      📊 <strong data-de="Warum ein Depot wissenschaftlich die beste Wahl ist:" data-en="Why a depot is scientifically the best choice:">Warum ein Depot wissenschaftlich die beste Wahl ist:</strong>
+      <span data-de=" Langfristige Studien zeigen, dass breit gestreute Aktienanlagen (z.B. ETFs auf den MSCI World) über Zeiträume von 15+ Jahren historisch eine durchschnittliche Rendite von 7–9 % pro Jahr erzielt haben – deutlich mehr als Tagesgeld oder Sparbuch. Für Kinder ist der Zeithorizont besonders wertvoll: Wer mit 13 anfängt zu investieren, hat bis zum 18. Geburtstag bereits 5 Jahre Zinseszins-Effekt genutzt. Je früher, desto stärker arbeitet das Geld." data-en=" Long-term studies show that broadly diversified equity investments (e.g. ETFs on the MSCI World) have historically achieved average returns of 7–9% per year over periods of 15+ years – significantly more than daily savings accounts or passbooks. For children, the time horizon is particularly valuable: those who start investing at 13 have already used 5 years of compound interest by their 18th birthday. The earlier you start, the harder the money works."> Langfristige Studien zeigen, dass breit gestreute Aktienanlagen (z.B. ETFs auf den MSCI World) über Zeiträume von 15+ Jahren historisch eine durchschnittliche Rendite von 7–9 % pro Jahr erzielt haben – deutlich mehr als Tagesgeld oder Sparbuch. Für Kinder ist der Zeithorizont besonders wertvoll: Wer mit 13 anfängt zu investieren, hat bis zum 18. Geburtstag bereits 5 Jahre Zinseszins-Effekt genutzt. Je früher, desto stärker arbeitet das Geld.</span>
+      <div style="margin-top:10px; font-size:13px; font-weight:700; color:var(--text-light);" data-de="⚠️ Hinweis: Dies ist keine Anlageberatung. Aktienanlagen unterliegen Kursschwankungen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren." data-en="⚠️ Note: This is not investment advice. Equity investments are subject to price fluctuations. Parents should inform themselves independently before opening an account.">⚠️ Hinweis: Dies ist keine Anlageberatung. Aktienanlagen unterliegen Kursschwankungen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren.</div>
+    </div>
+    <p class="source-note" style="margin-top:8px;" data-de="Quelle: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse" data-en="Source: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historical return analysis">Quelle: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse</p>
+
+  </section>
+
+  <!-- SECTION 3: CTA -->
+  <section>
+    <h2 class="section-title" data-de="🐷 Bereit für den ersten Schritt?" data-en="🐷 Ready for the first step?">🐷 Bereit für den ersten Schritt?</h2>
+    <p class="section-lead" data-de="Taschengeld ist der einfachste Weg, Kindern echte Finanzkompetenz beizubringen – nicht durch Erklären, sondern durch Erleben. Fangt klein an, bleibt konsequent, und lasst Fehler zu. Piggyplant begleitet euch und eure Kinder dabei." data-en="Pocket money is the simplest way to teach children real financial skills – not through explanation, but through experience. Start small, stay consistent, and allow mistakes. Piggyplant is here to support you and your children along the way.">Taschengeld ist der einfachste Weg, Kindern echte Finanzkompetenz beizubringen – nicht durch Erklären, sondern durch Erleben. Fangt klein an, bleibt konsequent, und lasst Fehler zu. Piggyplant begleitet euch und eure Kinder dabei.</p>
+
+    <div class="info-box" style="margin-bottom: 24px;">
+      💡 <strong data-de="Tipp für den Einstieg:" data-en="Getting started tip:">Tipp für den Einstieg:</strong>
+      <span data-de=" Schaut euch die Spiele unten am besten erst gemeinsam mit euren Kindern an – so könnt ihr erklären, Fragen beantworten und den ersten Spielspaß gleich teilen. Kinder lernen am meisten, wenn Eltern dabei sind." data-en=" It's best to explore the games below together with your children first – so you can explain, answer questions and share the first fun moments together. Children learn the most when parents are involved."> Schaut euch die Spiele unten am besten erst gemeinsam mit euren Kindern an – so könnt ihr erklären, Fragen beantworten und den ersten Spielspaß gleich teilen. Kinder lernen am meisten, wenn Eltern dabei sind.</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; margin-bottom:32px;">
+
+      <a href="../kleine-sparer/sparziel-rechner.html" style="text-decoration:none;">
+        <div class="game-tile game-tile-green">
+          <div style="font-size:36px; margin-bottom:8px;">🎯</div>
+          <div class="game-tile-title" data-de="Sparziel-Rechner" data-en="Savings Goal Calculator">Sparziel-Rechner</div>
+          <div class="game-tile-sub" data-de="Wie lange bis zum Wunsch?" data-en="How long until the wish?">Wie lange bis zum Wunsch?</div>
+        </div>
+      </a>
+
+      <a href="../kleine-sparer/wunsch-sparer.html" style="text-decoration:none;">
+        <div class="game-tile game-tile-blue">
+          <div style="font-size:36px; margin-bottom:8px;">⭐</div>
+          <div class="game-tile-title" data-de="Wunsch-Sparer" data-en="Wish Saver">Wunsch-Sparer</div>
+          <div class="game-tile-sub" data-de="Sparziel spielerisch verfolgen" data-en="Track savings goals playfully">Sparziel spielerisch verfolgen</div>
+        </div>
+      </a>
+
+      <a href="../kleine-sparer/einkaufen-spiel.html" style="text-decoration:none;">
+        <div class="game-tile game-tile-yellow">
+          <div style="font-size:36px; margin-bottom:8px;">🛒</div>
+          <div class="game-tile-title" data-de="Einkaufen-Spiel" data-en="Shopping Game">Einkaufen-Spiel</div>
+          <div class="game-tile-sub" data-de="Mit Budget haushalten" data-en="Managing a budget">Mit Budget haushalten</div>
+        </div>
+      </a>
+
+      <a href="../kleine-sparer/sparschwein-spiel.html" style="text-decoration:none;">
+        <div class="game-tile game-tile-pink">
+          <div style="font-size:36px; margin-bottom:8px;">🐷</div>
+          <div class="game-tile-title" data-de="Sparschwein-Spiel" data-en="Piggy Bank Game">Sparschwein-Spiel</div>
+          <div class="game-tile-sub" data-de="Münzen sammeln & sparen" data-en="Collect coins & save">Münzen sammeln & sparen</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div style="text-align:center; margin-top:8px;">
+      <a href="elternbereich.html" style="display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg, #5BBF7A, #4AACDB); color:#fff; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; padding:12px 28px; border-radius:50px; text-decoration:none; border:none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        ← <span data-de="Zurück zur Elternbereich-Übersicht" data-en="Back to Parents' Corner overview">Zurück zur Elternbereich-Übersicht</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function togglePiggy(header) {
+    header.closest('.piggy-card').classList.toggle('open');
+  }
+
+  function toggleGroup(header) {
+    const group = header.closest('.age-group');
+    group.classList.toggle('open');
+  }
+
+  let dark = false, lang = 'de';
+
+  if (localStorage.getItem('piggyplant-dark') === 'true') {
+    dark = true;
+    document.body.classList.add('dark');
+    const _l = document.getElementById('dark-label');
+    if (_l) _l.textContent = 'Dunkel';
+  }
+
+  const _savedLang = localStorage.getItem('piggyplant-lang');
+  if (_savedLang && _savedLang !== 'de') {
+    lang = _savedLang;
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _savedLang));
+    document.getElementById('btn-de').classList.toggle('active', _savedLang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', _savedLang === 'en');
+    document.documentElement.lang = _savedLang;
+  }
+
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    localStorage.setItem('piggyplant-dark', dark);
+    const l = document.getElementById('dark-label');
+    if (l) l.textContent = dark ? (lang === 'de' ? 'Dunkel' : 'Dark') : (lang === 'de' ? 'Hell' : 'Light');
+  }
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('piggyplant-lang', l);
+    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.getElementById('btn-de').classList.toggle('active', l === 'de');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.documentElement.lang = l;
+    const lbl = document.getElementById('dark-label');
+    if (lbl) lbl.textContent = dark ? (l === 'de' ? 'Dunkel' : 'Dark') : (l === 'de' ? 'Hell' : 'Light');
+  }
+</script>
+</body>
+</html>
