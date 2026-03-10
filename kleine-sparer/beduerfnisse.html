@@ -80,9 +80,9 @@ body.dark .col-card.want{background:#2A1800}
 .col-card.need .col-card-title{color:var(--green-dark)} body.dark .col-card.need .col-card-title{color:var(--green)}
 .col-card.want .col-card-title{color:#C05A00} body.dark .col-card.want .col-card-title{color:var(--orange)}
 .col-list{display:flex;flex-direction:column;gap:5px}
-.col-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);background:rgba(255,255,255,0.6);border-radius:10px;padding:6px 10px}
+.col-item{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--text);background:rgba(255,255,255,0.6);border-radius:10px;padding:6px 10px}
 body.dark .col-item{background:rgba(0,0,0,0.2)}
-.col-item span:first-child{font-size:16px;flex-shrink:0}
+.col-item span:first-child{font-size:18px;flex-shrink:0}
 
 /* STEPS */
 .steps{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
@@ -96,8 +96,8 @@ body.dark .col-item{background:rgba(0,0,0,0.2)}
 .scenario-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .scenario-emoji{font-size:26px}
 .scenario-title{font-family:var(--font-display);font-size:16px}
-.scenario-body{font-size:13px;color:var(--text-light);font-weight:600;line-height:1.6;margin-bottom:10px}
-.scenario-verdict{display:flex;align-items:center;gap:8px;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800}
+.scenario-body{font-size:15px;color:var(--text-light);font-weight:600;line-height:1.6;margin-bottom:10px}
+.scenario-verdict{display:flex;align-items:center;gap:8px;border-radius:10px;padding:7px 12px;font-size:15px;font-weight:800}
 .scenario-verdict.need{background:var(--green-light);color:var(--green-dark)} body.dark .scenario-verdict.need{color:var(--green)}
 .scenario-verdict.want{background:#FFF5E6;color:#C05A00} body.dark .scenario-verdict.want{background:#2A1800;color:var(--orange)}
 .scenario-verdict-icon{font-size:18px;flex-shrink:0}
@@ -121,12 +121,42 @@ body.dark .tip-box h3{color:var(--blue)}
 
 .game-cta-box{background:linear-gradient(135deg,var(--green-light),var(--blue-light));border:2.5px dashed var(--green);border-radius:24px;padding:28px 24px;text-align:center;margin-bottom:20px;animation:fadeUp 0.5s 0.3s both}
 body.dark .game-cta-box{background:linear-gradient(135deg,#1C3528,#172838);border-color:var(--green)}
-.cta-emoji{font-size:56px;display:block;margin-bottom:8px;animation:wiggle 2s ease-in-out infinite}
 .game-cta-box h3{font-family:var(--font-display);font-size:22px;color:var(--green-dark);margin-bottom:6px}
 body.dark .game-cta-box h3{color:var(--green)}
 .game-cta-box p{font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:18px;line-height:1.5}
 .game-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:white;border:none;font-family:var(--font-body);font-weight:900;font-size:17px;padding:16px 36px;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 24px rgba(74,172,219,0.35);transition:all 0.2s;letter-spacing:0.3px}
 .game-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 32px rgba(74,172,219,0.5)}
+
+/* WISHLIST TOOL */
+.wishlist-box{background:var(--surface);border:2px solid var(--purple);border-radius:20px;padding:22px;margin-bottom:20px;animation:fadeUp 0.5s both}
+body.dark .wishlist-box{background:var(--surface2)}
+.wishlist-box h3{font-family:var(--font-display);font-size:20px;color:var(--text);margin-bottom:6px}
+.wishlist-box p{font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:14px}
+.wishlist-input-row{display:flex;gap:8px;margin-bottom:14px}
+.wishlist-input{flex:1;border:2px solid var(--border);border-radius:50px;padding:10px 18px;font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--text);background:var(--bg);outline:none;transition:border 0.2s}
+.wishlist-input:focus{border-color:var(--purple)}
+body.dark .wishlist-input{background:var(--surface);color:var(--text)}
+.wishlist-add-btn{background:var(--purple);color:white;border:none;font-family:var(--font-body);font-weight:800;font-size:14px;padding:10px 20px;border-radius:50px;cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0}
+.wishlist-add-btn:hover{transform:scale(1.05);opacity:0.9}
+.wishlist-add-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.wishlist-items{display:flex;flex-direction:column;gap:8px}
+.wishlist-item{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:14px;padding:10px 14px;animation:fadeUp 0.3s both}
+.wishlist-item-text{flex:1;font-size:14px;font-weight:700;color:var(--text)}
+.wishlist-item-date{font-size:12px;font-weight:600;color:var(--text-light);white-space:nowrap}
+.wishlist-item-date.due{color:var(--green-dark);font-weight:800}
+body.dark .wishlist-item-date.due{color:var(--green)}
+.wishlist-delete{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-light);padding:2px 6px;border-radius:8px;transition:all 0.2s;line-height:1}
+.wishlist-delete:hover{background:rgba(255,107,157,0.15);color:var(--pink)}
+.wishlist-empty{text-align:center;font-size:13px;font-weight:600;color:var(--text-light);padding:12px 0}
+
+/* CTA CARDS */
+.cta-cards{position:relative;width:120px;height:110px;margin:0 auto 16px}
+.cta-card{position:absolute;width:80px;height:100px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 20px rgba(0,0,0,0.15);font-weight:800;font-size:13px}
+.cta-card-need{background:linear-gradient(135deg,#E8F7EE,#C8EDDA);border:2px solid var(--green);color:var(--green-dark);left:0;top:8px;transform:rotate(-6deg);z-index:1}
+.cta-card-want{background:linear-gradient(135deg,#FFF5E6,#FFE3B8);border:2px solid var(--orange);color:#C05A00;right:0;top:0;transform:rotate(6deg);z-index:2}
+body.dark .cta-card-need{background:linear-gradient(135deg,#1C3528,#243B2C);color:var(--green)}
+body.dark .cta-card-want{background:linear-gradient(135deg,#2A1800,#3A2200);color:var(--orange)}
+.cta-card-emoji{font-size:32px;line-height:1}
 
 /* VORLESEN */
 .read-bar{background:linear-gradient(135deg,var(--blue-light),var(--green-light));border-radius:20px;padding:16px 20px;margin-bottom:20px;display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px solid var(--blue);animation:fadeUp 0.5s both}
@@ -179,8 +209,8 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
   <span class="floating-icons fi3">✅</span>
   <span class="floating-icons fi4">⭐</span>
   <span class="hero-emoji">🤔</span>
-  <h1 class="hero-title">Wünsche & Bedürfnisse</h1>
-  <p class="hero-sub">Was brauchst du wirklich – und was wünschst du dir nur?</p>
+  <h1 class="hero-title" data-de="Wünsche & Bedürfnisse" data-en="Wants & Needs">Wünsche & Bedürfnisse</h1>
+  <p class="hero-sub" data-de="Was brauchst du wirklich – und was wünschst du dir nur?" data-en="What do you really need – and what do you just wish for?">Was brauchst du wirklich – und was wünschst du dir nur?</p>
 </section>
 
 <div class="content">
@@ -191,117 +221,144 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
       <button class="read-btn" id="readBtn" onclick="toggleRead()" title="Vorlesen">
         <svg id="readIcon" width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,4 20,12 6,20"/></svg>
       </button>
-      <span style="font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--text)">Vorlesen</span>
-      <span class="read-label">Geschwindigkeit:</span>
+      <span style="font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--text)" data-de="Vorlesen" data-en="Read aloud">Vorlesen</span>
+      <span class="read-label" data-de="Geschwindigkeit:" data-en="Speed:">Geschwindigkeit:</span>
       <div class="speed-btns">
-        <button class="speed-btn" onclick="setSpeed(0.7,this)">🐢 Langsam</button>
-        <button class="speed-btn active" onclick="setSpeed(1.0,this)">🐇 Normal</button>
-        <button class="speed-btn" onclick="setSpeed(1.4,this)">🚀 Schnell</button>
+        <button class="speed-btn" onclick="setSpeed(0.7,this)" data-de="🐢 Langsam" data-en="🐢 Slow">🐢 Langsam</button>
+        <button class="speed-btn active" onclick="setSpeed(1.0,this)" data-de="🐇 Normal" data-en="🐇 Normal">🐇 Normal</button>
+        <button class="speed-btn" onclick="setSpeed(1.4,this)" data-de="🚀 Schnell" data-en="🚀 Fast">🚀 Schnell</button>
       </div>
     </div>
   </div>
 
   <!-- INTRO -->
   <div class="info-box" id="readable-1">
-    <h3>🌍 Jeder Mensch hat Bedürfnisse</h3>
-    <p>Stell dir vor, du wärst auf einer einsamen Insel. Was würdest du unbedingt brauchen? Wasser zum Trinken, etwas zu essen, Kleidung wenn es kalt wird, und einen sicheren Platz zum Schlafen. Das sind <strong>Bedürfnisse</strong> – Dinge, ohne die wir nicht gut leben können. Daneben gibt es <strong>Wünsche</strong> – Dinge, die toll wären, aber keine Notwendigkeit sind. Den Unterschied zu kennen ist super wichtig, wenn du weißt wie du mit deinem Geld umgehst!</p>
+    <h3 data-de="🌍 Jeder Mensch hat Bedürfnisse" data-en="🌍 Every person has needs">🌍 Jeder Mensch hat Bedürfnisse</h3>
+    <p data-de="Stell dir vor, du wärst auf einer einsamen Insel. Was würdest du unbedingt brauchen? Wasser zum Trinken, etwas zu essen, Kleidung wenn es kalt wird, und einen sicheren Platz zum Schlafen. Das sind <strong>Bedürfnisse</strong> – Dinge, ohne die wir nicht gut leben können. Daneben gibt es <strong>Wünsche</strong> – Dinge, die toll wären, aber keine Notwendigkeit sind. Den Unterschied zu kennen ist super wichtig, damit du weißt wie du richtige Entscheidungen mit deinem Geld triffst!" data-en="Imagine you were on a desert island. What would you absolutely need? Water to drink, something to eat, clothing when it gets cold, and a safe place to sleep. These are <strong>needs</strong> – things we cannot live well without. Then there are <strong>wants</strong> – things that would be great, but are not necessary. Knowing the difference is super important so you can make the right decisions with your money!">Stell dir vor, du wärst auf einer einsamen Insel. Was würdest du unbedingt brauchen? Wasser zum Trinken, etwas zu essen, Kleidung wenn es kalt wird, und einen sicheren Platz zum Schlafen. Das sind <strong>Bedürfnisse</strong> – Dinge, ohne die wir nicht gut leben können. Daneben gibt es <strong>Wünsche</strong> – Dinge, die toll wären, aber keine Notwendigkeit sind. Den Unterschied zu kennen ist super wichtig, damit du weißt wie du richtige Entscheidungen mit deinem Geld triffst!</p>
   </div>
 
   <!-- ZWEI SPALTEN: BEDÜRFNIS vs. WUNSCH -->
-  <div class="section-title" id="readable-2">✅ Was ist was?</div>
+  <div class="section-title" id="readable-2" data-de="✅ Was ist was?" data-en="✅ What is what?">✅ Was ist was?</div>
   <div class="two-col">
     <div class="col-card need">
-      <div class="col-card-title">✅ Bedürfnisse</div>
+      <div class="col-card-title" data-de="✅ Bedürfnisse" data-en="✅ Needs">✅ Bedürfnisse</div>
       <div class="col-list">
-        <div class="col-item"><span>🍞</span><span>Essen & Trinken</span></div>
-        <div class="col-item"><span>🏠</span><span>Ein Zuhause</span></div>
-        <div class="col-item"><span>👕</span><span>Kleidung</span></div>
-        <div class="col-item"><span>💊</span><span>Gesundheit</span></div>
-        <div class="col-item"><span>📚</span><span>Schule & Bildung</span></div>
-        <div class="col-item"><span>🧼</span><span>Hygiene</span></div>
+        <div class="col-item"><span>🍞</span><span data-de="Essen & Trinken" data-en="Food & Drink">Essen & Trinken</span></div>
+        <div class="col-item"><span>🏠</span><span data-de="Ein Zuhause" data-en="A home">Ein Zuhause</span></div>
+        <div class="col-item"><span>👕</span><span data-de="Kleidung" data-en="Clothing">Kleidung</span></div>
+        <div class="col-item"><span>💊</span><span data-de="Gesundheit" data-en="Health">Gesundheit</span></div>
+        <div class="col-item"><span>📚</span><span data-de="Schule & Bildung" data-en="School & Education">Schule & Bildung</span></div>
+        <div class="col-item"><span>🧼</span><span data-de="Hygiene" data-en="Hygiene">Hygiene</span></div>
       </div>
     </div>
     <div class="col-card want">
-      <div class="col-card-title">⭐ Wünsche</div>
+      <div class="col-card-title" data-de="⭐ Wünsche" data-en="⭐ Wants">⭐ Wünsche</div>
       <div class="col-list">
-        <div class="col-item"><span>🎮</span><span>Spielekonsole</span></div>
-        <div class="col-item"><span>🍭</span><span>Süßigkeiten</span></div>
-        <div class="col-item"><span>👟</span><span>Markenschuhe</span></div>
-        <div class="col-item"><span>📱</span><span>Neues Handy</span></div>
-        <div class="col-item"><span>🎠</span><span>Freizeitpark</span></div>
-        <div class="col-item"><span>🧸</span><span>Spielzeug</span></div>
+        <div class="col-item"><span>🎮</span><span data-de="Spielekonsole" data-en="Games console">Spielekonsole</span></div>
+        <div class="col-item"><span>🍭</span><span data-de="Süßigkeiten" data-en="Sweets">Süßigkeiten</span></div>
+        <div class="col-item"><span>👟</span><span data-de="Markenschuhe" data-en="Designer shoes">Markenschuhe</span></div>
+        <div class="col-item"><span>📱</span><span data-de="Neues Handy" data-en="New phone">Neues Handy</span></div>
+        <div class="col-item"><span>🎠</span><span data-de="Freizeitpark" data-en="Theme park">Freizeitpark</span></div>
+        <div class="col-item"><span>🧸</span><span data-de="Spielzeug" data-en="Toys">Spielzeug</span></div>
       </div>
     </div>
   </div>
 
   <!-- INFO BOX UNTERSCHIED -->
   <div class="info-box blue" id="readable-3">
-    <h3>💡 Der wichtige Unterschied</h3>
-    <p>Bedürfnisse sind Dinge, die wir <strong>zum Leben brauchen</strong>. Ohne sie wären wir krank, hätten Hunger oder könnten nicht in die Schule gehen. Wünsche hingegen sind Dinge, die wir <strong>haben möchten</strong> – sie machen Spaß und sind schön, aber ohne sie kommen wir gut klar. Keiner sagt, dass Wünsche schlecht sind! Aber zuerst kommen immer die Bedürfnisse.</p>
+    <h3 data-de="💡 Der wichtige Unterschied" data-en="💡 The important difference">💡 Der wichtige Unterschied</h3>
+    <p data-de="Bedürfnisse sind Dinge, die wir <strong>zum Leben brauchen</strong>. Ohne sie hätten wir Hunger, wären krank oder könnten nicht in die Schule gehen. Wünsche hingegen sind Dinge, die wir <strong>haben möchten</strong> – sie machen Spaß und sind schön, aber ohne sie kommen wir gut klar. Keiner sagt, dass Wünsche schlecht sind – und ab und zu sollte man sich von seinem Geld auch Wünsche erfüllen! Aber zuerst kommen immer die Bedürfnisse." data-en="Needs are things we <strong>need to live</strong>. Without them we would be hungry, sick or unable to go to school. Wants on the other hand are things we <strong>would like to have</strong> – they are fun and nice, but we can manage well without them. Nobody says wants are bad – and every now and then you should treat yourself too! But needs always come first.">Bedürfnisse sind Dinge, die wir <strong>zum Leben brauchen</strong>. Ohne sie hätten wir Hunger, wären krank oder könnten nicht in die Schule gehen. Wünsche hingegen sind Dinge, die wir <strong>haben möchten</strong> – sie machen Spaß und sind schön, aber ohne sie kommen wir gut klar. Keiner sagt, dass Wünsche schlecht sind – und ab und zu sollte man sich von seinem Geld auch Wünsche erfüllen! Aber zuerst kommen immer die Bedürfnisse.</p>
   </div>
 
   <!-- BEISPIEL-SZENARIEN -->
-  <div class="section-title" id="readable-4">🔍 Schau mal genau hin!</div>
+  <div class="section-title" id="readable-4" data-de="🔍 Schau mal genau hin!" data-en="🔍 Take a closer look!">🔍 Schau mal genau hin!</div>
 
   <div class="scenario">
     <div class="scenario-header">
       <span class="scenario-emoji">👟</span>
-      <div class="scenario-title">Schuhe kaufen</div>
+      <div class="scenario-title" data-de="Schuhe kaufen" data-en="Buying shoes">Schuhe kaufen</div>
     </div>
-    <div class="scenario-body">Emma braucht neue Schuhe für die Schule – ihre alten sind kaputt. Sie sieht aber auch coole Markenschuhe, die ihr viel besser gefallen, kosten aber dreimal so viel.</div>
-    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span>Neue Schuhe → <strong>Bedürfnis</strong></div>
+    <div class="scenario-body" data-de="Emma braucht neue Schuhe für die Schule – ihre alten sind kaputt. Sie sieht aber auch coole Markenschuhe, die ihr viel besser gefallen, kosten aber dreimal so viel." data-en="Emma needs new shoes for school – her old ones are broken. But she also sees cool designer shoes she likes much better, though they cost three times as much.">Emma braucht neue Schuhe für die Schule – ihre alten sind kaputt. Sie sieht aber auch coole Markenschuhe, die ihr viel besser gefallen, kosten aber dreimal so viel.</div>
+    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span><span data-de="Neue Schuhe → <strong>Bedürfnis</strong>" data-en="New shoes → <strong>Need</strong>">Neue Schuhe → <strong>Bedürfnis</strong></span></div>
     <div style="margin-top:8px"></div>
-    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span>Die teuren Markenschuhe → <strong>Wunsch</strong></div>
+    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span><span data-de="Die teuren Markenschuhe → <strong>Wunsch</strong>" data-en="The expensive designer shoes → <strong>Want</strong>">Die teuren Markenschuhe → <strong>Wunsch</strong></span></div>
   </div>
 
   <div class="scenario">
     <div class="scenario-header">
       <span class="scenario-emoji">📱</span>
-      <div class="scenario-title">Ein neues Handy</div>
+      <div class="scenario-title" data-de="Ein neues Handy" data-en="A new phone">Ein neues Handy</div>
     </div>
-    <div class="scenario-body">Luca hat ein Handy, das noch gut funktioniert. Aber sein Freund hat das neueste Modell und er findet es total cool. Sein altes Handy macht noch alles, was er braucht.</div>
-    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span>Das neue Handy → <strong>Wunsch</strong></div>
+    <div class="scenario-body" data-de="Luca hat ein Handy, das noch gut funktioniert. Aber sein Freund hat das neueste Modell und er findet es total cool. Sein altes Handy macht noch alles, was er braucht." data-en="Luca has a phone that still works fine. But his friend has the latest model and he thinks it's really cool. His old phone still does everything he needs.">Luca hat ein Handy, das noch gut funktioniert. Aber sein Freund hat das neueste Modell und er findet es total cool. Sein altes Handy macht noch alles, was er braucht.</div>
+    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span><span data-de="Das neue Handy → <strong>Wunsch</strong>" data-en="The new phone → <strong>Want</strong>">Das neue Handy → <strong>Wunsch</strong></span></div>
   </div>
 
   <div class="scenario">
     <div class="scenario-header">
-      <span class="scenario-emoji">💊</span>
-      <div class="scenario-title">Zum Arzt gehen</div>
+      <span class="scenario-emoji">🍽️</span>
+      <div class="scenario-title" data-de="Essen gehen" data-en="Going out to eat">Essen gehen</div>
     </div>
-    <div class="scenario-body">Sofia hat seit zwei Tagen Halsschmerzen und Fieber. Sie braucht Medizin und einen Arztbesuch, auch wenn ihr das gar nicht so viel Spaß macht.</div>
-    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span>Arztbesuch & Medizin → <strong>Bedürfnis</strong></div>
+    <div class="scenario-body" data-de="Mia hat Hunger und möchte etwas essen. Zuhause gibt es genug – aber sie möchte unbedingt ins Restaurant, weil das viel mehr Spaß macht." data-en="Mia is hungry and wants something to eat. There's plenty of food at home – but she really wants to go to a restaurant because that's much more fun.">Mia hat Hunger und möchte etwas essen. Zuhause gibt es genug – aber sie möchte unbedingt ins Restaurant, weil das viel mehr Spaß macht.</div>
+    <div class="scenario-verdict need"><span class="scenario-verdict-icon">✅</span><span data-de="Etwas essen → <strong>Bedürfnis</strong>" data-en="Eating something → <strong>Need</strong>">Etwas essen → <strong>Bedürfnis</strong></span></div>
+    <div style="margin-top:8px"></div>
+    <div class="scenario-verdict want"><span class="scenario-verdict-icon">⭐</span><span data-de="Ins Restaurant gehen → <strong>Wunsch</strong>" data-en="Going to a restaurant → <strong>Want</strong>">Ins Restaurant gehen → <strong>Wunsch</strong></span></div>
   </div>
 
   <!-- WUNSCHLISTEN-TIPP -->
-  <div class="section-title">💰 Wünsche & Geld – was tun?</div>
+  <div class="section-title" data-de="💰 Wünsche & Geld – was tun?" data-en="💰 Wants & money – what to do?">💰 Wünsche & Geld – was tun?</div>
   <div class="tip-box" id="readable-5">
-    <h3>📝 Der Wunschlisten-Trick</h3>
-    <p>Wünsche sind toll – aber manchmal will man etwas kaufen, nur weil es gerade so verlockend aussieht. Probier mal diesen Trick:</p>
+    <h3 data-de="📝 Der Wunschlisten-Trick" data-en="📝 The wish list trick">📝 Der Wunschlisten-Trick</h3>
+    <p data-de="Wünsche sind toll – aber manchmal will man etwas kaufen, nur weil es gerade so verlockend aussieht. Probier mal diesen Trick:" data-en="Wants are great – but sometimes you want to buy something just because it looks so tempting right now. Try this trick:">Wünsche sind toll – aber manchmal will man etwas kaufen, nur weil es gerade so verlockend aussieht. Probier mal diesen Trick:</p>
     <div class="tip-steps">
-      <div class="tip-step"><div class="tip-step-badge">1</div><span>Schreib deinen Wunsch auf eine Liste und warte <strong>eine Woche</strong>.</span></div>
-      <div class="tip-step"><div class="tip-step-badge">2</div><span>Hast du den Wunsch noch <strong>und</strong> das Geld dafür? Dann kauf es! 🎉</span></div>
-      <div class="tip-step"><div class="tip-step-badge">3</div><span>Fehlt noch das Geld? Dann fang an zu <strong>sparen</strong>. 🐷</span></div>
-      <div class="tip-step"><div class="tip-step-badge">4</div><span>Ist der Wunsch nach einer Woche nicht mehr so stark? Dann <strong>lass es lieber</strong>. Das Geld bleibt dir erhalten!</span></div>
+      <div class="tip-step"><div class="tip-step-badge">1</div><span data-de="Schreib deinen Wunsch auf einen Zettel und warte <strong>eine Woche</strong>." data-en="Write your wish on a piece of paper and wait <strong>one week</strong>.">Schreib deinen Wunsch auf einen Zettel und warte <strong>eine Woche</strong>.</span></div>
+      <div class="tip-step"><div class="tip-step-badge">2</div><span data-de="Hast du den Wunsch noch <strong>und</strong> das Geld dafür? Dann kauf es! 🎉" data-en="Do you still want it <strong>and</strong> have the money? Then buy it! 🎉">Hast du den Wunsch noch <strong>und</strong> das Geld dafür? Dann kauf es! 🎉</span></div>
+      <div class="tip-step"><div class="tip-step-badge">3</div><span data-de="Fehlt noch das Geld? Dann fang an zu <strong>sparen</strong>. 🐷 <a href='sparziel-rechner.html' style='color:var(--green-dark);font-weight:800;text-decoration:underline'>→ Zum Sparziel-Rechner</a>" data-en="Still missing the money? Then start <strong>saving</strong>. 🐷 <a href='sparziel-rechner.html' style='color:var(--green-dark);font-weight:800;text-decoration:underline'>→ To the Savings Goal Calculator</a>">Fehlt noch das Geld? Dann fang an zu <strong>sparen</strong>. 🐷 <a href="sparziel-rechner.html" style="color:var(--green-dark);font-weight:800;text-decoration:underline">→ Zum Sparziel-Rechner</a></span></div>
+      <div class="tip-step"><div class="tip-step-badge">4</div><span data-de="Ist der Wunsch nach einer Woche nicht mehr so stark? Dann <strong>lass es lieber</strong>. Das Geld bleibt dir erhalten!" data-en="Is the wish not as strong after a week? Then <strong>let it go</strong>. You keep your money!">Ist der Wunsch nach einer Woche nicht mehr so stark? Dann <strong>lass es lieber</strong>. Das Geld bleibt dir erhalten!</span></div>
     </div>
   </div>
 
   <!-- FRAGE AN DICH -->
   <div class="info-box" style="border-left-color:var(--purple);animation-delay:0.2s" id="readable-6">
-    <h3>🤔 Frag dich selbst!</h3>
-    <p>Wenn du das nächste Mal etwas kaufen möchtest, stell dir diese eine Frage: <strong>„Brauche ich das wirklich – oder wünsche ich es mir nur?"</strong> Wenn es ein Wunsch ist, ist das völlig okay! Aber dann weißt du: das ist etwas, für das es sich lohnt zu sparen – und nicht etwas, das sofort sein muss.</p>
+    <h3 data-de="🤔 Frag dich selbst!" data-en="🤔 Ask yourself!">🤔 Frag dich selbst!</h3>
+    <p data-de="Wenn du das nächste Mal etwas kaufen möchtest, stell dir diese eine Frage: &bdquo;Brauche ich das wirklich &ndash; oder wünsche ich es mir nur?&ldquo; Wenn es ein Wunsch ist, ist das völlig okay! Aber dann weißt du: das ist etwas, für das es sich lohnt zu sparen &ndash; und nicht etwas, das sofort sein muss." data-en="Next time you want to buy something, ask yourself this one question: &bdquo;Do I really need this &ndash; or do I just want it?&ldquo; If it&apos;s a want, that&apos;s completely fine! But then you know: this is something worth saving up for &ndash; not something that has to happen right now.">Wenn du das nächste Mal etwas kaufen möchtest, stell dir diese eine Frage: „Brauche ich das wirklich – oder wünsche ich es mir nur?" Wenn es ein Wunsch ist, ist das völlig okay! Aber dann weißt du: das ist etwas, für das es sich lohnt zu sparen – und nicht etwas, das sofort sein muss.</p>
+  </div>
+
+  <!-- WUNSCHLISTE TOOL -->
+  <div class="wishlist-box">
+    <h3>📋 <span data-de="Meine Wunschliste" data-en="My Wish List">Meine Wunschliste</span></h3>
+    <p data-de="Trag deinen Wunsch ein – nach einer Woche siehst du ob er noch so wichtig ist!" data-en="Add your wish – after one week you'll see if it's still that important!">Trag deinen Wunsch ein – nach einer Woche siehst du ob er noch so wichtig ist!</p>
+    <div class="wishlist-input-row">
+      <input class="wishlist-input" id="wishlistInput" type="text" maxlength="60"
+        placeholder="z.B. Neues Lego-Set..."
+        data-placeholder-de="z.B. Neues Lego-Set..."
+        data-placeholder-en="e.g. New Lego set...">
+      <button class="wishlist-add-btn" id="wishlistAddBtn" onclick="addWish()">
+        <span data-de="+ Eintragen" data-en="+ Add">+ Eintragen</span>
+      </button>
+    </div>
+    <div class="wishlist-items" id="wishlistItems"></div>
   </div>
 
   <!-- GAME CTA -->
   <div class="game-cta-box">
-    <span class="cta-emoji">🎮</span>
-    <h3>Jetzt testen!</h3>
-    <p>Du hast gelernt, was Bedürfnisse und Wünsche sind. Jetzt kannst du dein Wissen im Spiel beweisen – sortiere 20 Karten in die richtige Box!</p>
-    <a class="game-btn" href="beduerfnisse-spiel.html">Zum Spiel →</a>
+    <div class="cta-cards">
+      <div class="cta-card cta-card-need">
+        <span class="cta-card-emoji">🍞</span>
+        <span data-de="Bedürfnis" data-en="Need">Bedürfnis</span>
+      </div>
+      <div class="cta-card cta-card-want">
+        <span class="cta-card-emoji">🎮</span>
+        <span data-de="Wunsch" data-en="Want">Wunsch</span>
+      </div>
+    </div>
+    <h3 data-de="Brauch ich es wirklich?" data-en="Do I really need it?">Brauch ich es wirklich?</h3>
+    <p data-de="Du hast gelernt, was Bedürfnisse und Wünsche sind. Jetzt kannst du dein Wissen im Spiel beweisen – sortiere 20 Karten in die richtige Box!" data-en="You've learned what needs and wants are. Now prove your knowledge in the game – sort 20 cards into the right box!">Du hast gelernt, was Bedürfnisse und Wünsche sind. Jetzt kannst du dein Wissen im Spiel beweisen – sortiere 20 Karten in die richtige Box!</p>
+    <a class="game-btn" href="beduerfnisse-spiel.html" data-de="Brauch ich's oder will ich's? →" data-en="Need it or want it? →">Brauch ich's oder will ich's? →</a>
   </div>
 
   <!-- ZURÜCK BUTTONS -->
   <div style="text-align:center;margin-top:8px;display:flex;flex-direction:column;gap:12px;align-items:center">
-    <a href="../elternbereich/elternbereich.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;padding:12px 28px;border-radius:50px;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">← Zurück zur Elternbereich-Übersicht</a>
+    <a href="kleine-sparer.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;padding:12px 28px;border-radius:50px;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'" data-de="← Zurück zur Übersicht" data-en="← Back to overview">← Zurück zur Übersicht</a>
   </div>
 
 </div>
@@ -310,14 +367,14 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
   <div class="footer-inner">
     <div class="footer-logo">
       <span class="footer-brand">Piggyplant</span>
-      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+      <span class="footer-copy" data-de="© 2026 Piggyplant. Alle Rechte vorbehalten." data-en="© 2026 Piggyplant. All rights reserved.">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
-      <a href="kleine-sparer.html">← Kleine Sparer</a>
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
-      <a href="../impressum.html">Impressum</a>
+      <a href="../impressum.html" data-de="Impressum" data-en="Legal notice">Impressum</a>
       <span class="footer-divider">·</span>
-      <a href="../datenschutz.html">Datenschutz</a>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
     </div>
   </div>
 </footer>
@@ -335,7 +392,10 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
   const _savedLang = localStorage.getItem('piggyplant-lang');
   if (_savedLang && _savedLang !== 'de') {
     lang = _savedLang;
-    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + _savedLang));
+    document.querySelectorAll('[data-de]').forEach(el => {
+      const val = el.getAttribute('data-' + _savedLang);
+      if (val) el.innerHTML = val;
+    });
     document.getElementById('btn-de').classList.toggle('active', _savedLang === 'de');
     document.getElementById('btn-en').classList.toggle('active', _savedLang === 'en');
     document.documentElement.lang = _savedLang;
@@ -352,12 +412,19 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
   function setLang(l) {
     lang = l;
     localStorage.setItem('piggyplant-lang', l);
-    document.querySelectorAll('[data-de]').forEach(el => el.textContent = el.getAttribute('data-' + l));
+    document.querySelectorAll('[data-de]').forEach(el => {
+      const val = el.getAttribute('data-' + l);
+      if (val) el.innerHTML = val;
+    });
     document.getElementById('btn-de').classList.toggle('active', l === 'de');
     document.getElementById('btn-en').classList.toggle('active', l === 'en');
     document.documentElement.lang = l;
     const lbl = document.getElementById('dark-label');
     if (lbl) lbl.textContent = dark ? (l === 'de' ? 'Dunkel' : 'Dark') : (l === 'de' ? 'Hell' : 'Light');
+    // update wishlist placeholder + selftest
+    const inp = document.getElementById('wishlistInput');
+    if (inp) inp.placeholder = inp.getAttribute('data-placeholder-' + l) || '';
+    renderWishes();
   }
 
   // TEXT-TO-SPEECH
@@ -395,6 +462,69 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
       ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
       : '<polygon points="6,4 20,12 6,20"/>';
   }
+
+  // ── WISHLIST ──────────────────────────────────────────────
+  const WISH_KEY = 'piggyplant-wishlist';
+  const MAX_WISHES = 5;
+
+  function loadWishes() { try { return JSON.parse(localStorage.getItem(WISH_KEY)) || []; } catch { return []; } }
+  function saveWishes(w) { localStorage.setItem(WISH_KEY, JSON.stringify(w)); }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
+  }
+
+  function renderWishes() {
+    const wishes = loadWishes();
+    const container = document.getElementById('wishlistItems');
+    const addBtn = document.getElementById('wishlistAddBtn');
+    addBtn.disabled = wishes.length >= MAX_WISHES;
+    if (wishes.length === 0) {
+      container.innerHTML = `<div class="wishlist-empty">${lang === 'en' ? 'No wishes yet – add one above! ✨' : 'Noch keine Wünsche – trag einen ein! ✨'}</div>`;
+      return;
+    }
+    const today = new Date(); today.setHours(0,0,0,0);
+    container.innerHTML = wishes.map((w, i) => {
+      const due = new Date(w.due); due.setHours(0,0,0,0);
+      const isDue = due <= today;
+      const label = isDue
+        ? (lang === 'en' ? '✅ Week is up!' : '✅ Woche um!')
+        : (lang === 'en' ? 'Check on: ' : 'Prüfen am: ') + formatDate(w.due);
+      return `<div class="wishlist-item">
+        <span style="font-size:20px">⭐</span>
+        <span class="wishlist-item-text">${w.text}</span>
+        <span class="wishlist-item-date${isDue ? ' due' : ''}">${label}</span>
+        <button class="wishlist-delete" onclick="deleteWish(${i})" title="${lang === 'en' ? 'Delete' : 'Löschen'}">🗑️</button>
+      </div>`;
+    }).join('');
+  }
+
+  function addWish() {
+    const input = document.getElementById('wishlistInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const wishes = loadWishes();
+    if (wishes.length >= MAX_WISHES) return;
+    const due = new Date();
+    due.setDate(due.getDate() + 7);
+    wishes.push({ text, due: due.toISOString() });
+    saveWishes(wishes);
+    input.value = '';
+    renderWishes();
+  }
+
+  function deleteWish(i) {
+    const wishes = loadWishes();
+    wishes.splice(i, 1);
+    saveWishes(wishes);
+    renderWishes();
+  }
+
+  // Enter key support
+  document.getElementById('wishlistInput').addEventListener('keydown', e => { if (e.key === 'Enter') addWish(); });
+
+  renderWishes();
 </script>
 </body>
 </html>
