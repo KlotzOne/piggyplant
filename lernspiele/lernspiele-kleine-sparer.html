@@ -226,7 +226,7 @@
     <h3 style="font-family:var(--font-display);font-size:18px;color:#8B6200;margin-bottom:8px;" data-de="💡 Tipp: Zeig was du kannst!" data-en="💡 Tip: Show what you've got!">💡 Tipp: Zeig was du kannst!</h3>
     <p style="font-size:14px;color:var(--text-light);font-weight:600;line-height:1.6;" data-de="Noch mehr Spaß macht es, wenn du deine Eltern herausforderst! Zeig ihnen, was du gelernt hast – vielleicht wissen sie nicht alles besser. 😄" data-en="Even more fun when you challenge your parents! Show them what you've learnt – maybe they don't know everything better after all. 😄">Noch mehr Spaß macht es, wenn du deine Eltern herausforderst! Zeig ihnen, was du gelernt hast – vielleicht wissen sie nicht alles besser. 😄</p>
   </div>
-  <a class="back-btn" id="back-btn" href="../kleine-sparer/kleine-sparer.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
+  <a class="back-btn" id="back-btn" href="../lernspiele/lernspiele.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
 
 </div>
 
@@ -275,7 +275,7 @@
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
     const backBtn = document.getElementById('back-btn');
-    if (backBtn && from === 'lernspiele') {
+    if (backBtn && (from === 'lernspiele' || from === 'lernspiele-kleine-sparer' || from === 'spiele-ecke')) {
       backBtn.href = 'lernspiele.html';
       backBtn.querySelector('span').setAttribute('data-de', 'Zurück zu Lernspiele');
       backBtn.querySelector('span').setAttribute('data-en', 'Back to Learning Games');
