@@ -213,21 +213,16 @@
   </div>
 </div>
 
-<a class="back-btn" id="backBtn" href="sparschwein.html">← Zurück zum Sparschwein</a>
-
 <script>
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
 
 // ── FROM= NAVIGATION ───────────────────────────────────────
 (function() {
   const from = new URLSearchParams(window.location.search).get('from');
-  const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'sparschwein.html';
-  const backLabel = from === 'lernspiele' ? '← Zurück zu Lernspiele' : '← Zurück zum Sparschwein';
+  const backUrl = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'sparschwein.html';
   document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('closeBtn');
-    const backBtn = document.getElementById('backBtn');
     if (closeBtn) closeBtn.href = backUrl;
-    if (backBtn) { backBtn.href = backUrl; backBtn.textContent = backLabel; }
   });
 })();
 
@@ -444,44 +439,6 @@ function playSound() {
 }
 
 // ── APPLAUSE SOUND ────────────────────────────────────────
-function playApplause() {
-  try {
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const duration = 4.0;
-    const bufSize = ctx.sampleRate * duration;
-    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-    const d2 = buf.getChannelData(0);
-    for (let i=0; i<bufSize; i++) {
-      const t = i / ctx.sampleRate;
-      const env = Math.sin(Math.PI * t / duration) * (0.5 + 0.5*Math.random());
-      d2[i] = (Math.random()*2-1) * env * 0.7;
-    }
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 1800;
-    filter.Q.value = 0.8;
-    src.connect(filter);
-    filter.connect(ctx.destination);
-    src.start();
-
-    // Jubel-Melodie aufsteigend
-    [0, 0.15, 0.35, 0.6, 0.9, 1.3, 1.8, 2.4].forEach((delay, i) => {
-      const o = ctx.createOscillator();
-      const g2 = ctx.createGain();
-      o.connect(g2); g2.connect(ctx.destination);
-      o.type = 'sine';
-      o.frequency.value = [523,587,659,784,880,988,1047,1175][i];
-      g2.gain.setValueAtTime(0, ctx.currentTime+delay);
-      g2.gain.linearRampToValueAtTime(0.18, ctx.currentTime+delay+0.06);
-      g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+delay+0.5);
-      o.start(ctx.currentTime+delay);
-      o.stop(ctx.currentTime+delay+0.6);
-    });
-  } catch(e) {}
-}
-
 // ── COIN PARTICLE ──────────────────────────────────────────
 function spawnParticle(val) {
   const r = document.getElementById('pigDropZone').getBoundingClientRect();
@@ -522,8 +479,6 @@ function celebrate() {
   const g = GOALS[goalIndex];
   const overflow = currentCent - g.price;
   carryCent = overflow;
-  playApplause();
-
   document.getElementById('celebTitle').textContent = 'Geschafft! ' + g.emoji;
   document.getElementById('celebText').textContent  = `Du hast ${fmt(g.price)} für ${g.name} gespart!`;
 

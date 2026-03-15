@@ -86,7 +86,7 @@
   @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
   @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
   .footer-logo { display:flex; flex-direction:column; gap:2px; }
   .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -94,7 +94,7 @@
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
   @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
 
 </style>
@@ -260,7 +260,7 @@
 
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant" style="width:36px;height:36px;object-fit:contain;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
@@ -330,7 +330,7 @@
     <div class="topic-title" data-de="Mein Sparziel" data-en="My Savings Goal">Mein Sparziel</div>
     <div class="topic-desc" data-de="Was möchtest du kaufen? Wann schaffst du es?" data-en="What do you want to buy? When will you make it?">Was möchtest du kaufen? Wann schaffst du es?</div>
   </a>
-  <a class="topic-card" href="lernspiele.html">
+  <a class="topic-card" href="../lernspiele/lernspiele.html">
     <span class="topic-emoji">🎮</span>
     <div class="topic-title" data-de="Lernspiele" data-en="Learning Games">Lernspiele</div>
     <div class="topic-desc" data-de="Spiele und verdiene Punkte!" data-en="Play and earn points!">Spiele und verdiene Punkte!</div>

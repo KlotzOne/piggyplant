@@ -365,7 +365,7 @@ let streak = 0;
 let _backUrl = 'kleine-sparer.html';
 
 const _p = new URLSearchParams(location.search);
-if (_p.get('from') === 'lernspiele') _backUrl = 'lernspiele.html';
+if (_p.get('from') === 'lernspiele' || _p.get('from') === 'lernspiele-kleine-sparer') _backUrl = '../lernspiele/lernspiele-kleine-sparer.html';
 document.getElementById('close-btn').href = _backUrl;
 if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
 

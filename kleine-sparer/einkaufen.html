@@ -170,25 +170,26 @@
     transition: all 0.2s; letter-spacing: 0.3px;
   }
   .game-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(50,142,166,0.55); }
-  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin-top:10px; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin:16px auto 0; display:block; width:fit-content; }
   .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
 
   /* FOOTER */
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
-  .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
 </style>
 </head>
 <body>
 
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant" style="width:36px;height:36px;object-fit:contain;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
@@ -388,8 +389,7 @@
     <div class="fun-fact">
       <h3 data-de="⚠️ Vorsicht bei Angeboten!" data-en="⚠️ Watch out for offers!">⚠️ Vorsicht bei Angeboten!</h3>
       <p data-de="Angebote können verlockend sein – aber kaufe nur, was du wirklich brauchst! Ein Angebot spart nur Geld, wenn du das Produkt sowieso kaufen wolltest. Wenn du etwas kaufst, nur weil es im Angebot ist, gibst du eigentlich mehr Geld aus, nicht weniger!" data-en="Offers can be tempting – but only buy what you really need! An offer only saves money if you were going to buy the product anyway. If you buy something just because it is on offer, you are actually spending more money, not less!">Angebote können verlockend sein – aber kaufe nur, was du wirklich brauchst! Ein Angebot spart nur Geld, wenn du das Produkt sowieso kaufen wolltest. Wenn du etwas kaufst, nur weil es im Angebot ist, gibst du eigentlich mehr Geld aus, nicht weniger!</p>
-      <p style="margin-top:10px" data-de="🤔 Außerdem: Manchmal sind „Rabatte" gar keine richtigen Rabatte! Ein Produkt das vorher 1,00€ gekostet hat und jetzt als „Angebot" für 0,98€ verkauft wird, ist nur minimal billiger. Das große rote Schild macht es nur so aussehen, als würdest du viel sparen. Schau also genau hin, wie viel du wirklich sparst!" data-en="🤔 Also: sometimes 'discounts' are not real discounts at all! A product that used to cost €1.00 and is now sold as a 'special offer' for €0.98 is only minimally cheaper. The big red sign just makes it look like you are saving a lot. So take a close look at how much you are actually saving!">🤔 Außerdem: Manchmal sind „Rabatte" gar keine richtigen Rabatte! Ein Produkt das vorher 1,00€ gekostet hat und jetzt als „Angebot" für 0,98€ verkauft wird, ist nur minimal billiger. Das große rote Schild macht es nur so aussehen, als würdest du viel sparen. Schau also genau hin, wie viel du wirklich sparst!</p>
-      <p style="margin-top:10px;font-size:14px;font-weight:600;color:var(--text-light);line-height:1.6" data-de="🔍 Außerdem: Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der &quot;normale&quot; Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!" data-en="🔍 Also: sometimes discounts are not real discounts at all! A product that is supposedly 20% cheaper may have only briefly been more expensive before – so the &quot;normal&quot; price was actually the sale price. So look closely and compare with other products instead!">🔍 Außerdem: Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der "normale" Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!</p>
+      <p style="margin-top:10px" data-de="🔍 Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der &quot;normale&quot; Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!" data-en="🔍 Sometimes discounts are not real discounts at all! A product that is supposedly 20% cheaper may have only briefly been more expensive before – so the &quot;normal&quot; price was actually the sale price. So look closely and compare with other products instead!">🔍 Manchmal sind Rabatte gar keine echten Rabatte! Ein Produkt das angeblich 20% günstiger ist, war vorher vielleicht nur kurz teurer – der "normale" Preis war also eigentlich der Angebotspreis. Schau also genau hin und vergleiche lieber mit anderen Produkten!</p>
     </div>
   </div>
 
@@ -397,7 +397,6 @@
   <div class="fun-fact" id="readable-8">
     <h3 data-de="🧠 Wusstest du schon?" data-en="🧠 Did you know?">🧠 Wusstest du schon?</h3>
     <p data-de="💡 Supermärkte stellen teure Produkte oft auf Augenhöhe ins Regal, weil Kunden sie so als erstes sehen. Günstigere Produkte findest du oft ganz oben oder ganz unten im Regal. Es lohnt sich, genau hinzuschauen!" data-en="💡 Supermarkets often place expensive products at eye level on the shelf because customers see them first. Cheaper products are often right at the top or bottom of the shelf. It is worth taking a closer look!">💡 Supermärkte stellen teure Produkte oft auf Augenhöhe ins Regal, weil Kunden sie so als erstes sehen. Günstigere Produkte findest du oft ganz oben oder ganz unten im Regal. Es lohnt sich, genau hinzuschauen!</p>
-    <p style="margin-top:10px" data-de="🛒 In Deutschland machen Menschen im Durchschnitt 3-4 Einkäufe pro Woche. Wer dabei jedes Mal nur 50 Cent spart, hat am Ende des Jahres fast 100 Euro mehr – das ist fast ein ganzes Taschengeld-Jahr!" data-en="🛒 In Germany people go shopping an average of 3-4 times a week. If you save just 50 cents each time, you will have nearly €100 more in your wallet at the end of the year!">🛒 In Deutschland machen Menschen im Durchschnitt 3-4 Einkäufe pro Woche. Wer dabei jedes Mal nur 50 Cent spart, hat am Ende des Jahres fast 100 Euro mehr – das ist fast ein ganzes Taschengeld-Jahr!</p>
   </div>
 
   <div class="game-cta-box">
@@ -414,13 +413,17 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-logo">
-      <div class="footer-brand">Piggyplant</div>
-      <div class="footer-copy" data-de="© 2025 Piggyplant. Für kleine Sparer." data-en="© 2025 Piggyplant. For little savers.">© 2025 Piggyplant. Für kleine Sparer.</div>
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
-      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
       <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>

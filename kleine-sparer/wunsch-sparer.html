@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wunsch-Sparer 🐷</title>
+<title>Wunsch-Sparer</title>
 <link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -44,8 +44,6 @@
 
   .close-btn { position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(91,191,122,0.4); color:var(--green-dark); font-size:20px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.2s; z-index:10; }
   .close-btn:hover { background:rgba(91,191,122,0.2); transform:scale(1.1); }
-  .back-btn { display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(91,191,122,0.4); transition:all 0.2s; margin:24px auto 32px; width:fit-content; }
-  .back-btn:hover { transform:translateY(-2px); }
 
   .header { text-align:center; padding:20px 20px 16px; background:linear-gradient(135deg,#F0FFF8,#E0F7EE); border-bottom:2px solid #B3E8CC; position:relative; overflow:hidden; }
   .float-icon { position:absolute; animation:floatIcon 4s ease-in-out infinite; opacity:0.6; font-size:22px; pointer-events:none; }
@@ -168,7 +166,7 @@
   <span class="float-icon fi-3">⭐</span>
   <span class="float-icon fi-4">🎁</span>
   <a class="close-btn" href="sparziel.html" id="closeBtn">✕</a>
-  <div class="header-title">Wunsch-Sparer 🐷</div>
+  <div class="header-title">Wunsch-Sparer</div>
   <div class="header-sub">Spar auf deinen Traumwunsch – und widersteh den Versuchungen!</div>
 </div>
 
@@ -245,15 +243,14 @@
   </div>
 </div>
 
-<a class="back-btn" href="sparziel.html" id="backBtn">← Zurück</a>
 
 <script>
   if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
 
   document.addEventListener('DOMContentLoaded', () => {
     const from = new URLSearchParams(window.location.search).get('from');
-    const url = from === 'lernspiele' ? 'lernspiele.html' : 'sparziel.html';
-    document.querySelectorAll('.close-btn,.back-btn').forEach(el => el.href = url);
+    const url = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'sparziel.html';
+    document.querySelectorAll('.close-btn').forEach(el => el.href = url);
     buildWishGrid();
   });
 

@@ -593,7 +593,7 @@
     });
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
-    const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'sparziel.html';
+    const backUrl = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'sparziel.html';
     document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.href = backUrl);
   });
 

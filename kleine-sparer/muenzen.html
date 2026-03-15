@@ -75,7 +75,7 @@
   .step-num { color:white; font-family:var(--font-display); font-size:22px; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .step-text h4 { font-family:var(--font-display); font-size:18px; margin-bottom:4px; }
   .step-text p { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.5; }
-  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin-top:10px; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin:16px auto 0; display:block; width:fit-content; }
   .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
 
   /* MÜNZ-GALERIE */
@@ -148,15 +148,15 @@
   .reading-highlight { background:#FFE4EE; border-radius:4px; transition:background 0.3s; }
   body.dark .reading-highlight { background:#3A1A28; }
   /* FOOTER */
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
   .footer-logo { display:flex; flex-direction:column; gap:2px; }
-  .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
 </style>
 <style>
   .page-hero { background:linear-gradient(135deg,#FFFBEA,#FFF3CC); }
@@ -214,7 +214,7 @@
 <body>
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant" style="width:36px;height:36px;object-fit:contain;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">

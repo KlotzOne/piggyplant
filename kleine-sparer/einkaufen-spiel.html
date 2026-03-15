@@ -181,8 +181,6 @@ body.dark .result-change-amount { color:var(--green); }
 body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; color:var(--yellow); }
 .next-btn { background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-display); font-size:18px; padding:14px 36px; border-radius:50px; cursor:pointer; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; }
 .next-btn:hover { transform:translateY(-2px) scale(1.03); }
-.back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin-top:12px; }
-.back-btn:hover { transform:translateY(-2px); }
 
 /* TOO LITTLE overlay */
 .too-little { color:var(--pink); font-size:12px; font-weight:800; text-align:center; margin-top:4px; min-height:18px; }
@@ -201,25 +199,25 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
   <span class="float-icon fi4">💶</span>
   <span class="float-icon fi5">🧾</span>
   <a class="close-btn" id="closeBtn" href="einkaufen.html">✕</a>
-  <h1>Einkaufen-Spiel</h1>
-  <p id="headerSub">Pack deinen Einkaufswagen und bezahl an der Kasse!</p>
+  <h1 data-de="Einkaufen-Spiel" data-en="Shopping Game">Einkaufen-Spiel</h1>
+  <p id="headerSub" data-de="Pack deinen Einkaufswagen und bezahl an der Kasse!" data-en="Fill your shopping cart and pay at the checkout!">Pack deinen Einkaufswagen und bezahl an der Kasse!</p>
 </div>
 
 <div class="round-badge">
-  <div class="badge rnd">🎯 Runde <span id="roundNum">1</span></div>
-  <div class="badge score" style="display:flex;align-items:center;gap:4px;">⭐ Punkte: <span id="scoreNum">0</span><button class="info-popup-btn" onclick="document.getElementById('scoreInfoOverlay').classList.add('open')" title="Punkteverteilung">?</button></div>
-  <div class="badge">💰 Gespart: <span id="savedNum" style="font-family:var(--font-display);font-size:17px;color:var(--orange)">0,00 €</span></div>
+  <div class="badge rnd">🎯 <span data-de="Runde" data-en="Round">Runde</span> <span id="roundNum">1</span></div>
+  <div class="badge score" style="display:flex;align-items:center;gap:4px;">⭐ <span data-de="Punkte:" data-en="Score:">Punkte:</span> <span id="scoreNum">0</span><button class="info-popup-btn" onclick="document.getElementById('scoreInfoOverlay').classList.add('open')" title="Punkteverteilung">?</button></div>
+  <div class="badge">💰 <span data-de="Gespart:" data-en="Saved:">Gespart:</span> <span id="savedNum" style="font-family:var(--font-display);font-size:17px;color:var(--orange)">0,00 €</span></div>
 </div>
 
 <div class="info-overlay" id="scoreInfoOverlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="info-card">
-    <h3>⭐ Punkteverteilung</h3>
-    <div class="score-row gold"><span>🎯 Exakt bezahlt</span><span class="pts">15 Pkt</span></div>
-    <div class="score-row silver"><span>✅ Wechselgeld bis 50ct</span><span class="pts">13 Pkt</span></div>
-    <div class="score-row bronze"><span>👍 Wechselgeld bis 2,00€</span><span class="pts">11 Pkt</span></div>
-    <div class="score-row base"><span>🙂 Wechselgeld über 2,00€</span><span class="pts">10 Pkt</span></div>
-    <p style="font-size:12px;color:var(--text-light);font-weight:600;text-align:center;margin-top:10px;">Maximum: 75 Punkte (5 Runden)</p>
-    <button class="info-close-btn" onclick="document.getElementById('scoreInfoOverlay').classList.remove('open')">Verstanden! 👍</button>
+    <h3 data-de="⭐ Punkteverteilung" data-en="⭐ Score breakdown">⭐ Punkteverteilung</h3>
+    <div class="score-row gold"><span data-de="🎯 Exakt bezahlt" data-en="🎯 Paid exactly">🎯 Exakt bezahlt</span><span class="pts">15 Pkt</span></div>
+    <div class="score-row silver"><span data-de="✅ Wechselgeld bis 50ct" data-en="✅ Change up to 50ct">✅ Wechselgeld bis 50ct</span><span class="pts">13 Pkt</span></div>
+    <div class="score-row bronze"><span data-de="👍 Wechselgeld bis 2,00€" data-en="👍 Change up to 2.00€">👍 Wechselgeld bis 2,00€</span><span class="pts">11 Pkt</span></div>
+    <div class="score-row base"><span data-de="🙂 Wechselgeld über 2,00€" data-en="🙂 Change over 2.00€">🙂 Wechselgeld über 2,00€</span><span class="pts">10 Pkt</span></div>
+    <p style="font-size:12px;color:var(--text-light);font-weight:600;text-align:center;margin-top:10px;" data-de="Maximum: 75 Punkte (5 Runden)" data-en="Maximum: 75 points (5 rounds)">Maximum: 75 Punkte (5 Runden)</p>
+    <button class="info-close-btn" onclick="document.getElementById('scoreInfoOverlay').classList.remove('open')" data-de="Verstanden! 👍" data-en="Got it! 👍">Verstanden! 👍</button>
   </div>
 </div>
 <div class="game-wrap">
@@ -230,13 +228,13 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
 
       <!-- EINKAUFSLISTE -->
       <div class="list-panel">
-        <div class="panel-title">📋 Deine Einkaufsliste</div>
+        <div class="panel-title" data-de="📋 Deine Einkaufsliste" data-en="📋 Your shopping list">📋 Deine Einkaufsliste</div>
         <div class="list-items" id="shoppingList"></div>
       </div>
 
       <!-- REGAL -->
       <div class="shelf-panel">
-        <div class="panel-title">🏪 Supermarkt-Regal</div>
+        <div class="panel-title" data-de="🏪 Supermarkt-Regal" data-en="🏪 Supermarket shelf">🏪 Supermarkt-Regal</div>
         <div class="shelf-grid" id="shelfGrid"></div>
       </div>
 
@@ -245,10 +243,10 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
     <!-- WARENKORB BAR -->
     <div class="cart-bar">
       <div>
-        <div style="font-size:13px;color:var(--text-light);font-weight:700">🛒 Einkaufswagen</div>
-        <div class="cart-count"><span id="cartCount">0</span> / <span id="cartTarget">0</span> Produkte</div>
+        <div style="font-size:13px;color:var(--text-light);font-weight:700" data-de="🛒 Einkaufswagen" data-en="🛒 Shopping cart">🛒 Einkaufswagen</div>
+        <div class="cart-count"><span id="cartCount">0</span> <span id="cartOfLabel" data-de="/ 0 Produkte" data-en="/ 0 items">/ <span id="cartTarget">0</span> Produkte</span></div>
       </div>
-      <button class="cart-btn" id="checkoutBtn" onclick="goToKasse()" disabled>
+      <button class="cart-btn" id="checkoutBtn" onclick="goToKasse()" disabled data-de="🛒 Zur Kasse →" data-en="🛒 Go to checkout →">
         🛒 Zur Kasse →
       </button>
     </div>
@@ -260,32 +258,32 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
 
       <!-- BON -->
       <div class="receipt">
-        <div class="receipt-title">🧾 Kassenbon</div>
+        <div class="receipt-title" data-de="🧾 Kassenbon" data-en="🧾 Receipt">🧾 Kassenbon</div>
         <div id="receiptRows"></div>
         <div class="receipt-total">
-          <span>Gesamt</span>
+          <span data-de="Gesamt" data-en="Total">Gesamt</span>
           <span id="receiptTotal">0,00 €</span>
         </div>
       </div>
 
       <!-- ZAHLUNG -->
       <div class="payment-panel">
-        <div class="payment-title">💶 Bezahlen</div>
-        <div class="payment-hint">Zieh Münzen & Scheine auf den Kassenteller!</div>
+        <div class="payment-title" data-de="💶 Bezahlen" data-en="💶 Pay">💶 Bezahlen</div>
+        <div class="payment-hint" data-de="Zieh Münzen &amp; Scheine auf den Kassenteller!" data-en="Drag coins &amp; notes onto the tray!">Zieh Münzen &amp; Scheine auf den Kassenteller!</div>
 
         <div class="wallet-grid" id="walletGrid"></div>
 
         <div class="tray-area" id="payTray">
-          <span class="tray-hint" id="trayHint">Hierher ziehen 👆</span>
+          <span class="tray-hint" id="trayHint" data-de="Hierher ziehen 👆" data-en="Drag here 👆">Hierher ziehen 👆</span>
         </div>
 
         <div class="tray-total">
-          <span class="tray-total-label">Auf dem Teller:</span>
+          <span class="tray-total-label" data-de="Auf dem Teller:" data-en="On the tray:">Auf dem Teller:</span>
           <span class="tray-total-amount" id="trayTotal">0,00 €</span>
         </div>
         <div class="too-little" id="tooLittleMsg"></div>
 
-        <button class="pay-btn" id="payBtn" onclick="pay()">🪙 Bezahlen</button>
+        <button class="pay-btn" id="payBtn" onclick="pay()" data-de="🪙 Bezahlen" data-en="🪙 Pay">🪙 Bezahlen</button>
       </div>
     </div>
   </div>
@@ -294,16 +292,14 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
   <div id="phase-result">
     <div class="result-card">
       <span class="result-emoji" id="resultEmoji">🎉</span>
-      <div class="result-title" id="resultTitle">Super gemacht!</div>
+      <div class="result-title" id="resultTitle"></div>
       <div id="resultMsg" style="font-size:14px;color:var(--text-light);font-weight:600;margin-bottom:12px;"></div>
       <div class="result-change">
-        <div class="result-change-label">🪙 Wechselgeld zurück</div>
+        <div class="result-change-label" data-de="🪙 Wechselgeld zurück" data-en="🪙 Change back">🪙 Wechselgeld zurück</div>
         <div class="result-change-amount" id="resultChange">0,00 €</div>
       </div>
       <div class="result-savings" id="resultSavings" style="display:none"></div>
-      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()">➡️ Nächste Runde</button>
-      <br>
-      <a class="back-btn back-btn-nav" href="einkaufen.html">← Zurück zur Übersicht</a>
+      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()"></button>
     </div>
   </div>
 
@@ -312,18 +308,153 @@ body.dark .result-savings { background:linear-gradient(135deg,#221A08,#2C2210); 
 <script>
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
 
+// ── LANGUAGE ───────────────────────────────────────────────
+let lang = localStorage.getItem('piggyplant-lang') || 'de';
+
+const T = {
+  de: {
+    title: 'Einkaufen-Spiel',
+    headerSub: 'Pack deinen Einkaufswagen und bezahl an der Kasse!',
+    roundLabel: '🎯 Runde',
+    scoreLabel: '⭐ Punkte:',
+    savedLabel: '💰 Gespart:',
+    scoreInfoTitle: '⭐ Punkteverteilung',
+    scoreRowExact: '🎯 Exakt bezahlt',
+    scoreRowSmall: '✅ Wechselgeld bis 50ct',
+    scoreRowMed: '👍 Wechselgeld bis 2,00€',
+    scoreRowBase: '🙂 Wechselgeld über 2,00€',
+    scoreMax: 'Maximum: 75 Punkte (5 Runden)',
+    scoreClose: 'Verstanden! 👍',
+    listTitle: '📋 Deine Einkaufsliste',
+    shelfTitle: '🏪 Supermarkt-Regal',
+    cartLabel: '🛒 Einkaufswagen',
+    cartOf: '/ {n} Produkte',
+    checkoutBtn: '🛒 Zur Kasse →',
+    receiptTitle: '🧾 Kassenbon',
+    receiptTotal: 'Gesamt',
+    payTitle: '💶 Bezahlen',
+    payHint: 'Zieh Münzen & Scheine auf den Kassenteller!',
+    trayHint: 'Hierher ziehen 👆',
+    trayLabel: 'Auf dem Teller:',
+    payBtn: '🪙 Bezahlen',
+    tooMuch: '✋ Das reicht schon! Du kannst jetzt bezahlen.',
+    exact: '🎯 Genau der richtige Betrag!',
+    enough: '✅ Genug! Du kannst jetzt bezahlen.',
+    tooLittle: 'Zu wenig! Du brauchst noch {x} mehr.',
+    changeLabel: '🪙 Wechselgeld zurück',
+    resultPerfectEmoji: '🏆', resultPerfectTitle: 'Perfekt bezahlt!',
+    resultPerfectMsg: 'Kein Wechselgeld – du hast den genauen Betrag gegeben! Das ist Profi-Level! 🌟',
+    resultGoodEmoji: '🥇', resultGoodTitle: 'Super gemacht!',
+    resultGoodMsg: 'Du bekommst {x} Wechselgeld zurück. Fast perfekt!',
+    resultOkEmoji: '🎉', resultOkTitle: 'Gut gemacht!',
+    resultOkMsg: 'Du bekommst {x} Wechselgeld zurück. Beim nächsten Mal kannst du versuchen, genauer zu zahlen!',
+    savingsText: '💡 Du hast durch NoName-Produkte insgesamt {x} gespart!',
+    nextRound: '➡️ Runde {n}',
+    finalTitle: '🏆 Alle 5 Runden geschafft!',
+    finalSub: 'Du bist jetzt ein echter Einkaufs-Profi!',
+    finalScore: '⭐ Gesamtpunkte',
+    finalSavings: '💡 Durch NoName-Produkte hast du insgesamt {x} gespart!',
+    impulseYes: '🛒 Du wolltest {n}× etwas kaufen, das nicht auf der Liste stand!',
+    impulseNo: '✅ Du hast alle Störprodukte ignoriert – perfekt!',
+    restartBtn: '🔄 Nochmal spielen',
+    backBtn: '← Zurück zur Übersicht',
+    backLernspiele: '← Zurück zu Lernspiele',
+    distract: '😅 Das steht nicht auf der Liste!',
+    brandBadge: 'Marke',
+    nonameBadge: 'NoName',
+    questionMark: '?',
+    finish: '🏁 Zum Abschluss',
+  },
+  en: {
+    title: 'Shopping Game',
+    headerSub: 'Fill your shopping cart and pay at the checkout!',
+    roundLabel: '🎯 Round',
+    scoreLabel: '⭐ Score:',
+    savedLabel: '💰 Saved:',
+    scoreInfoTitle: '⭐ Score breakdown',
+    scoreRowExact: '🎯 Paid exactly',
+    scoreRowSmall: '✅ Change up to 50ct',
+    scoreRowMed: '👍 Change up to 2.00€',
+    scoreRowBase: '🙂 Change over 2.00€',
+    scoreMax: 'Maximum: 75 points (5 rounds)',
+    scoreClose: 'Got it! 👍',
+    listTitle: '📋 Your shopping list',
+    shelfTitle: '🏪 Supermarket shelf',
+    cartLabel: '🛒 Shopping cart',
+    cartOf: '/ {n} items',
+    checkoutBtn: '🛒 Go to checkout →',
+    receiptTitle: '🧾 Receipt',
+    receiptTotal: 'Total',
+    payTitle: '💶 Pay',
+    payHint: 'Drag coins & notes onto the tray!',
+    trayHint: 'Drag here 👆',
+    trayLabel: 'On the tray:',
+    payBtn: '🪙 Pay',
+    tooMuch: '✋ That\'s enough! You can pay now.',
+    exact: '🎯 Exact amount!',
+    enough: '✅ Enough! You can pay now.',
+    tooLittle: 'Not enough! You still need {x} more.',
+    changeLabel: '🪙 Change back',
+    resultPerfectEmoji: '🏆', resultPerfectTitle: 'Perfect payment!',
+    resultPerfectMsg: 'No change needed – you paid the exact amount! That\'s pro level! 🌟',
+    resultGoodEmoji: '🥇', resultGoodTitle: 'Well done!',
+    resultGoodMsg: 'You get {x} change back. Almost perfect!',
+    resultOkEmoji: '🎉', resultOkTitle: 'Good job!',
+    resultOkMsg: 'You get {x} change back. Next time try to pay more exactly!',
+    savingsText: '💡 You saved {x} in total by choosing no-name products!',
+    nextRound: '➡️ Round {n}',
+    finalTitle: '🏆 All 5 rounds done!',
+    finalSub: 'You\'re a real shopping pro now!',
+    finalScore: '⭐ Total score',
+    finalSavings: '💡 You saved {x} in total with no-name products!',
+    impulseYes: '🛒 You tried to buy {n} item(s) not on the list!',
+    impulseNo: '✅ You ignored all distraction products – perfect!',
+    restartBtn: '🔄 Play again',
+    backBtn: '← Back to overview',
+    backLernspiele: '← Back to games',
+    distract: '😅 That\'s not on the list!',
+    brandBadge: 'Brand',
+    nonameBadge: 'No-name',
+    questionMark: '?',
+    finish: '🏁 Final result',
+  }
+};
+
+function t(key, vars) {
+  let s = (T[lang] || T.de)[key] || key;
+  if (vars) Object.entries(vars).forEach(([k,v]) => { s = s.replace('{'+k+'}', v); });
+  return s;
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('piggyplant-lang', l);
+  applyLang();
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-de]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) el.innerHTML = val;
+  });
+  // back-btn-nav dynamisch befüllen
+  const from = new URLSearchParams(window.location.search).get('from');
+  document.querySelectorAll('.back-btn-nav').forEach(btn => {
+    btn.textContent = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? t('backLernspiele') : t('backBtn');
+  });
+}
+
 // ── FROM= NAVIGATION ───────────────────────────────────────
 (function() {
   const from = new URLSearchParams(window.location.search).get('from');
-  const backUrl = from === 'lernspiele' ? 'lernspiele.html' : 'einkaufen.html';
-  const backLabel = from === 'lernspiele' ? '← Zurück zu Lernspiele' : '← Zurück zur Übersicht';
+  const backUrl = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'einkaufen.html';
   document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('closeBtn');
     if (closeBtn) closeBtn.href = backUrl;
     document.querySelectorAll('.back-btn-nav').forEach(btn => {
       btn.href = backUrl;
-      btn.textContent = backLabel;
     });
+    applyLang();
   });
 })();
 
@@ -492,6 +623,7 @@ function buildRound() {
   document.getElementById('phase-shop').style.display = 'block';
   document.getElementById('phase-kasse').style.display = 'none';
   document.getElementById('phase-result').style.display = 'none';
+  applyLang();
 }
 
 // ── RENDER LIST ────────────────────────────────────────────
@@ -503,7 +635,7 @@ function renderShoppingList() {
     div.className = 'list-item' + (cartItems.includes(i) ? ' checked' : '');
     div.id = 'list-' + i;
     const priceStr = item.type === 'pair'
-      ? (item.chosen !== null ? fmt(item.chosen === 'brand' ? item.brandPrice : item.noNamePrice) : '?')
+      ? (item.chosen !== null ? fmt(item.chosen === 'brand' ? item.brandPrice : item.noNamePrice) : t('questionMark'))
       : fmt(item.price);
     div.innerHTML = `
       <div class="checkmark">${cartItems.includes(i) ? '✓' : ''}</div>
@@ -542,9 +674,9 @@ function makeProductCard(emoji, name, price, badgeType, listIdx, variant) {
   card.dataset.listidx = listIdx;
   card.dataset.variant = variant || '';
   const badge = badgeType === 'brand'
-    ? `<div class="brand-badge">Marke</div>`
+    ? `<div class="brand-badge">${t('brandBadge')}</div>`
     : badgeType === 'noname'
-    ? `<div class="noname-badge">NoName</div>`
+    ? `<div class="noname-badge">${t('nonameBadge')}</div>`
     : '';
   card.innerHTML = `
     ${badge}
@@ -599,7 +731,7 @@ function showFeedbackToast(msg) {
       box-shadow:0 8px 32px rgba(0,0,0,0.25);
       text-align:center;
       animation:popIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
-    ">😅 Das steht nicht<br>auf der Liste!</div>
+    ">${t('distract').replace('😅 ', '😅<br>')}</div>
   `;
   overlay.style.opacity = '1';
   clearTimeout(overlay._timer);
@@ -632,7 +764,7 @@ function addToCart(listIdx, variant, price) {
 
   if (count === shoppingList.length) {
     document.getElementById('checkoutBtn').disabled = false;
-    document.getElementById('checkoutBtn').textContent = '🛒 Zur Kasse →';
+    document.getElementById('checkoutBtn').textContent = t('checkoutBtn');
   }
 }
 
@@ -671,6 +803,7 @@ function goToKasse() {
   trayItems = [];
   renderTray();
   document.getElementById('tooLittleMsg').textContent = '';
+  applyLang();
 }
 
 function getCartTotal() {
@@ -795,18 +928,17 @@ function addToTray(m) {
   if (alreadyPaid >= total) {
     const msg = document.getElementById('tooLittleMsg');
     msg.style.color = 'var(--orange)';
-    msg.textContent = '✋ Das reicht schon! Du kannst jetzt bezahlen.';
-    setTimeout(() => { if (msg.textContent.includes('reicht')) msg.textContent = ''; }, 2500);
+    msg.textContent = t('tooMuch');
+    setTimeout(() => { if (msg.textContent === t('tooMuch')) msg.textContent = ''; }, 2500);
     return;
   }
   trayItems.push(m);
   renderTray();
-  // Prüfen ob genau genug
   const newTotal = trayItems.reduce((s,x) => s+x.value, 0);
   if (newTotal >= total) {
     const msg = document.getElementById('tooLittleMsg');
     msg.style.color = 'var(--green-dark)';
-    msg.textContent = newTotal === total ? '🎯 Genau der richtige Betrag!' : '✅ Genug! Du kannst jetzt bezahlen.';
+    msg.textContent = newTotal === total ? t('exact') : t('enough');
   }
 }
 
@@ -823,7 +955,7 @@ function renderTray() {
   tray.innerHTML = '';
   if (trayItems.length === 0) {
     tray.appendChild(Object.assign(document.createElement('span'), {
-      className:'tray-hint', textContent:'Hierher ziehen 👆'
+      className:'tray-hint', textContent: t('trayHint')
     }));
   } else {
     trayItems.forEach((m, i) => {
@@ -847,7 +979,7 @@ function pay() {
   const paid = trayItems.reduce((s,m) => s+m.value, 0);
 
   if (paid < total) {
-    document.getElementById('tooLittleMsg').textContent = `Zu wenig! Du brauchst noch ${fmt(total - paid)} mehr.`;
+    document.getElementById('tooLittleMsg').textContent = t('tooLittle', {x: fmt(total - paid)});
     const btn = document.getElementById('payBtn');
     btn.classList.add('shake');
     setTimeout(() => btn.classList.remove('shake'), 500);
@@ -876,14 +1008,14 @@ function showResult(total, paid, change, roundScore) {
 
   let emoji, title, msg;
   if (change === 0) {
-    emoji = '🏆'; title = 'Perfekt bezahlt!';
-    msg = 'Kein Wechselgeld – du hast den genauen Betrag gegeben! Das ist Profi-Level! 🌟';
+    emoji = t('resultPerfectEmoji'); title = t('resultPerfectTitle');
+    msg = t('resultPerfectMsg');
   } else if (change <= 50) {
-    emoji = '🥇'; title = 'Super gemacht!';
-    msg = `Du bekommst ${fmt(change)} Wechselgeld zurück. Fast perfekt!`;
+    emoji = t('resultGoodEmoji'); title = t('resultGoodTitle');
+    msg = t('resultGoodMsg', {x: fmt(change)});
   } else {
-    emoji = '🎉'; title = 'Gut gemacht!';
-    msg = `Du bekommst ${fmt(change)} Wechselgeld zurück. Beim nächsten Mal kannst du versuchen, genauer zu zahlen!`;
+    emoji = t('resultOkEmoji'); title = t('resultOkTitle');
+    msg = t('resultOkMsg', {x: fmt(change)});
   }
 
   document.getElementById('resultEmoji').textContent = emoji;
@@ -893,11 +1025,12 @@ function showResult(total, paid, change, roundScore) {
   const savings = document.getElementById('resultSavings');
   if (totalSaved > 0) {
     savings.style.display = 'block';
-    savings.textContent = `💡 Du hast durch NoName-Produkte insgesamt ${fmt(totalSaved)} gespart!`;
+    savings.textContent = t('savingsText', {x: fmt(totalSaved)});
   }
 
   const nextBtn = document.getElementById('nextRoundBtn');
-  nextBtn.textContent = round >= 5 ? '🏁 Zum Abschluss' : `➡️ Runde ${round + 1}`;
+  nextBtn.textContent = round >= 5 ? t('finish') : t('nextRound', {n: round + 1});
+  applyLang();
 }
 
 function nextRound() {
@@ -910,22 +1043,24 @@ function nextRound() {
 }
 
 function showFinalResult() {
+  const from = new URLSearchParams(window.location.search).get('from');
+  const backUrl = (from === 'lernspiele' || from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'einkaufen.html';
   document.getElementById('phase-result').innerHTML = `
     <div class="result-card">
       <span class="result-emoji">🏆</span>
-      <div class="result-title">Alle 5 Runden geschafft!</div>
-      <div style="font-size:14px;color:var(--text-light);font-weight:600;margin:8px 0 16px">Du bist jetzt ein echter Einkaufs-Profi!</div>
+      <div class="result-title">${t('finalTitle')}</div>
+      <div style="font-size:14px;color:var(--text-light);font-weight:600;margin:8px 0 16px">${t('finalSub')}</div>
       <div class="result-change">
-        <div class="result-change-label">⭐ Gesamtpunkte</div>
+        <div class="result-change-label">${t('finalScore')}</div>
         <div class="result-change-amount">${totalScore}</div>
       </div>
       <div class="result-savings" style="display:block">
-        💡 Durch NoName-Produkte hast du insgesamt <strong>${fmt(totalSaved)}</strong> gespart!
+        ${t('finalSavings', {x: fmt(totalSaved)})}
       </div>
-      ${impulseCount > 0 ? `<div style="margin-top:8px;font-size:13px;color:var(--orange);font-weight:700">🛒 Du wolltest ${impulseCount}× etwas kaufen, das nicht auf der Liste stand!</div>` : `<div style="margin-top:8px;font-size:13px;color:var(--green-dark);font-weight:700">✅ Du hast alle Störprodukte ignoriert – perfekt!</div>`}
-      <button class="next-btn" onclick="restartGame()" style="margin-top:16px">🔄 Nochmal spielen</button>
-      <br>
-      <a class="back-btn back-btn-nav" href="einkaufen.html">← Zurück zur Übersicht</a>
+      ${impulseCount > 0
+        ? `<div style="margin-top:8px;font-size:13px;color:var(--orange);font-weight:700">${t('impulseYes', {n: impulseCount})}</div>`
+        : `<div style="margin-top:8px;font-size:13px;color:var(--green-dark);font-weight:700">${t('impulseNo')}</div>`}
+      <button class="next-btn" onclick="restartGame()" style="margin-top:16px">${t('restartBtn')}</button>
     </div>
   `;
 }
@@ -939,16 +1074,14 @@ function restartGame() {
   document.getElementById('phase-result').innerHTML = `
     <div class="result-card">
       <span class="result-emoji" id="resultEmoji">🎉</span>
-      <div class="result-title" id="resultTitle">Super gemacht!</div>
+      <div class="result-title" id="resultTitle"></div>
       <div id="resultMsg" style="font-size:14px;color:var(--text-light);font-weight:600;margin-bottom:12px;"></div>
       <div class="result-change">
-        <div class="result-change-label">🪙 Wechselgeld zurück</div>
+        <div class="result-change-label" data-de="🪙 Wechselgeld zurück" data-en="🪙 Change back">🪙 Wechselgeld zurück</div>
         <div class="result-change-amount" id="resultChange">0,00 €</div>
       </div>
       <div class="result-savings" id="resultSavings" style="display:none"></div>
-      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()">➡️ Nächste Runde</button>
-      <br>
-      <a class="back-btn back-btn-nav" href="einkaufen.html">← Zurück zur Übersicht</a>
+      <button class="next-btn" id="nextRoundBtn" onclick="nextRound()"></button>
     </div>
   `;
   buildRound();

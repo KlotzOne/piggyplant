@@ -113,6 +113,7 @@
   .score-item.correct span { color: var(--green); }
   .score-item.wrong span { color: var(--pink); }
   .score-item.total span { color: var(--blue); }
+  .score-item.streak span { color: var(--orange); }
 
   /* PROGRESS */
   .progress-wrap { height: 8px; background: var(--surface2); border-radius: 8px; overflow: hidden; margin: 0 20px; }
@@ -132,7 +133,9 @@
 
   .question-num { font-size: 12px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
   .imgs-gallery { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:0 auto 10px; max-width:360px; }
-  .imgs-gallery img { width:20px; height:20px; border-radius:50%; object-fit:contain; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+  .imgs-gallery img { width:52px; height:52px; border-radius:50%; object-fit:contain; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+  .imgs-gallery.notes { gap:8px; max-width:400px; }
+  .imgs-gallery.notes img { width:72px; height:36px; border-radius:4px; object-fit:cover; }
   .question-img {
     width: 100%; max-width: 130px; margin: 0 auto 8px;
     display: block; border-radius: 12px; object-fit: contain;
@@ -219,7 +222,7 @@
 
 <!-- HEADER -->
 <div class="header">
-  <a class="close-btn" href="muenzen.html" title="Schließen">✕</a>
+  <a class="close-btn" id="closeBtn" href="muenzen.html" title="Schließen">✕</a>
   <div class="float-coins">
     <span class="float-coin">🪙</span>
     <span class="float-coin">💶</span>
@@ -236,6 +239,7 @@
   <div class="score-item correct">✅ <span id="scoreCorrect">0</span> <span style="font-family:Nunito;font-size:14px" data-de="Richtig" data-en="Correct">Richtig</span></div>
   <div class="score-item wrong">❌ <span id="scoreWrong">0</span> <span style="font-family:Nunito;font-size:14px" data-de="Falsch" data-en="Wrong">Falsch</span></div>
   <div class="score-item total">🎯 <span id="scoreTotal">0</span>/10</div>
+  <div class="score-item streak">🔥 <span id="scoreStreak">0</span> <span style="font-family:Nunito;font-size:14px" data-de="Streak" data-en="Streak">Streak</span></div>
 </div>
 <div style="padding:8px 20px 0; background:var(--surface); border-bottom:2px solid var(--border);">
   <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
@@ -264,18 +268,18 @@
     <div class="result-stars" id="resultStars"></div>
     <div class="result-score"><span class="correct" id="finalScore">0</span><span class="total"> / 10</span></div>
     <div class="result-msg" id="resultMsg"></div>
-    <button class="restart-btn" onclick="restartQuiz()">🔄 <span data-de="Neues Spiel" data-en="New game">Neues Spiel</span></button>
+    <button class="restart-btn" onclick="startQuiz()">🔄 <span data-de="Neues Spiel" data-en="New game">Neues Spiel</span></button>
   </div>
 
-  <a class="back-btn" href="muenzen.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
+
 </div>
 
 <script>
 // ?from= Parameter: wohin führt der X-Button zurück
 const _from = new URLSearchParams(window.location.search).get('from');
-const _backUrl = _from === 'lernspiele' ? 'lernspiele.html' : 'muenzen.html';
+const _backUrl = (_from === 'lernspiele' || _from === 'lernspiele-kleine-sparer') ? '../lernspiele/lernspiele-kleine-sparer.html' : 'muenzen.html';
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.close-btn, .back-btn').forEach(el => el.setAttribute('href', _backUrl));
+  document.querySelectorAll('.close-btn').forEach(el => el.setAttribute('href', _backUrl));
 });
 
 const BASE = 'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/';
@@ -333,8 +337,10 @@ const allQuestions = [
       imgs: ['1Cent.webp','2Cent.webp','5Cent.webp','10Cent.webp','20Cent.webp','50Cent.webp','1Euro.webp','2Euro.webp'] }
   },
   {
-    de: { q: 'Welche Münzen ziehen Magneten an?', answers: ['1€ und 2€','10 und 20 Cent','1, 2 und 5 Cent','50 Cent'], correct: 2 },
-    en: { q: 'Which coins are attracted to magnets?', answers: ['1€ and 2€','10 and 20 cent','1, 2 and 5 cent','50 cent'], correct: 2 }
+    de: { q: 'Welche Münzen ziehen Magneten an?', answers: ['1€ und 2€','10 und 20 Cent','1, 2 und 5 Cent','50 Cent'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp'] },
+    en: { q: 'Which coins are attracted to magnets?', answers: ['1€ and 2€','10 and 20 cent','1, 2 and 5 cent','50 cent'], correct: 2,
+      imgs: ['1Cent.webp','2Cent.webp','5Cent.webp'] }
   },
   {
     de: { q: 'Welche Farbe hat der 5-Euro-Schein?', answers: ['Rot','Grau','Blau','Gelb'], correct: 1 },
@@ -384,7 +390,7 @@ const allQuestions = [
   {
     de: { q: 'Wie viele verschiedene Euro-Scheine gibt es aktuell?', answers: ['5','6','7','8'], correct: 1 },
     en: { q: 'How many different Euro banknotes are there currently?', answers: ['5','6','7','8'], correct: 1 },
-    img: null,
+    img: null, imgType: 'notes',
     imgs: ['5Euro.webp','10Euro.webp','20Euro.webp','50Euro.webp','100Euro.webp','200Euro.webp']
   },
   {
@@ -440,6 +446,7 @@ let current = 0;
 let correct = 0;
 let wrong = 0;
 let answered = false;
+let streak = 0;
 
 const icons = ['🅰️','🅱️','🅲','🅳'];
 const answerIcons = ['','','',''];
@@ -455,7 +462,7 @@ function shuffle(arr) {
 
 function startQuiz() {
   questions = shuffle(allQuestions).slice(0, 10);
-  current = 0; correct = 0; wrong = 0; answered = false;
+  current = 0; correct = 0; wrong = 0; answered = false; streak = 0;
   updateScoreBar();
   document.getElementById('questionCard').style.display = 'block';
   document.getElementById('resultScreen').style.display = 'none';
@@ -476,12 +483,13 @@ function showQuestion() {
   const oldGallery = document.getElementById('imgsGallery');
   if (oldGallery) oldGallery.remove();
 
-  if (data.imgs) {
+  const activeImgs = data.imgs || q.imgs;
+  if (activeImgs) {
     img.style.display = 'none';
     const gallery = document.createElement('div');
     gallery.id = 'imgsGallery';
-    gallery.className = 'imgs-gallery';
-    data.imgs.forEach(name => {
+    gallery.className = 'imgs-gallery' + (q.imgType === 'notes' ? ' notes' : '');
+    activeImgs.forEach(name => {
       const i = document.createElement('img');
       i.src = BASE + name;
       i.alt = name.replace('.webp','');
@@ -530,11 +538,14 @@ function selectAnswer(btn, isCorrect, correctVal, grid) {
     btn.classList.remove('reveal');
     btn.classList.add('correct');
     correct++;
+    streak++;
     fb.className = 'feedback correct';
     fb.textContent = lang === 'de' ? '✅ Super! Das ist richtig!' : '✅ Great! That\'s correct!';
+    if (streak > 0 && streak % 3 === 0) showStreakBurst(streak);
   } else {
     btn.classList.add('wrong');
     wrong++;
+    streak = 0;
     fb.className = 'feedback wrong';
     fb.textContent = lang === 'de'
       ? `❌ Nicht ganz! Richtig wäre: ${correctVal}`
@@ -600,17 +611,103 @@ function showResult() {
   document.getElementById('resultTitle').textContent = title;
   document.getElementById('resultStars').textContent = stars;
   document.getElementById('resultMsg').textContent = msg;
+
+  if (correct >= 8) setTimeout(launchCelebration, 400);
 }
 
 function updateScoreBar() {
   document.getElementById('scoreCorrect').textContent = correct;
   document.getElementById('scoreWrong').textContent = wrong;
   document.getElementById('scoreTotal').textContent = current;
+  document.getElementById('scoreStreak').textContent = streak;
 }
 
-function restartQuiz() {
-  startQuiz();
+function showStreakBurst(n) {
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+    background:linear-gradient(135deg,#FFD166,#FF9A3C);color:white;
+    font-family:'Fredoka One',cursive;font-size:28px;padding:18px 32px;
+    border-radius:50px;box-shadow:0 8px 32px rgba(255,154,60,0.5);
+    z-index:9999;pointer-events:none;text-align:center;
+    transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275)`;
+  el.textContent = lang === 'de' ? `🔥 ${n} richtig in Folge!` : `🔥 ${n} in a row!`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { el.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  setTimeout(() => {
+    el.style.transition = 'all 0.4s ease';
+    el.style.transform = 'translate(-50%,-60%) scale(0.8)';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+  }, 1400);
 }
+
+function launchCelebration() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const COLORS = ['#5BBF7A','#4AACDB','#FFD166','#FF9A3C','#FF6B9D','#9B7FE8'];
+  const particles = [];
+
+  for (let i = 0; i < 120; i++) {
+    particles.push({
+      type: 'confetti',
+      x: Math.random() * canvas.width, y: -20 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 4, vy: 2 + Math.random() * 4,
+      rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 8,
+      w: 8 + Math.random() * 10, h: 5 + Math.random() * 6,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)], opacity: 1
+    });
+  }
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      type: 'coin',
+      x: Math.random() * canvas.width, y: -30 - Math.random() * 150,
+      vx: (Math.random() - 0.5) * 3, vy: 1.5 + Math.random() * 3,
+      rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 6,
+      size: 18 + Math.random() * 12, opacity: 1
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      if (p.opacity <= 0) return;
+      alive = true;
+      p.x += p.vx; p.y += p.vy; p.rot += p.rotV; p.vy += 0.08;
+      if (p.y > canvas.height * 0.75) p.opacity -= 0.025;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      if (p.type === 'confetti') {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      } else {
+        const grad = ctx.createRadialGradient(-p.size*0.2, -p.size*0.2, 1, 0, 0, p.size/2);
+        grad.addColorStop(0, '#FFE566'); grad.addColorStop(1, '#D4A017');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(0, 0, p.size/2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#A07010';
+        ctx.font = `bold ${p.size*0.5}px sans-serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('€', 0, 1);
+      }
+      ctx.restore();
+    });
+    frame++;
+    if (alive && frame < 300) requestAnimationFrame(draw);
+    else canvas.remove();
+  }
+  draw();
+}
+
+
 
 function toggleDark() {
   document.body.classList.toggle('dark');
@@ -619,6 +716,7 @@ function toggleDark() {
 
 function setLang(l) {
   lang = l;
+  localStorage.setItem('piggyplant-lang', l);
   document.querySelectorAll('[data-de]').forEach(el => {
     el.textContent = l === 'de' ? el.dataset.de : el.dataset.en;
   });
@@ -627,6 +725,8 @@ function setLang(l) {
 // Init
 window.onload = () => {
   if (localStorage.getItem('piggyplant-dark') === 'true') document.body.classList.add('dark');
+  const savedLang = localStorage.getItem('piggyplant-lang');
+  if (savedLang) setLang(savedLang);
   startQuiz();
 };
 </script>

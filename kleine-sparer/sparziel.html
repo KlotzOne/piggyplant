@@ -93,7 +93,7 @@
   .game-cta-box p { font-size:14px; font-weight:600; color:var(--text-light); margin-bottom:18px; line-height:1.5; }
   .game-btn { display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:var(--font-body); font-weight:900; font-size:17px; padding:16px 36px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 8px 24px rgba(91,191,122,0.4); transition:all 0.2s; }
   .game-btn:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 14px 32px rgba(91,191,122,0.5); }
-  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(74,172,219,0.4); transition:all 0.2s; margin-top:10px; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(74,172,219,0.4); transition:all 0.2s; margin:16px auto 0; display:block; width:fit-content; }
   .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(74,172,219,0.5); }
   /* VORLESEN */
   .read-bar { background:linear-gradient(135deg,#FFF0F5,#FFE4EE); border-radius:20px; padding:16px 20px; margin-bottom:20px; display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap; border:2px solid #FFB3CC; animation:fadeUp 0.5s both; }
@@ -109,15 +109,15 @@
   .reading-highlight { background:#FFE4EE; border-radius:4px; transition:background 0.3s; }
   body.dark .reading-highlight { background:#3A1A28; }
   /* FOOTER */
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
   .footer-logo { display:flex; flex-direction:column; gap:2px; }
-  .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
 </style>
 </head>
 <body>
@@ -226,7 +226,7 @@
     <span class="cta-emoji">🧮</span>
     <h3 data-de="Wie lange brauchst du?" data-en="How long will it take you?">Wie lange brauchst du?</h3>
     <p data-de="Gib deinen Wunsch und dein Taschengeld ein – unser Rechner zeigt dir in Sekunden wann du dein Ziel erreichst. Mit Meilensteinen, Sparplan und sogar zum Ausdrucken!" data-en="Enter your wish and your pocket money – our calculator shows you in seconds when you'll reach your goal. With milestones, savings plan and even printable!">Gib deinen Wunsch und dein Taschengeld ein – unser Rechner zeigt dir in Sekunden wann du dein Ziel erreichst. Mit Meilensteinen, Sparplan und sogar zum Ausdrucken!</p>
-    <a class="game-btn" href="sparziel-rechner.html">🎯 Zum Sparziel-Rechner</a>
+    <a class="game-btn" href="sparziel-rechner.html" data-de="🎯 Zum Sparziel-Rechner" data-en="🎯 To the Savings Calculator">🎯 Zum Sparziel-Rechner</a>
   </div>
 
   <div class="section-title" data-de="🌟 Was sparen andere Kinder?" data-en="🌟 What are other kids saving for?">🌟 Was sparen andere Kinder?</div>
@@ -263,7 +263,7 @@
     <span class="cta-emoji">🎮</span>
     <h3 data-de="Jetzt selbst ausprobieren!" data-en="Try it yourself now!">Jetzt selbst ausprobieren!</h3>
     <p data-de="Im Wunsch-Sparer sammelst du Taschengeld, triffst Entscheidungen und sparst auf deinen Traumwunsch hin. Schaffst du es ohne alles auszugeben?" data-en="In the Wish Saver you collect pocket money, make decisions and save up for your dream wish. Can you do it without spending everything?">Im Wunsch-Sparer sammelst du Taschengeld, triffst Entscheidungen und sparst auf deinen Traumwunsch hin. Schaffst du es ohne alles auszugeben?</p>
-    <a class="game-btn" href="wunsch-sparer.html">🐷 Zum Wunsch-Sparer</a>
+    <a class="game-btn" href="wunsch-sparer.html" data-de="🐷 Zum Wunsch-Sparer" data-en="🐷 To the Wish Saver">🐷 Zum Wunsch-Sparer</a>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -286,6 +286,8 @@
       <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
       <span class="footer-divider">·</span>
       <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>

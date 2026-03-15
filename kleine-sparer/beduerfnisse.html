@@ -186,18 +186,20 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
 @keyframes bounceIn{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin:16px auto 0; display:block; width:fit-content; }
+  .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
 </style>
 </head>
 <body>
 
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
     <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
-    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="dark-toggle" onclick="toggleDark()"></button>
     <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
   </div>
@@ -356,10 +358,7 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
     <a class="game-btn" href="beduerfnisse-spiel.html" data-de="Brauch ich's oder will ich's? →" data-en="Need it or want it? →">Brauch ich's oder will ich's? →</a>
   </div>
 
-  <!-- ZURÜCK BUTTONS -->
-  <div style="text-align:center;margin-top:8px;display:flex;flex-direction:column;gap:12px;align-items:center">
-    <a href="kleine-sparer.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;padding:12px 28px;border-radius:50px;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'" data-de="← Zurück zur Übersicht" data-en="← Back to overview">← Zurück zur Übersicht</a>
-  </div>
+  <a class="back-btn" id="backBtn" href="kleine-sparer.html">← <span data-de="Zurück zur Übersicht" data-en="Back to overview">Zurück zur Übersicht</span></a>
 
 </div>
 
@@ -372,9 +371,11 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
     <div class="footer-links">
       <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
-      <a href="../impressum.html" data-de="Impressum" data-en="Legal notice">Impressum</a>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
       <span class="footer-divider">·</span>
-      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -525,6 +526,18 @@ body.dark .read-bar{background:linear-gradient(135deg,#0A1F30,#0F2820);border-co
   document.getElementById('wishlistInput').addEventListener('keydown', e => { if (e.key === 'Enter') addWish(); });
 
   renderWishes();
+
+  // ?from= Parameter
+  document.addEventListener('DOMContentLoaded', () => {
+    const from = new URLSearchParams(window.location.search).get('from');
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn && (from === 'lernspiele' || from === 'lernspiele-kleine-sparer')) {
+      backBtn.href = '../lernspiele/lernspiele-kleine-sparer.html';
+      backBtn.querySelector('span').setAttribute('data-de', '← Zurück zu Lernspiele');
+      backBtn.querySelector('span').setAttribute('data-en', '← Back to games');
+      backBtn.querySelector('span').textContent = lang === 'en' ? '← Back to games' : '← Zurück zu Lernspiele';
+    }
+  });
 </script>
 </body>
 </html>
