@@ -275,11 +275,16 @@
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
     const backBtn = document.getElementById('back-btn');
-    if (backBtn && (from === 'lernspiele' || from === 'lernspiele-kleine-sparer' || from === 'spiele-ecke')) {
-      backBtn.href = 'lernspiele.html';
-      backBtn.querySelector('span').setAttribute('data-de', 'Zurück zu Lernspiele');
-      backBtn.querySelector('span').setAttribute('data-en', 'Back to Learning Games');
-      backBtn.querySelector('span').textContent = lang === 'de' ? 'Zurück zu Lernspiele' : 'Back to Learning Games';
+    if (backBtn && from === 'kleine-sparer') {
+      backBtn.href = '../kleine-sparer/kleine-sparer.html';
+      backBtn.querySelector('span').setAttribute('data-de', '← Zurück zur Übersicht');
+      backBtn.querySelector('span').setAttribute('data-en', '← Back to overview');
+      backBtn.querySelector('span').textContent = lang === 'de' ? '← Zurück zur Übersicht' : '← Back to overview';
+    } else if (backBtn && (from === 'lernspiele' || from === 'lernspiele-kleine-sparer' || from === 'spiele-ecke')) {
+      backBtn.href = '../lernspiele/lernspiele.html';
+      backBtn.querySelector('span').setAttribute('data-de', '← Zurück zu Lernspiele');
+      backBtn.querySelector('span').setAttribute('data-en', '← Back to Learning Games');
+      backBtn.querySelector('span').textContent = lang === 'de' ? '← Zurück zu Lernspiele' : '← Back to Learning Games';
     }
   });
 
