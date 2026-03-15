@@ -147,15 +147,15 @@
   body.dark .src{background:var(--border)}
 
   /* FOOTER */
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
-  .footer-logo { display:flex; flex-direction:column; gap:2px; align-items:flex-start; }
-  .footer-brand { font-family:var(--font-display); font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
   @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
 
 
@@ -165,11 +165,11 @@
 
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant" style="width:36px;height:36px;object-fit:contain;">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
-<span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
     <button class="dark-toggle" onclick="toggleDark()"></button>
     <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
@@ -860,7 +860,7 @@
       <div class="faq-cta-box" style="max-width:420px;width:100%;">
         <h2 data-de="📚 Lernspiele für Kleine Sparer von 6–10 Jahren" data-en="📚 Learning games for Little Savers aged 6–10">📚 Lernspiele für Kleine Sparer von 6–10 Jahren</h2>
         <p data-de="Theorie ist gut – gemeinsames Ausprobieren ist besser. Schaut euch die Spiele am besten erst zusammen an, bevor eure Kinder alleine loslegen." data-en="Theory is good – trying together is better. Best look at the games together first before your children start on their own.">Theorie ist gut – gemeinsames Ausprobieren ist besser. Schaut euch die Spiele am besten erst zusammen an, bevor eure Kinder alleine loslegen.</p>
-        <a class="faq-game-btn" href="../kleine-sparer/lernspiele.html">
+        <a class="faq-game-btn" href="../lernspiele/lernspiele.html">
           🎮 <span data-de="Zu den Lernspielen" data-en="To the learning games">Zu den Lernspielen</span>
         </a>
       </div>

@@ -167,7 +167,7 @@
   .source-note { font-size:12px; font-weight:700; color:var(--text-light); margin-top:10px; }
 
   /* FOOTER */
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
   .footer-logo { display:flex; flex-direction:column; gap:2px; }
   .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -175,7 +175,7 @@
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
   @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
 </style>
 </head>
@@ -184,13 +184,12 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
-    <a class="nav-back" href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
     <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
-    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="dark-toggle" onclick="toggleDark()"></button>
     <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
   </div>
@@ -385,11 +384,13 @@
       <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
-      <a href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
       <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
       <span class="footer-divider">·</span>
       <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>

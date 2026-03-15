@@ -336,7 +336,7 @@
   body.dark .game-tile-yellow .game-tile-title { color:#FCD34D; }
   body.dark .game-tile-pink { background:#2A1020; border-color:#FF6B9D; }
   body.dark .game-tile-pink .game-tile-title { color:#FF6B9D; }
-  .footer { background:var(--surface); border-top:1px solid var(--border); padding:24px; transition:background 0.4s; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
   .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
   .footer-logo { display:flex; flex-direction:column; gap:2px; }
   .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -344,7 +344,7 @@
   .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
   .footer-links a:hover { color:var(--green); }
-  .footer-divider { color:var(--text-light); font-size:13px; }
+  .footer-divider { color:var(--border); font-size:16px; }
   @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
 </style>
 </head>
@@ -353,12 +353,12 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="../index.html">
-    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" alt="Piggyplant">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
     <span>Piggyplant</span>
   </a>
   <div class="nav-right">
     <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
-    <button class="dark-toggle" onclick="toggleDark()" aria-label="Dark Mode umschalten"></button>
+    <button class="dark-toggle" onclick="toggleDark()"></button>
     <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
   </div>
@@ -437,7 +437,7 @@
     <div style="margin-top:12px; display:flex; flex-direction:column; gap:4px;">
       <p class="source-note">
         <span data-de="Quelle: " data-en="Source: ">Quelle: </span>
-        <a href="https://www.dji.de/themen/jugend/taschengeld.html" target="_blank" rel="noopener" style="color:var(--blue-dark);text-decoration:none;font-weight:800;" data-de="DJI: Taschengeld und Gelderziehung (2025)" data-en="DJI: Pocket Money and Financial Education (2025)">DJI: Taschengeld und Gelderziehung (2025)</a>
+        <a href="https://www.dji.de/fileadmin/user_upload/dasdji/publikationen/Broschueren_2025/DJI_Taschengeld_Expertise_2025.pdf" target="_blank" rel="noopener" style="color:var(--blue-dark);text-decoration:none;font-weight:800;" data-de="DJI: Taschengeld und Gelderziehung (2025)" data-en="DJI: Pocket Money and Financial Education (2025)">DJI: Taschengeld und Gelderziehung (2025)</a>
       </p>
       <p class="source-note" data-de="* ab 16 Jahren für Jugendliche, die wirtschaftlich noch von den Eltern abhängig sind (z.B. Schüler:innen)" data-en="* from age 16 for young people still economically dependent on parents (e.g. pupils)">* ab 16 Jahren für Jugendliche, die wirtschaftlich noch von den Eltern abhängig sind (z.B. Schüler:innen)</p>
     </div>
@@ -465,13 +465,13 @@
         <li data-de="Sparziele gemeinsam besprechen – ein konkretes Ziel motiviert viel stärker als abstrakte Sparappelle. Piggyplant hilft dabei 🐷" data-en="Discuss savings goals together – a concrete goal motivates far more than abstract calls to save. Piggyplant helps with this 🐷">Sparziele gemeinsam besprechen – ein konkretes Ziel motiviert viel stärker als abstrakte Sparappelle. Piggyplant hilft dabei 🐷</li>
       </ul>
     </div>
-    <p class="source-note" style="margin-top:12px;" data-de="Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · PISA 2022 (OECD)" data-en="Source: Chabursky/Langmeyer (2025): Pocket Money and Financial Education, DJI · PISA 2022 (OECD)">Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · PISA 2022 (OECD)</p>
+    <p class="source-note" style="margin-top:12px;" data-de="Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · DOI: 10.36189/DJI202534 · PISA 2022 (OECD)" data-en="Source: Chabursky/Langmeyer (2025): Pocket Money and Financial Education, DJI · DOI: 10.36189/DJI202534 · PISA 2022 (OECD)">Quelle: Chabursky/Langmeyer (2025): Taschengeld und Gelderziehung, DJI · DOI: 10.36189/DJI202534 · PISA 2022 (OECD)</p>
   </section>
 
   <!-- SECTION 3: Sparschwein -->
   <section>
     <h2 class="section-title" data-de="🐷 Zeit für das erste Sparschwein" data-en="🐷 Time for the first piggy bank">🐷 Zeit für das erste Sparschwein</h2>
-    <p class="section-lead" data-de="Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen zwei Schweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben." data-en="A piggy bank is more than a container – it's a child's first real financial tool. But not all piggy banks are the same. We recommend two at different points, each with a very different job.">Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen zwei Schweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben.</p>
+    <p class="section-lead" data-de="Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen schrittweise drei Sparschweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben." data-en="A piggy bank is more than a container – it's a child's first real financial tool. But not all piggy banks are the same. We recommend three piggy banks step by step at different points, each with a very different job.">Ein Sparschwein ist mehr als ein Behälter – es ist das erste echte Finanzwerkzeug eines Kindes. Aber nicht alle Sparschweine sind gleich. Wir empfehlen schrittweise drei Sparschweine zu unterschiedlichen Zeitpunkten, mit ganz unterschiedlichen Aufgaben.</p>
 
     <div class="piggy-cards">
 
@@ -531,7 +531,7 @@
       <span data-de=" Langfristige Studien zeigen, dass breit gestreute Aktienanlagen (z.B. ETFs auf den MSCI World) über Zeiträume von 15+ Jahren historisch eine durchschnittliche Rendite von 7–9 % pro Jahr erzielt haben – deutlich mehr als Tagesgeld oder Sparbuch. Für Kinder ist der Zeithorizont besonders wertvoll: Wer mit 13 anfängt zu investieren, hat bis zum 18. Geburtstag bereits 5 Jahre Zinseszins-Effekt genutzt. Je früher, desto stärker arbeitet das Geld." data-en=" Long-term studies show that broadly diversified equity investments (e.g. ETFs on the MSCI World) have historically achieved average returns of 7–9% per year over periods of 15+ years – significantly more than daily savings accounts or passbooks. For children, the time horizon is particularly valuable: those who start investing at 13 have already used 5 years of compound interest by their 18th birthday. The earlier you start, the harder the money works."> Langfristige Studien zeigen, dass breit gestreute Aktienanlagen (z.B. ETFs auf den MSCI World) über Zeiträume von 15+ Jahren historisch eine durchschnittliche Rendite von 7–9 % pro Jahr erzielt haben – deutlich mehr als Tagesgeld oder Sparbuch. Für Kinder ist der Zeithorizont besonders wertvoll: Wer mit 13 anfängt zu investieren, hat bis zum 18. Geburtstag bereits 5 Jahre Zinseszins-Effekt genutzt. Je früher, desto stärker arbeitet das Geld.</span>
       <div style="margin-top:10px; font-size:13px; font-weight:700; color:var(--text-light);" data-de="⚠️ Hinweis: Dies ist keine Anlageberatung. Aktienanlagen unterliegen Kursschwankungen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren." data-en="⚠️ Note: This is not investment advice. Equity investments are subject to price fluctuations. Parents should inform themselves independently before opening an account.">⚠️ Hinweis: Dies ist keine Anlageberatung. Aktienanlagen unterliegen Kursschwankungen. Eltern sollten sich vor der Depoteröffnung eigenständig informieren.</div>
     </div>
-    <p class="source-note" style="margin-top:8px;" data-de="Quelle: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse" data-en="Source: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historical return analysis">Quelle: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse</p>
+    <p class="source-note" style="margin-top:8px;" data-de="Richtwert: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse. Historische Renditen sind keine Garantie für zukünftige Ergebnisse." data-en="Indicative: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historical return analysis. Past performance is no guarantee of future results.">Richtwert: Gerd Kommer, 'Souverän investieren mit Indexfonds & ETFs', 2018 · MSCI World historische Renditeanalyse. Historische Renditen sind keine Garantie für zukünftige Ergebnisse.</p>
 
   </section>
 
@@ -555,27 +555,11 @@
         </div>
       </a>
 
-      <a href="../kleine-sparer/wunsch-sparer.html" style="text-decoration:none;">
+      <a href="../lernspiele/lernspiele-kleine-sparer.html" style="text-decoration:none;">
         <div class="game-tile game-tile-blue">
-          <div style="font-size:36px; margin-bottom:8px;">⭐</div>
-          <div class="game-tile-title" data-de="Wunsch-Sparer" data-en="Wish Saver">Wunsch-Sparer</div>
-          <div class="game-tile-sub" data-de="Sparziel spielerisch verfolgen" data-en="Track savings goals playfully">Sparziel spielerisch verfolgen</div>
-        </div>
-      </a>
-
-      <a href="../kleine-sparer/einkaufen-spiel.html" style="text-decoration:none;">
-        <div class="game-tile game-tile-yellow">
-          <div style="font-size:36px; margin-bottom:8px;">🛒</div>
-          <div class="game-tile-title" data-de="Einkaufen-Spiel" data-en="Shopping Game">Einkaufen-Spiel</div>
-          <div class="game-tile-sub" data-de="Mit Budget haushalten" data-en="Managing a budget">Mit Budget haushalten</div>
-        </div>
-      </a>
-
-      <a href="../kleine-sparer/sparschwein-spiel.html" style="text-decoration:none;">
-        <div class="game-tile game-tile-pink">
-          <div style="font-size:36px; margin-bottom:8px;">🐷</div>
-          <div class="game-tile-title" data-de="Sparschwein-Spiel" data-en="Piggy Bank Game">Sparschwein-Spiel</div>
-          <div class="game-tile-sub" data-de="Münzen sammeln & sparen" data-en="Collect coins & save">Münzen sammeln & sparen</div>
+          <div style="font-size:36px; margin-bottom:8px;">🎮</div>
+          <div class="game-tile-title" data-de="Lernspiele Kleine Sparer" data-en="Little Savers Games">Lernspiele Kleine Sparer</div>
+          <div class="game-tile-sub" data-de="Für Kinder von 6 bis 10 Jahren" data-en="For children aged 6 to 10">Für Kinder von 6 bis 10 Jahren</div>
         </div>
       </a>
 
@@ -598,11 +582,13 @@
       <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
     </div>
     <div class="footer-links">
-      <a href="elternbereich.html" data-de="← Elternbereich" data-en="← Parents' Corner">← Elternbereich</a>
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
       <span class="footer-divider">·</span>
       <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
       <span class="footer-divider">·</span>
       <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
     </div>
   </div>
 </footer>
