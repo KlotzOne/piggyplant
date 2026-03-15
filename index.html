@@ -286,6 +286,9 @@
   .card-5 { background: linear-gradient(135deg, #F0EEFF, #E4DDFF); }
   .card-5::before { background: #9B7FE8; }
   body.dark .card-5 { background: linear-gradient(135deg, #1A1530, #221C3A); }
+  .card-6 { background: linear-gradient(135deg, #E8FFF5, #CCFAEC); }
+  .card-6::before { background: var(--green); }
+  body.dark .card-6 { background: linear-gradient(135deg, #0A2018, #0F2A20); }
   body.dark .card-1 { background: linear-gradient(135deg, #2A1520, #3A1A28); }
   body.dark .card-2 { background: linear-gradient(135deg, #102518, #162E1E); }
   body.dark .card-3 { background: linear-gradient(135deg, #0E1E2E, #122638); }
@@ -610,54 +613,15 @@
 
 
   /* ── FOOTER ── */
-  .footer {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 24px;
-    transition: background 0.4s;
-  }
-  .footer-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .footer-logo {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .footer-brand {
-    font-family: 'Fredoka One', cursive;
-    font-size: 18px;
-    background: linear-gradient(135deg, var(--green-dark), var(--blue-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .footer-copy {
-    font-size: 11px;
-    color: var(--text-light);
-    font-weight: 600;
-  }
-  .footer-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .footer-links a {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-light);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--green); }
-  .footer-divider { color: var(--text-light); font-size: 13px; }
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--border); font-size:16px; }
   .impressum-text { text-align: left; font-size: 13px; line-height: 1.7; color: var(--text); }
   .impressum-text p { margin-bottom: 12px; }
   .impressum-note { color: var(--orange); font-weight: 700; font-size: 12px; }
@@ -831,11 +795,11 @@
   <text x="40" y="55" text-anchor="middle" font-size="9" font-weight="bold" fill="white">€</text>
 </svg></div>
       <div class="card-age" data-de="16 – 18 Jahre" data-en="Ages 16 – 18">16 – 18 Jahre</div>
-      <div class="card-title" data-de="Money-Teens" data-en="Money Teens">Money-Teens</div>
+      <div class="card-title" data-de="Money-Profi" data-en="Money Profi">Money-Profi</div>
       <div class="card-desc" data-de="Nebenjob, Steuern & das erste eigene Konto" data-en="Part-time jobs, taxes & your first bank account">Nebenjob, Steuern & das erste eigene Konto</div>
       
     </div>
-    <div class="card card-4" onclick="openModal('parents')">
+    <div class="card card-4" onclick="window.location.href='elternbereich/elternbereich.html'" style="cursor:pointer">
       <div class="card-emoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
   <!-- Shadow -->
   <ellipse cx="41" cy="73" rx="22" ry="4" fill="rgba(0,0,0,0.10)"/>
@@ -889,6 +853,31 @@
       
     </div>
 
+    <div class="card card-6" onclick="window.location.href='lernspiele/lernspiele.html'">
+      <div class="card-emoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Shadow -->
+  <ellipse cx="40" cy="74" rx="22" ry="4" fill="rgba(0,0,0,0.10)"/>
+  <!-- Controller body -->
+  <rect x="10" y="28" width="60" height="36" rx="18" fill="#5BBF7A" stroke="#3D9E5F" stroke-width="2.5"/>
+  <!-- Left D-Pad -->
+  <rect x="20" y="40" width="6" height="14" rx="2" fill="white" opacity="0.85"/>
+  <rect x="16" y="44" width="14" height="6" rx="2" fill="white" opacity="0.85"/>
+  <!-- Right buttons -->
+  <circle cx="54" cy="40" r="4" fill="#FFD166" stroke="#B8860B" stroke-width="1.5"/>
+  <circle cx="62" cy="46" r="4" fill="#FF6B9D" stroke="#C04070" stroke-width="1.5"/>
+  <circle cx="54" cy="52" r="4" fill="#4AACDB" stroke="#2A85B0" stroke-width="1.5"/>
+  <circle cx="46" cy="46" r="4" fill="#9B7FE8" stroke="#6A4FC0" stroke-width="1.5"/>
+  <!-- Center buttons -->
+  <rect x="34" y="43" width="6" height="5" rx="2" fill="white" opacity="0.6"/>
+  <rect x="41" y="43" width="6" height="5" rx="2" fill="white" opacity="0.6"/>
+  <!-- Star decoration -->
+  <text x="40" y="22" text-anchor="middle" font-size="13">⭐</text>
+</svg></div>
+      <div class="card-age" data-de="Für alle" data-en="For everyone">Für alle</div>
+      <div class="card-title" data-de="Spiele-Ecke" data-en="Games Corner">Spiele-Ecke</div>
+      <div class="card-desc" data-de="Lernspiele für alle Altersgruppen – spielend Geld verstehen!" data-en="Learning games for all ages – understand money through play!">Lernspiele für alle Altersgruppen – spielend Geld verstehen!</div>
+    </div>
+
   </div>
 </section>
 
@@ -921,7 +910,7 @@
     </div>
     <div class="why-cta">
       <p class="why-cta-text" data-de="Tipps &amp; Tricks, wie Sie Ihr Kind optimal auf die Welt der Finanzen vorbereiten? Im Eltern-Bereich werden Sie f&uuml;ndig!" data-en="Tips &amp; tricks on how to best prepare your child for the world of finance? Visit the Parent Zone!">Tipps &amp; Tricks, wie Sie Ihr Kind optimal auf die Welt der Finanzen vorbereiten? Im Eltern-Bereich werden Sie f&uuml;ndig!</p>
-      <button class="why-cta-btn" onclick="openModal('parents')" data-de="Zum Eltern-Bereich" data-en="Go to Parent Zone">Zum Eltern-Bereich</button>
+      <button class="why-cta-btn" onclick="window.location.href='elternbereich/elternbereich.html'" data-de="Zum Eltern-Bereich" data-en="Go to Parent Zone">Zum Eltern-Bereich</button>
     </div>
   </div>
 </section>
@@ -937,9 +926,20 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <p>🐷🌱 <span>Piggyplant</span> · <span data-de="Finanzwissen für die ganze Familie" data-en="Financial literacy for the whole family">Finanzwissen für die ganze Familie</span></p>
-  <p style="margin-top:6px" data-de="Kein Ersatz für professionelle Finanzberatung." data-en="Not a substitute for professional financial advice.">Kein Ersatz für professionelle Finanzberatung.</p>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
+    </div>
+  </div>
 </footer>
 
 <!-- MODALS -->
@@ -1009,8 +1009,8 @@
     },
     teens: {
       emoji: '💼',
-      de: { title: 'Money-Teens', subtitle: 'Für Jugendliche von 16 bis 18 Jahren', topics: ['💼 Erster Nebenjob','🧾 Steuern erklärt','🏦 Eigenes Konto eröffnen','📱 Kreditkarte & Klarna','📊 ETFs für Einsteiger'], chipClass: 'blue', btn: 'Kommt bald! 🌱' },
-      en: { title: 'Money Teens', subtitle: 'For teens aged 16 to 18', topics: ['💼 First part-time job','🧾 Taxes explained','🏦 Opening a bank account','📱 Credit cards & BNPL','📊 ETFs for beginners'], chipClass: 'blue', btn: 'Coming soon! 🌱' }
+      de: { title: 'Money-Profi', subtitle: 'Für Jugendliche von 16 bis 18 Jahren', topics: ['💼 Erster Nebenjob','🧾 Steuern erklärt','🏦 Eigenes Konto eröffnen','📱 Kreditkarte & Klarna','📊 ETFs für Einsteiger'], chipClass: 'blue', btn: 'Kommt bald! 🌱' },
+      en: { title: 'Money Profi', subtitle: 'For teens aged 16 to 18', topics: ['💼 First part-time job','🧾 Taxes explained','🏦 Opening a bank account','📱 Credit cards & BNPL','📊 ETFs for beginners'], chipClass: 'blue', btn: 'Coming soon! 🌱' }
     },
     parents: {
       emoji: '👨‍👩‍👧',
@@ -1064,21 +1064,7 @@
   </script>
 
 <!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-logo">
-      <span class="footer-brand">Piggyplant</span>
-      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
-    </div>
-    <div class="footer-links">
-      <a href="impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
-      <span class="footer-divider">·</span>
-      <a href="datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
-      <span class="footer-divider">·</span>
-      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
-    </div>
-  </div>
-</footer>
+
 
 <!-- IMPRESSUM MODAL -->
 <div class="modal-overlay" id="modal-impressum" onclick="if(event.target===this)closeModal('impressum')">
