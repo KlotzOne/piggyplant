@@ -118,6 +118,8 @@
   .footer-links a:hover { color:var(--green); }
   .footer-divider { color:var(--border); font-size:16px; }
   @media (max-width:600px) { .footer-inner { flex-direction:column; align-items:center; text-align:center; } .footer-logo { align-items:center; } .footer-links { justify-content:center; } }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#3a9b65,#328ea6); color:white; border:none; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; cursor:pointer; text-decoration:none; box-shadow:0 6px 20px rgba(50,142,166,0.4); transition:all 0.2s; margin:16px auto 0; display:block; width:fit-content; }
+  .back-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(50,142,166,0.5); }
 </style>
 </head>
 <body>
@@ -178,6 +180,8 @@
   </div>
 </div>
 
+  <a class="back-btn" id="backBtn" href="../index.html">← <span data-de="Zurück zur Startseite" data-en="Back to home">Zurück zur Startseite</span></a>
+
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-logo">
@@ -225,6 +229,15 @@
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('../assets/service-worker.js').catch(() => {});
   }
+
+  // ?from= Parameter
+  document.addEventListener('DOMContentLoaded', () => {
+    const from = new URLSearchParams(window.location.search).get('from');
+    const backBtn = document.getElementById('backBtn');
+    if (!backBtn) return;
+    // Standard: immer zurück zur Startseite
+    backBtn.href = '../index.html';
+  });
 </script>
 </body>
 </html>
