@@ -442,12 +442,12 @@ if (localStorage.getItem('piggyplant-dark') === 'true') {
 }
 
 // LANGUAGE
-let currentLang = localStorage.getItem('lang') || 'de';
+let currentLang = localStorage.getItem('piggyplant-lang') || 'de';
 function setLang(lang) {
   currentLang = lang;
-  localStorage.setItem('lang', lang);
+  localStorage.setItem('piggyplant-lang', lang);
   document.querySelectorAll('[data-de]').forEach(el => {
-    el.textContent = lang === 'de' ? el.dataset.de : el.dataset.en;
+    el.innerHTML = lang === 'de' ? el.dataset.de : el.dataset.en;
   });
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
