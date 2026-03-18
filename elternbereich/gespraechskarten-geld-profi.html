@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Geld-Gesprächskarten – Geld-Profi – Piggyplant</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link rel="manifest" href="../assets/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--green:#5BBF7A;--green-dark:#3D9E5F;--green-light:#E8F7EE;--blue:#4AACDB;--blue-dark:#2A85B0;--bg:#F0FAF5;--text:#2D3748;--text-light:#718096;--surface:#FDFCFA;--surface2:#EEF5EF;--border:#E8F7EE;--font-body:'Nunito',sans-serif;--font-display:'Fredoka One',cursive}
+body.dark{--bg:#0F1A14;--text:#E8F5EE;--text-light:#8EAAA0;--surface:#1A2E22;--surface2:#243B2C;--border:#2A4035;--green-light:#1C3528}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
+.header{text-align:center;padding:24px 20px 20px;background:linear-gradient(135deg,#E8F7EE,#E6F6FF);border-bottom:2px solid var(--border);position:relative;overflow:hidden}
+body.dark .header{background:linear-gradient(135deg,#0A2018,#0E1E30)}
+.header h1{font-family:var(--font-display);font-size:28px;background:linear-gradient(135deg,#3D9E5F,#2A85B0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{font-size:14px;color:var(--text-light);font-weight:700;margin-top:5px}
+.close-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.5);border:2px solid rgba(61,158,95,0.4);color:#3D9E5F;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+body.dark .close-btn{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.5);color:#fff}
+.fi{position:absolute;font-size:20px;opacity:0.4;pointer-events:none;animation:float 3s ease-in-out infinite}
+.fi1{top:20%;left:6%}.fi2{top:25%;right:8%;animation-delay:.7s}.fi3{bottom:20%;left:8%;animation-delay:1.3s}.fi4{bottom:20%;right:6%;animation-delay:.4s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.wrap{max-width:460px;margin:0 auto;padding:28px 20px 60px}
+.card{background:transparent;width:100%;padding-bottom:154.2%;position:relative;border-radius:0;overflow:visible;cursor:pointer;box-shadow:none;margin-bottom:20px;-webkit-tap-highlight-color:transparent;user-select:none}
+.side{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;border-radius:22px;transition:opacity .3s,transform .3s}
+.front{background:url("https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Karte_Geld_Profi.webp") center/100% 100% no-repeat;z-index:2;background-color:transparent}
+.pig{display:none}
+.front-title{display:none}
+.front-sub{display:none}
+.back{background:url("https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Karte_Rueckseite.webp") center/100% 100% no-repeat;background-color:transparent;border:none;z-index:1;opacity:0;transform:scale(0.95)}
+.cat{font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#222;background:rgba(255,255,255,0.7);padding:4px 14px;border-radius:50px;margin-bottom:14px}
+.question{font-family:var(--font-display);font-size:20px;color:#111;text-align:center;line-height:1.4}
+@media(max-width:380px){.question{font-size:17px}}
+.hint{font-size:13px;color:#333;font-weight:700;text-align:center;margin-top:10px;line-height:1.5}
+.btn{width:100%;background:linear-gradient(135deg,#9B7FE8,#FF6B9D);color:white;border:none;font-family:var(--font-body);font-weight:900;font-size:17px;padding:16px;border-radius:50px;cursor:pointer;box-shadow:0 6px 24px rgba(91,191,122,0.4)}
+.done{display:none;text-align:center;padding:20px 0}
+.done h2{font-family:var(--font-display);font-size:26px;margin:12px 0 8px}
+.done p{font-size:15px;color:var(--text-light);font-weight:600;margin-bottom:16px}
+.done .emo{font-size:64px}
+.btn-sm{background:linear-gradient(135deg,#9B7FE8,#FF6B9D);color:white;border:none;font-family:var(--font-body);font-weight:900;font-size:15px;padding:13px 28px;border-radius:50px;cursor:pointer}
+.card-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:12px 24px;background:linear-gradient(135deg,#3a9b65,#328ea6);color:white !important;border:none;border-radius:50px;font-size:13px;font-weight:800;text-decoration:none !important;font-family:var(--font-body);box-shadow:0 4px 14px rgba(50,142,166,0.4);transition:all 0.2s;cursor:pointer}
+.card-link:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(50,142,166,0.5)}
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="fi fi1">🚀</span><span class="fi fi2">💰</span><span class="fi fi3">🌱</span><span class="fi fi4">⭐</span>
+  <a class="close-btn" id="closeBtn" href="../elternbereich/geld-reden.html">✕</a>
+  <h1>Geld-Gesprächskarten</h1>
+  <p>🚀 Geld-Profi · 16–18 Jahre</p>
+  <p style="margin-top:4px">Echte Fragen, ehrliche Antworten. Auf Augenhoehe.</p>
+</div>
+<div class="wrap">
+  <div class="card" id="card">
+    <div class="side front" id="front">
+
+    </div>
+    <div class="side back" id="back" style="padding:55px 40px;">
+      <div class="question" id="question"></div>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+  <div id="linkArea" style="width:100%;text-align:center;min-height:0;margin-top:20px"></div>
+  <button class="btn" id="btnNext" style="margin-top:20px">Nächste Karte →</button>
+  <div class="done" id="done">
+    <div class="emo">🎉</div>
+    <h2>Alle Karten gespielt!</h2>
+    <p>Respekt! Diese Fragen stellen die wenigsten. Ihr seid gut vorbereitet.</p>
+    <button class="btn-sm" id="btnRestart">🔄 Nochmal spielen</button>
+  </div>
+</div>
+<script>
+var Q=[
+  {c:'Gehalt',q:'Du bekommst dein erstes Gehalt – wie teilst du es auf?',h:'Fixkosten, Sparen, Ausgeben?'},
+  {c:'Investieren',q:'Hast du schon mal von ETFs gehört?',h:'Was glaubst du, wie die funktionieren?'},
+  {c:'Wohnen',q:'Eigene Wohnung: Was glaubst du, was das wirklich kostet – monatlich?',h:'Miete, Strom, Versicherung, Lebensmittel, Handy...'},
+  {c:'Kredit',q:'Wann wäre es okay einen Kredit aufzunehmen? Und wann nicht?',h:'Konsumkredit vs. Investition – wo ist der Unterschied?'},
+  {c:'Versicherung',q:'Welche Versicherungen braucht man wirklich wenn man auszieht?',h:'Welche machen Sinn und welche sind überflüssig?'},
+  {c:'Ausbildung',q:'Lohnt sich ein Studium oder doch eher eine Ausbildung?',h:'Was möchte man später machen?'},
+  {c:'Zinseszins',q:'Wenn du mit 18 anfängst 50 Euro pro Monat zu investieren – was könnte das mit 60 sein?',h:'Schätzt doch mal – dann schaut ob ihr Recht hattet.',l:'../elternbereich/rendite-rechner.html'},
+  {c:'Steuern',q:'Was passiert eigentlich mit deinen Steuern? Wofür werden sie ausgegeben?',h:'Was schätzt du musst du von deinem Gehalt abgeben?'},
+  {c:'Risiko',q:'Was ist riskanter: Geld auf dem Girokonto lassen oder in ETFs investieren?',h:'Hängt das Risiko am Anlagezeitraum oder spielt das keine Rolle?'},
+  {c:'Zukunft',q:'Wie stellst du dir deine finanzielle Situation mit 30 vor?',h:'Rückwärts planen: Was musst du bis dahin tun?'},
+  {c:'Verhandeln',q:'Du bekommst ein Jobangebot. Wie würdest du über Gehalt verhandeln?',h:'Recherche, Argumente, Selbstbewusstsein – was ist dein nächster Schritt?'},
+  {c:'Werte',q:'Würdest du einen Job mit weniger Gehalt annehmen wenn er sinnvoller ist?',h:'Ist Geld wichtiger als Sinn?'},
+  {c:'Nettolohn',q:'Du verdienst 2.500 Euro brutto – wie viel bleibt netto übrig?',h:'Steuern, Krankenkasse, Rentenversicherung – grob schätzen!'},
+  {c:'Girokonto',q:'Was ist der Unterschied zwischen einem Girokonto und einem Tagesgeldkonto?',h:'Zinsen, Verfügbarkeit, Zweck – was passt wann?'},
+  {c:'Crash',q:'Die Börse bricht um 30% ein. Dein ETF verliert massiv. Was tust du?',h:'Was wäre historisch klug gewesen?'},
+  {c:'Eigenheim',q:'Kaufen oder mieten – was lohnt sich langfristig mehr?',h:'Was zählt für euch und was musst du für diese Entscheidung tun?'},
+  {c:'Notgroschen',q:'Was ist ein Notgroschen und wie groß sollte er sein?',h:'Was würdest du tun, wenn du ihn brauchen würdest?'},
+  {c:'FIRE',q:'FIRE – Financial Independence, Retire Early. Klingt das erstrebenswert?',h:'Was müsste man dafür tun und auf was verzichten?'},
+  {c:'KI und Arbeit',q:'Könnte dein Traumjob in 10 Jahren durch KI ersetzt werden?',h:'Was macht Menschen unersetzlich?'},
+  {c:'Globalisierung',q:'Günstige Produkte aus Fernost – wer zahlt den eigentlichen Preis?',h:'Lohnkosten, Umwelt, Transport – was zählt ihr mit ein?'},
+  {c:'Abo-Falle',q:'Zählt mal alle Abonnements auf, die ihr habt. Was kostet das im Jahr?',h:'Netflix, Spotify, iCloud, Gym... nutzt ihr diese wirklich?'},
+  {c:'Glücksspiel',q:'Lotterien, Sportwetten, Spielautomaten – warum machen die so viele Menschen?',h:'Denkt ihr, man hat hier gute Chancen zu gewinnen?'},
+  {c:'Rente',q:'Das Rentensystem wird für eure Generation nicht reichen. Was tut ihr dagegen?',h:'Was für Möglichkeiten gibt es und was ist euer Plan?'},
+  {c:'Beziehung',q:'Paare streiten oft über Geld. Wie würdet ihr Finanzen in einer Beziehung organisieren?',h:'Gemeinsames Konto, getrennt oder gemischt?'},
+  {c:'Gründen',q:'Wenn ihr ein Unternehmen gründen würdet – was bräuchtet ihr zum Start?',h:'Kapital, Idee, Team, Zeit – was ist am wichtigsten für euch?'},
+  {c:'Finanzmedien',q:'Finanzblogs, YouTube, TikTok – wem vertraut ihr in Geldfragen?',h:'Wie erkennt ihr guten von schlechtem Finanzrat?'},
+  {c:'Behavioral Finance',q:'Warum kaufen Menschen Aktien wenn sie steigen und verkaufen wenn sie fallen?',h:'Angst und Gier – kennt ihr das Gefühl?'},
+  {c:'Währung',q:'Was passiert wenn eine Währung an Wert verliert? Beispiel Inflation in anderen Ländern?',h:'Was könnte das für euch bedeuten?'}
+];
+var order=[],cur=0,flipped=false;
+function shuffle(){order=Q.map(function(_,i){return i});for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}}
+function showFront(){document.getElementById('linkArea').innerHTML='';flipped=false;document.getElementById('front').style.opacity='1';document.getElementById('front').style.transform='scale(1)';document.getElementById('back').style.opacity='0';document.getElementById('back').style.transform='scale(0.95)'}
+function showBack(){var q=Q[order[cur]];document.getElementById('question').textContent=q.q;document.getElementById('hint').textContent=q.h;var cl=document.getElementById('linkArea');cl.innerHTML='';if(q.l){var lblMap={'../kleine-sparer/sparziel-rechner.html':'Sparziel-Rechner','../elternbereich/rendite-rechner.html':'Rendite-Rechner'};var lbl=(lblMap[q.l]||'Zum Rechner');var a=document.createElement('a');a.className='card-link';a.href=q.l;a.target='_blank';a.textContent='→ '+lbl;a.addEventListener('click',function(e){e.stopPropagation();});cl.appendChild(a);}flipped=true;document.getElementById('front').style.opacity='0';document.getElementById('front').style.transform='scale(0.95)';document.getElementById('back').style.opacity='1';document.getElementById('back').style.transform='scale(1)'}
+document.getElementById('card').onclick=function(e){if(e.target.tagName==='A'||e.target.closest('a')){return;}if(flipped){showFront()}else{showBack()}};
+document.getElementById('btnNext').onclick=function(){cur++;if(cur>=order.length){document.getElementById('card').style.display='none';document.getElementById('btnNext').style.display='none';document.getElementById('done').style.display='block';return}showFront()};
+document.getElementById('btnRestart').onclick=function(){cur=0;shuffle();document.getElementById('card').style.display='block';document.getElementById('btnNext').style.display='block';document.getElementById('done').style.display='none';showFront()};
+var p=new URLSearchParams(location.search).get('from');
+if(p==='lernspiele'||p==='lernspiele-kleine-sparer')document.getElementById('closeBtn').href='../lernspiele/lernspiele-kleine-sparer.html';
+if(localStorage.getItem('piggyplant-dark')==='true')document.body.classList.add('dark');
+shuffle();showFront();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('../assets/service-worker.js').catch(function(){});
+</script>
+</body>
+</html>

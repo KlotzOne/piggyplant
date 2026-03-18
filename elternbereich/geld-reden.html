@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp">
+<link rel="manifest" href="../assets/manifest.json">
+<meta name="theme-color" content="#5BBF7A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Piggyplant">
+<title>Mit Kindern über Geld reden – Piggyplant</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:#5BBF7A; --green-dark:#3D9E5F; --green-light:#E8F7EE;
+    --blue:#4AACDB; --blue-dark:#2A85B0; --blue-light:#E6F6FF;
+    --yellow:#FFD166; --orange:#FF9A3C; --pink:#FF6B9D; --purple:#9B7FE8;
+    --bg:#F0FAF5; --text:#2D3748; --text-light:#718096;
+    --surface:#FDFCFA; --surface2:#EEF5EF; --border:#E8F7EE;
+    --radius:20px; --shadow:0 6px 24px rgba(61,158,95,0.10);
+    --font-body:'Nunito',sans-serif; --font-display:'Fredoka One',cursive;
+  }
+  body.dark {
+    --bg:#0F1A14; --text:#E8F5EE; --text-light:#8EAAA0;
+    --surface:#1A2E22; --surface2:#243B2C; --border:#2A4035;
+    --green-light:#1C3528; --blue-light:#172838;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--text); overflow-x:hidden; transition:background 0.4s,color 0.4s; }
+  nav { background:var(--surface); border-bottom:2px solid var(--border); padding:10px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06); transition:background 0.4s; }
+  .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-logo span { font-family:var(--font-display); font-size:22px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-right { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  .lang-btn { border:2px solid var(--green); background:transparent; color:var(--green-dark); font-family:var(--font-body); font-weight:800; font-size:14px; padding:7px 18px; border-radius:50px; cursor:pointer; transition:all 0.2s; line-height:1; }
+  body.dark .lang-btn { color:var(--blue); border-color:var(--blue); }
+  .lang-btn.active { background:var(--green); color:white; border-color:var(--green-dark); box-shadow:0 2px 8px rgba(91,191,122,0.4); transform:scale(1.1); }
+  body.dark .lang-btn.active { background:var(--blue); color:white; border-color:var(--blue-dark); }
+  .dark-toggle { background:var(--surface2); border:2px solid var(--border); border-radius:50px; width:48px; height:26px; cursor:pointer; position:relative; transition:all 0.3s; }
+  .dark-toggle::before { content:'☀️'; position:absolute; left:2px; top:50%; transform:translateY(-50%); width:20px; height:20px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; line-height:20px; text-align:center; transition:left 0.3s; }
+  body.dark .dark-toggle::before { content:'🌙'; left:22px; background:#2A85B0; }
+  @media(max-width:520px) { .nav-logo span{font-size:16px} .lang-btn{font-size:10px;padding:5px 8px} .nav-right{gap:4px} #dark-label{display:none} }
+
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  .page-hero { background:linear-gradient(135deg,#F0FFF8,#E0F7EE); text-align:center; padding:40px 20px 30px; position:relative; overflow:hidden; }
+  body.dark .page-hero { background:linear-gradient(135deg,#0A2018,#0F2A20); }
+  .page-hero-emoji  { font-size:64px; display:block; animation:bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+  .page-hero-title  { font-family:var(--font-display); font-size:36px; margin:10px 0 6px; animation:fadeUp 0.5s 0.1s both; }
+  .page-hero-sub    { font-size:15px; color:var(--text-light); font-weight:600; animation:fadeUp 0.5s 0.2s both; }
+  .floating-icons   { position:absolute; font-size:24px; animation:float 3s ease-in-out infinite; pointer-events:none; user-select:none; opacity:0.75; }
+  .icon1{top:20%;left:8%;animation-delay:0s}
+  .icon2{top:30%;right:10%;animation-delay:0.7s}
+  .icon3{top:60%;left:5%;animation-delay:1.4s;font-size:20px}
+  .icon4{bottom:20%;right:6%;animation-delay:0.3s;font-size:22px}
+
+  .footer { background:var(--surface); border-top:2px solid var(--border); padding:24px 20px; margin-top:40px; }
+  .footer-inner { max-width:900px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+  .footer-logo  { display:flex; flex-direction:column; gap:2px; }
+  .footer-brand { font-family:'Fredoka One',cursive; font-size:18px; background:linear-gradient(135deg,var(--green-dark),var(--blue-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .footer-copy  { font-size:11px; color:var(--text-light); font-weight:600; }
+  .footer-links { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .footer-links a { font-size:13px; font-weight:700; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-divider { color:var(--border); font-size:16px; }
+  @media(max-width:600px) { .footer-inner{flex-direction:column;align-items:center;text-align:center} .footer-logo{align-items:center} .footer-links{justify-content:center} }
+
+  .content { max-width:800px; margin:0 auto; padding:30px 20px 60px; }
+  .section-title { font-family:var(--font-display); font-size:26px; margin:36px 0 16px; color:var(--text); animation:fadeUp 0.5s both; }
+  .section-title:first-child { margin-top:0; }
+
+  .info-box { background:var(--surface); border-radius:20px; padding:24px; margin-bottom:20px; box-shadow:var(--shadow); border-left:5px solid var(--green); animation:fadeUp 0.5s both; transition:background 0.4s; }
+  .info-box h3 { font-family:var(--font-display); font-size:20px; margin-bottom:10px; }
+  .info-box p  { font-size:15px; color:var(--text-light); font-weight:600; line-height:1.6; }
+
+  .fun-fact { background:linear-gradient(135deg,#FFF9E0,#FFF3CC); border-radius:20px; padding:20px; margin-bottom:20px; box-shadow:var(--shadow); border:2px solid var(--yellow); }
+  body.dark .fun-fact { background:linear-gradient(135deg,#221A08,#2C2210); border-color:#8B7020; }
+  .fun-fact h3 { font-family:var(--font-display); font-size:18px; color:#8B6200; margin-bottom:8px; }
+  body.dark .fun-fact h3 { color:var(--yellow); }
+  .fun-fact p  { font-size:14px; color:var(--text-light); font-weight:600; line-height:1.6; }
+
+  .back-btn { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--green),var(--blue)); color:white; font-family:var(--font-body); font-weight:800; font-size:15px; padding:14px 28px; border-radius:50px; text-decoration:none; box-shadow:0 6px 20px rgba(74,172,219,0.4); transition:all 0.2s; width:fit-content; }
+  .back-btn:hover { transform:translateY(-2px); }
+
+  /* Alters-Tabs */
+  .age-tabs { display:flex; gap:10px; flex-wrap:wrap; }
+  .age-tab { flex:1; min-width:120px; padding:14px 10px; border-radius:16px 16px 0 0; font-family:var(--font-display); font-size:16px; cursor:pointer; border:2px solid transparent; border-bottom:none; background:var(--surface2); color:var(--text-light); transition:all 0.2s; text-align:center; user-select:none; }
+  .age-tab.active { color:white; }
+  .age-tab:nth-child(1).active { background:var(--green-dark); }
+  .age-tab:nth-child(2).active { background:var(--blue-dark); }
+  .age-tab:nth-child(3).active { background:var(--purple); }
+  .age-tab .tab-emoji { display:block; font-size:24px; margin-bottom:4px; }
+  .age-tab .tab-age   { display:block; font-size:11px; font-family:var(--font-body); font-weight:700; margin-top:2px; opacity:0.85; }
+  .age-panels { margin-bottom:20px; }
+  .age-panel  { display:none; background:var(--surface); border-radius:0 0 20px 20px; padding:28px 24px; box-shadow:var(--shadow); border:2px solid var(--border); animation:fadeUp 0.4s both; }
+  .age-panel.active { display:block; }
+  .age-panel[data-panel="1"] { border-top:4px solid var(--green-dark); }
+  .age-panel[data-panel="2"] { border-top:4px solid var(--blue-dark); }
+  .age-panel[data-panel="3"] { border-top:4px solid var(--purple); }
+  .panel-intro { font-size:15px; color:var(--text-light); font-weight:600; line-height:1.6; margin-bottom:20px; }
+
+  .starter-list { display:flex; flex-direction:column; gap:12px; }
+  .starter-item { background:var(--surface2); border-radius:14px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; border-left:4px solid var(--green); }
+  .age-panel[data-panel="2"] .starter-item { border-left-color:var(--blue); }
+  .age-panel[data-panel="3"] .starter-item { border-left-color:var(--purple); }
+  .starter-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+  .starter-text { font-size:14px; font-weight:700; color:var(--text); line-height:1.5; }
+  .starter-text em { font-style:italic; font-weight:800; color:var(--green-dark); display:block; margin-top:4px; }
+  .age-panel[data-panel="2"] .starter-text em { color:var(--blue-dark); }
+  .age-panel[data-panel="3"] .starter-text em { color:var(--purple); }
+  .starter-hint { display:block; font-size:12px; font-weight:600; color:var(--text-light); margin-top:4px; }
+
+  .saetze-list { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+  .saetze-item { background:var(--surface); border-radius:14px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; border-left:4px solid var(--green); box-shadow:var(--shadow); }
+  .saetze-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+  .saetze-text { font-size:14px; font-weight:700; color:var(--text); line-height:1.5; }
+  .saetze-hint { display:block; font-size:12px; font-weight:600; color:var(--text-light); margin-top:4px; }
+
+  .dos-donts { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  @media(max-width:560px) { .dos-donts{grid-template-columns:1fr} }
+  .dos-card   { background:linear-gradient(135deg,#ECFDF5,#D1FAE5); border:2px solid #6EE7B7; border-radius:20px; padding:22px 20px; }
+  body.dark .dos-card { background:linear-gradient(135deg,#0E2A1A,#142A20); border-color:#2A6040; }
+  .donts-card { background:linear-gradient(135deg,#FFF1F2,#FFE4E6); border:2px solid #FECACA; border-radius:20px; padding:22px 20px; }
+  body.dark .donts-card { background:linear-gradient(135deg,#2A0E0E,#3A1818); border-color:#6A2828; }
+  .dos-card h3   { font-family:var(--font-display); font-size:18px; color:#065F46; margin-bottom:14px; }
+  body.dark .dos-card h3 { color:#6EE7B7; }
+  .donts-card h3 { font-family:var(--font-display); font-size:18px; color:#991B1B; margin-bottom:14px; }
+  body.dark .donts-card h3 { color:#FCA5A5; }
+  .dd-list { display:flex; flex-direction:column; gap:10px; }
+  .dd-item { display:flex; gap:10px; align-items:flex-start; font-size:14px; font-weight:700; color:var(--text); line-height:1.5; }
+  .dd-icon { flex-shrink:0; font-size:16px; margin-top:1px; }
+  .dd-why  { display:block; font-size:12px; font-weight:600; color:var(--text-light); margin-top:2px; }
+  .karten-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media(max-width:500px) { .karten-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <img src="https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Piggyplant_Logo_Icon.webp" width="32" height="32" alt="Piggyplant">
+    <span>Piggyplant</span>
+  </a>
+  <div class="nav-right">
+    <span id="dark-label" style="font-size:12px;font-weight:700;color:var(--text-light)">Hell</span>
+    <button class="dark-toggle" onclick="toggleDark()"></button>
+    <button class="lang-btn active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <span class="floating-icons icon1">💬</span>
+  <span class="floating-icons icon2">💡</span>
+  <span class="floating-icons icon3">❤️</span>
+  <span class="floating-icons icon4">🌱</span>
+  <span class="page-hero-emoji">💬</span>
+  <h1 class="page-hero-title" data-de="Mit Kindern über Geld reden" data-en="Talking to Kids About Money">Mit Kindern über Geld reden</h1>
+  <p class="page-hero-sub" data-de="Kein Tabu – wie ihr das Thema natürlich in den Alltag bringt 💚" data-en="No taboo – how to bring money talk naturally into everyday life 💚">Kein Tabu – wie ihr das Thema natürlich in den Alltag bringt 💚</p>
+</section>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- 1. WARUM DARÜBER REDEN? -->
+  <h2 class="section-title" data-de="Warum darüber reden?" data-en="Why talk about it?">Warum darüber reden?</h2>
+
+  <div class="info-box">
+    <h3 data-de="🙊 Warum viele Eltern schweigen" data-en="🙊 Why many parents stay silent">🙊 Warum viele Eltern schweigen</h3>
+    <p data-de="Viele Eltern wurden selbst nie über Geld aufgeklärt – Geld war ein Tabu-Thema. Die gute Nachricht: Ihr müsst keine Finanzexperten sein. Ehrlichkeit schlägt Perfektion. Ein einfaches &#8222;Das können wir uns gerade nicht leisten&#8220; ist wertvoller als auszuweichen." data-en="Many parents were never taught about money themselves – money was a taboo subject. The good news: you don't have to be financial experts. Honesty beats perfection. A simple 'we can't afford that right now' is more valuable than avoiding the topic.">Viele Eltern wurden selbst nie über Geld aufgeklärt – Geld war ein Tabu-Thema. Die gute Nachricht: Ihr müsst keine Finanzexperten sein. Ehrlichkeit schlägt Perfektion. Ein einfaches &#8222;Das können wir uns gerade nicht leisten&#8220; ist wertvoller als auszuweichen.</p>
+  </div>
+
+  <div class="fun-fact">
+    <h3 data-de="💡 Das sagt die Forschung" data-en="💡 What research says">💡 Das sagt die Forschung</h3>
+    <p data-de="Kinder, die früh offen über Geld sprechen, entwickeln ein besseres Gefühl für Wert, Konsum und Sparen. Laut einer Studie des Deutschen Jugendinstituts (DJI, 2025) lernen Kinder den Umgang mit Geld vor allem durch Beobachten und Nachmachen – das wichtigste Lernfeld ist der Familienalltag." data-en="Children who talk openly about money early on develop a better sense of value, spending and saving. According to a study by the German Youth Institute (DJI, 2025), children learn to handle money primarily by observing and imitating – the most important learning environment is family life.">Kinder, die früh offen über Geld sprechen, entwickeln ein besseres Gefühl für Wert, Konsum und Sparen. Laut einer Studie des Deutschen Jugendinstituts (DJI, 2025) lernen Kinder den Umgang mit Geld vor allem durch Beobachten und Nachmachen – das wichtigste Lernfeld ist der Familienalltag.</p>
+  </div>
+
+  <!-- 2. DEN EINSTIEG FINDEN -->
+  <h2 class="section-title" data-de="Den Einstieg finden" data-en="Finding your starting point">Den Einstieg finden</h2>
+
+  <div class="info-box" style="border-left-color:var(--blue)">
+    <h3 data-de="📍 Der beste Moment ist jetzt" data-en="📍 The best moment is now">📍 Der beste Moment ist jetzt</h3>
+    <p data-de="Ihr braucht keinen geplanten &#8222;Geld-Abend&#8220;. Der Alltag bietet ständig natürliche Gelegenheiten: an der Kasse, beim Einkauf, wenn eine Werbung läuft oder wenn das Kind nach etwas fragt. Nutzt diese Momente – sie sind wertvoller als jede Theorie-Stunde." data-en="You don't need a planned 'money evening'. Everyday life constantly offers natural opportunities: at the checkout, while shopping, when an ad comes on or when your child asks for something. Use these moments – they're more valuable than any theory lesson.">Ihr braucht keinen geplanten &#8222;Geld-Abend&#8220;. Der Alltag bietet ständig natürliche Gelegenheiten: an der Kasse, beim Einkauf, wenn eine Werbung läuft oder wenn das Kind nach etwas fragt. Nutzt diese Momente – sie sind wertvoller als jede Theorie-Stunde.</p>
+  </div>
+
+  <div class="info-box" style="border-left-color:var(--blue)">
+    <h3 data-de="So findet ihr den Einstieg" data-en="How to find your starting point">So findet ihr den Einstieg</h3>
+    <p data-de="1️⃣ Alltag als Lehrbuch nutzen: An der Supermarktkasse, beim Taschengeld, beim Online-Einkauf – überall passiert Geld. Kommentiert laut, was ihr tut." data-en="1️⃣ Use everyday life as a textbook: At the checkout, with pocket money, when shopping online – money happens everywhere. Comment out loud on what you're doing.">1️⃣ Alltag als Lehrbuch nutzen: An der Supermarktkasse, beim Taschengeld, beim Online-Einkauf – überall passiert Geld. Kommentiert laut, was ihr tut.</p>
+    <p style="margin-top:12px" data-de="2️⃣ Fragen ernst nehmen: Wenn euer Kind fragt &#8222;Warum kaufen wir das nicht?&#8220; – das ist Neugier, kein Angriff. Antwortet ehrlich und altersgerecht." data-en="2️⃣ Take questions seriously: When your child asks 'Why don't we buy that?' – that's curiosity, not an attack. Answer honestly and in an age-appropriate way.">2️⃣ Fragen ernst nehmen: Wenn euer Kind fragt &#8222;Warum kaufen wir das nicht?&#8220; – das ist Neugier, kein Angriff. Antwortet ehrlich und altersgerecht.</p>
+    <p style="margin-top:12px" data-de="3️⃣ Mitmachen lassen: Lasst euer Kind ab und zu mitentscheiden – &#8222;Wir haben 5 € für Snacks, was kaufen wir?&#8220; Eigenverantwortung lernt man durch echtes Tun." data-en="3️⃣ Let them join in: Let your child help decide occasionally – 'We have €5 for snacks, what do we buy?' Responsibility is learned through actually doing.">3️⃣ Mitmachen lassen: Lasst euer Kind ab und zu mitentscheiden – &#8222;Wir haben 5 € für Snacks, was kaufen wir?&#8220; Eigenverantwortung lernt man durch echtes Tun.</p>
+    <p style="margin-top:12px" data-de="4️⃣ Fehler erlauben: Wenn das Taschengeld am Montag weg ist – nicht retten. Das Gefühl &#8222;ich hab alles ausgegeben&#8220; ist eine der wertvollsten Lektionen." data-en="4️⃣ Allow mistakes: If the pocket money is gone by Monday – don't bail them out. The feeling of 'I spent everything' is one of the most valuable lessons.">4️⃣ Fehler erlauben: Wenn das Taschengeld am Montag weg ist – nicht retten. Das Gefühl &#8222;ich hab alles ausgegeben&#8220; ist eine der wertvollsten Lektionen.</p>
+  </div>
+
+  <!-- 3. GESPRÄCHSEINSTIEGE NACH ALTER -->
+  <h2 class="section-title" data-de="Gesprächseinstiege nach Alter" data-en="Conversation starters by age">Gesprächseinstiege nach Alter</h2>
+
+  <div class="age-tabs">
+    <div class="age-tab active" onclick="switchTab(1)" id="tab1">
+      <span class="tab-emoji">🐷</span>
+      <span data-de="Kleine Sparer" data-en="Little Savers">Kleine Sparer</span>
+      <span class="tab-age" data-de="6 – 10 Jahre" data-en="Ages 6–10">6 – 10 Jahre</span>
+    </div>
+    <div class="age-tab" onclick="switchTab(2)" id="tab2">
+      <span class="tab-emoji">🔍</span>
+      <span data-de="Geld-Checker" data-en="Money Checkers">Geld-Checker</span>
+      <span class="tab-age" data-de="11 – 15 Jahre" data-en="Ages 11–15">11 – 15 Jahre</span>
+    </div>
+    <div class="age-tab" onclick="switchTab(3)" id="tab3">
+      <span class="tab-emoji">🚀</span>
+      <span data-de="Geld-Profi" data-en="Money Pro">Geld-Profi</span>
+      <span class="tab-age" data-de="16 – 18 Jahre" data-en="Ages 16–18">16 – 18 Jahre</span>
+    </div>
+  </div>
+
+  <div class="age-panels">
+    <div class="age-panel active" data-panel="1">
+      <p class="panel-intro" data-de="In diesem Alter denken Kinder konkret und im Hier und Jetzt. Abstrakte Konzepte wie Zinsen oder Schulden sind noch nicht greifbar – aber Münzen, Sparziele und kleine Entscheidungen funktionieren perfekt." data-en="At this age, children think concretely and in the here and now. Abstract concepts like interest or debt aren't tangible yet – but coins, savings goals and small decisions work perfectly.">In diesem Alter denken Kinder konkret und im Hier und Jetzt. Abstrakte Konzepte wie Zinsen oder Schulden sind noch nicht greifbar – aber Münzen, Sparziele und kleine Entscheidungen funktionieren perfekt.</p>
+      <div class="starter-list">
+        <div class="starter-item">
+          <span class="starter-icon">🛒</span>
+          <div class="starter-text">
+            <span data-de="An der Kasse im Supermarkt:" data-en="At the supermarket checkout:">An der Kasse im Supermarkt:</span>
+            <em data-de="&#8222;Schau, ich bezahle jetzt mit der Karte. Das Geld geht von meinem Konto weg – das ist wie ein digitales Sparschwein.&#8220;" data-en="&#8222;Look, I'm paying by card now. The money leaves my account – it's like a digital piggy bank.&#8220;">&#8222;Schau, ich bezahle jetzt mit der Karte. Das Geld geht von meinem Konto weg – das ist wie ein digitales Sparschwein.&#8220;</em>
+            <span class="starter-hint" data-de="Warum: macht unsichtbares Geld sichtbar" data-en="Why: makes invisible money visible">Warum: macht unsichtbares Geld sichtbar</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">🎯</span>
+          <div class="starter-text">
+            <span data-de="Beim Spielzeug-Wunsch:" data-en="When they want a toy:">Beim Spielzeug-Wunsch:</span>
+            <em data-de="&#8222;Das kostet 18 €. Du kriegst 2 € Taschengeld pro Woche – in wie vielen Wochen hast du es?&#8220;" data-en="&#8222;That costs €18. You get €2 pocket money per week – how many weeks until you have it?&#8220;">&#8222;Das kostet 18 €. Du kriegst 2 € Taschengeld pro Woche – in wie vielen Wochen hast du es?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: Sparen wird real und lösbar, kein Nein nötig" data-en="Why: saving becomes real and solvable, no 'no' needed">Warum: Sparen wird real und lösbar, kein Nein nötig</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">💬</span>
+          <div class="starter-text">
+            <span data-de="Abends beim Abendbrot:" data-en="At the dinner table:">Abends beim Abendbrot:</span>
+            <em data-de="&#8222;Wenn du heute 1 € hättest – kaufst du dir sofort etwas, oder hebst du ihn auf?&#8220;" data-en="&#8222;If you had €1 today – would you spend it right away, or save it?&#8220;">&#8222;Wenn du heute 1 € hättest – kaufst du dir sofort etwas, oder hebst du ihn auf?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: öffnet Gespräch ohne Druck, keine richtige Antwort nötig" data-en="Why: opens conversation without pressure, no right answer needed">Warum: öffnet Gespräch ohne Druck, keine richtige Antwort nötig</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">🏪</span>
+          <div class="starter-text">
+            <span data-de="Beim Einkauf:" data-en="While shopping:">Beim Einkauf:</span>
+            <em data-de="&#8222;Welches nimmst du – das Markenjogurt für 1,20 € oder das andere für 0,69 €? Was ist der Unterschied?&#8220;" data-en="&#8222;Which one would you pick – the branded yoghurt for €1.20 or the other for €0.69? What's the difference?&#8220;">&#8222;Welches nimmst du – das Markenjogurt für 1,20 € oder das andere für 0,69 €? Was ist der Unterschied?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: übt Preisvergleich spielerisch" data-en="Why: practises price comparison in a playful way">Warum: übt Preisvergleich spielerisch</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="age-panel" data-panel="2">
+      <p class="panel-intro" data-de="Jugendliche in diesem Alter denken komplexer, entwickeln ein Gespür für Fairness und beginnen, gesellschaftliche Zusammenhänge wahrzunehmen. Sie wollen keine Kindererklärungen – sie wollen ernst genommen werden." data-en="Young people at this age think more complexly, develop a sense of fairness and start to notice societal connections. They don't want children's explanations – they want to be taken seriously.">Jugendliche in diesem Alter denken komplexer, entwickeln ein Gespür für Fairness und beginnen, gesellschaftliche Zusammenhänge wahrzunehmen. Sie wollen keine Kindererklärungen – sie wollen ernst genommen werden.</p>
+      <div class="starter-list">
+        <div class="starter-item">
+          <span class="starter-icon">📱</span>
+          <div class="starter-text">
+            <span data-de="Wenn sie etwas in sozialen Medien sehen:" data-en="When they see something on social media:">Wenn sie etwas in sozialen Medien sehen:</span>
+            <em data-de="&#8222;Der Typ auf TikTok sagt er macht 10.000 € im Monat mit Kryptos – was glaubst du, wie realistisch ist das?&#8220;" data-en="&#8222;The guy on TikTok says he makes €10,000 a month with crypto – what do you think, how realistic is that?&#8220;">&#8222;Der Typ auf TikTok sagt er macht 10.000 € im Monat mit Kryptos – was glaubst du, wie realistisch ist das?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: fördert kritisches Denken ohne zu moralisieren" data-en="Why: encourages critical thinking without moralising">Warum: fördert kritisches Denken ohne zu moralisieren</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">💸</span>
+          <div class="starter-text">
+            <span data-de="Beim Thema Konsum:" data-en="On the topic of spending:">Beim Thema Konsum:</span>
+            <em data-de="&#8222;Du hast 30 € – wärst du lieber ein Erlebnis oder ein Gegenstand? Warum?&#8220;" data-en="&#8222;You have €30 – would you rather have an experience or an object? Why?&#8220;">&#8222;Du hast 30 € – wärst du lieber ein Erlebnis oder ein Gegenstand? Warum?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: regt Reflexion über Wert und Bedeutung von Geld an" data-en="Why: prompts reflection on the value and meaning of money">Warum: regt Reflexion über Wert und Bedeutung von Geld an</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">🏦</span>
+          <div class="starter-text">
+            <span data-de="Zum ersten eigenen Konto:" data-en="About their first own account:">Zum ersten eigenen Konto:</span>
+            <em data-de="&#8222;Dein Konto gehört dir – ich schaue da nicht rein. Aber ich erkläre dir kurz, was du wissen solltest.&#8220;" data-en="&#8222;Your account is yours – I won't look at it. But let me briefly explain what you should know.&#8220;">&#8222;Dein Konto gehört dir – ich schaue da nicht rein. Aber ich erkläre dir kurz, was du wissen solltest.&#8220;</em>
+            <span class="starter-hint" data-de="Warum: signalisiert Vertrauen und Verantwortung gleichzeitig" data-en="Why: signals trust and responsibility at the same time">Warum: signalisiert Vertrauen und Verantwortung gleichzeitig</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">🌍</span>
+          <div class="starter-text">
+            <span data-de="Beim Thema Ungleichheit:" data-en="On the topic of inequality:">Beim Thema Ungleichheit:</span>
+            <em data-de="&#8222;Warum haben manche Menschen viel mehr Geld als andere? Was denkst du?&#8220;" data-en="&#8222;Why do some people have much more money than others? What do you think?&#8220;">&#8222;Warum haben manche Menschen viel mehr Geld als andere? Was denkst du?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: keine richtige Antwort – öffnet echten Dialog" data-en="Why: no right answer – opens a genuine dialogue">Warum: keine richtige Antwort – öffnet echten Dialog</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="age-panel" data-panel="3">
+      <p class="panel-intro" data-de="Junge Erwachsene stehen kurz vor dem echten Finanzleben: erste Jobs, Ausbildung, Studium, eigene Wohnung. Auf Augenhöhe reden, konkrete Themen ansprechen – jetzt zählt es wirklich." data-en="Young adults are on the verge of real financial life: first jobs, apprenticeship, university, own flat. Talk as equals, address concrete topics – now it really counts.">Junge Erwachsene stehen kurz vor dem echten Finanzleben: erste Jobs, Ausbildung, Studium, eigene Wohnung. Auf Augenhöhe reden, konkrete Themen ansprechen – jetzt zählt es wirklich.</p>
+      <div class="starter-list">
+        <div class="starter-item">
+          <span class="starter-icon">💼</span>
+          <div class="starter-text">
+            <span data-de="Beim ersten Job / Ausbildungsgehalt:" data-en="With the first job / apprenticeship pay:">Beim ersten Job / Ausbildungsgehalt:</span>
+            <em data-de="&#8222;Du hast jetzt eigenes Geld – hast du schon überlegt, wie du es aufteilst? Ich zeig dir, wie ich das mache.&#8220;" data-en="&#8222;You have your own money now – have you thought about how to split it? Let me show you how I do it.&#8220;">&#8222;Du hast jetzt eigenes Geld – hast du schon überlegt, wie du es aufteilst? Ich zeig dir, wie ich das mache.&#8220;</em>
+            <span class="starter-hint" data-de="Warum: Budgetierung von Anfang an, nicht belehrend sondern zeigend" data-en="Why: budgeting from the start, showing rather than lecturing">Warum: Budgetierung von Anfang an, nicht belehrend sondern zeigend</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">📈</span>
+          <div class="starter-text">
+            <span data-de="Zum Thema Investieren:" data-en="On the topic of investing:">Zum Thema Investieren:</span>
+            <em data-de="&#8222;Hast du schon mal was von ETFs gehört? Ich erkläre dir kurz, warum ich das interessant finde.&#8220;" data-en="&#8222;Have you heard of ETFs? Let me briefly explain why I find them interesting.&#8220;">&#8222;Hast du schon mal was von ETFs gehört? Ich erkläre dir kurz, warum ich das interessant finde.&#8220;</em>
+            <span class="starter-hint" data-de="Warum: früh anfangen macht riesigen Unterschied durch Zinseszins" data-en="Why: starting early makes an enormous difference through compound interest">Warum: früh anfangen macht riesigen Unterschied durch Zinseszins</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">📄</span>
+          <div class="starter-text">
+            <span data-de="Beim Thema Versicherungen:" data-en="On the topic of insurance:">Beim Thema Versicherungen:</span>
+            <em data-de="&#8222;Es gibt Versicherungen die man wirklich braucht – und welche, die rausgeschmissenes Geld sind. Soll ich dir kurz erklären, welche welche sind?&#8220;" data-en="&#8222;There are insurances you really need – and ones that are a waste of money. Want me to quickly explain which is which?&#8220;">&#8222;Es gibt Versicherungen die man wirklich braucht – und welche, die rausgeschmissenes Geld sind. Soll ich dir kurz erklären, welche welche sind?&#8220;</em>
+            <span class="starter-hint" data-de="Warum: praktisch, direkt, kein Wissen vorausgesetzt" data-en="Why: practical, direct, no prior knowledge assumed">Warum: praktisch, direkt, kein Wissen vorausgesetzt</span>
+          </div>
+        </div>
+        <div class="starter-item">
+          <span class="starter-icon">🏠</span>
+          <div class="starter-text">
+            <span data-de="Zur eigenen Wohnung / Auszug:" data-en="About moving out / their own flat:">Zur eigenen Wohnung / Auszug:</span>
+            <em data-de="&#8222;Wohnst du erst mal in einer WG oder alleine? Lass uns kurz durchrechnen, was das wirklich kostet.&#8220;" data-en="&#8222;Are you sharing a flat first or living alone? Let's quickly work out what that really costs.&#8220;">&#8222;Wohnst du erst mal in einer WG oder alleine? Lass uns kurz durchrechnen, was das wirklich kostet.&#8220;</em>
+            <span class="starter-hint" data-de="Warum: macht abstrakte Kosten greifbar bevor es ernst wird" data-en="Why: makes abstract costs tangible before it gets serious">Warum: macht abstrakte Kosten greifbar bevor es ernst wird</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. GESPRÄCHSKARTEN CTA -->
+  <div style="background:var(--surface);border:2.5px dashed var(--green);border-radius:24px;padding:28px 24px;margin-bottom:20px;box-shadow:var(--shadow);text-align:center">
+    <h3 style="font-family:var(--font-display);font-size:22px;color:var(--green-dark);margin-bottom:6px" data-de="🃏 Gesprächskarten für Familien" data-en="🃏 Conversation cards for families">🃏 Gesprächskarten für Familien</h3>
+    <p style="font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:20px;line-height:1.5" data-de="Einfach eine Karte ziehen und gemeinsam über Geld reden – nach Alter sortiert." data-en="Simply draw a card and talk about money together – sorted by age.">Einfach eine Karte ziehen und gemeinsam über Geld reden – nach Alter sortiert.</p>
+    <div class="karten-grid">
+      <a href="gespraechskarten-kleine-sparer.html" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px 10px;text-decoration:none;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <span style="font-size:28px">🐷</span>
+        <span style="font-size:11px;font-weight:800;color:var(--text-light)" data-de="6 – 10 Jahre" data-en="Ages 6–10">6 – 10 Jahre</span>
+        <span style="font-family:var(--font-display);font-size:15px;color:var(--green-dark)" data-de="Kleine Sparer" data-en="Little Savers">Kleine Sparer</span>
+      </a>
+      <a href="gespraechskarten-geld-checker.html" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--blue-light);border:2px solid var(--blue);border-radius:16px;padding:16px 10px;text-decoration:none;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <span style="font-size:28px">🔍</span>
+        <span style="font-size:11px;font-weight:800;color:var(--text-light)" data-de="11 – 15 Jahre" data-en="Ages 11–15">11 – 15 Jahre</span>
+        <span style="font-family:var(--font-display);font-size:15px;color:var(--blue-dark)" data-de="Geld-Checker" data-en="Money Checkers">Geld-Checker</span>
+      </a>
+      <a href="gespraechskarten-geld-profi.html" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:#F5F0FF;border:2px solid var(--purple);border-radius:16px;padding:16px 10px;text-decoration:none;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <span style="font-size:28px">📈</span>
+        <span style="font-size:11px;font-weight:800;color:var(--text-light)" data-de="16 – 18 Jahre" data-en="Ages 16–18">16 – 18 Jahre</span>
+        <span style="font-family:var(--font-display);font-size:15px;color:var(--purple)" data-de="Geld-Profi" data-en="Money Pro">Geld-Profi</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 5. HILFREICHE SÄTZE -->
+  <h2 class="section-title" data-de="💬 Hilfreiche Sätze im Alltag" data-en="💬 Helpful everyday phrases">💬 Hilfreiche Sätze im Alltag</h2>
+
+  <div class="saetze-list">
+    <div class="saetze-item">
+      <span class="saetze-icon">🛒</span>
+      <div class="saetze-text">
+        <span data-de="&#8222;Schau mal, ich vergleiche gerade die Preise – welches würdest du kaufen?&#8220;" data-en="&#8222;Look, I'm comparing prices right now – which one would you buy?&#8220;">&#8222;Schau mal, ich vergleiche gerade die Preise – welches würdest du kaufen?&#8220;</span>
+        <span class="saetze-hint" data-de="Beim Einkaufen – Kinder lieben es, mitentscheiden zu dürfen." data-en="While shopping – children love being allowed to help decide.">Beim Einkaufen – Kinder lieben es, mitentscheiden zu dürfen.</span>
+      </div>
+    </div>
+    <div class="saetze-item">
+      <span class="saetze-icon">💬</span>
+      <div class="saetze-text">
+        <span data-de="&#8222;Das können wir uns gerade nicht leisten – aber lass uns überlegen, wie wir dafür sparen könnten.&#8220;" data-en="&#8222;We can't afford that right now – but let's think about how we could save up for it.&#8220;">&#8222;Das können wir uns gerade nicht leisten – aber lass uns überlegen, wie wir dafür sparen könnten.&#8220;</span>
+        <span class="saetze-hint" data-de="Ehrlich und konstruktiv – ohne Scham oder Ablenkung." data-en="Honest and constructive – without shame or deflection.">Ehrlich und konstruktiv – ohne Scham oder Ablenkung.</span>
+      </div>
+    </div>
+    <div class="saetze-item">
+      <span class="saetze-icon">🤔</span>
+      <div class="saetze-text">
+        <span data-de="&#8222;Wenn du 10 Euro hättest – was würdest du damit machen?&#8220;" data-en="&#8222;If you had 10 euros – what would you do with it?&#8220;">&#8222;Wenn du 10 Euro hättest – was würdest du damit machen?&#8220;</span>
+        <span class="saetze-hint" data-de="Offen und neugierig – kein richtiges oder falsches Ergebnis." data-en="Open and curious – no right or wrong answer.">Offen und neugierig – kein richtiges oder falsches Ergebnis.</span>
+      </div>
+    </div>
+    <div class="saetze-item">
+      <span class="saetze-icon">🌱</span>
+      <div class="saetze-text">
+        <span data-de="&#8222;Ich hab früher auch Fehler mit Geld gemacht – zum Beispiel...&#8220;" data-en="&#8222;I made money mistakes too when I was younger – for example...&#8220;">&#8222;Ich hab früher auch Fehler mit Geld gemacht – zum Beispiel...&#8220;</span>
+        <span class="saetze-hint" data-de="Eigene Fehler teilen baut Vertrauen und nimmt den Druck." data-en="Sharing your own mistakes builds trust and eases pressure.">Eigene Fehler teilen baut Vertrauen und nimmt den Druck.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. DOS & DON'TS -->
+  <h2 class="section-title" data-de="Dos &amp; Don'ts" data-en="Dos &amp; Don'ts">Dos &amp; Don'ts</h2>
+
+  <div class="dos-donts">
+    <div class="dos-card">
+      <h3 data-de="✅ Das hilft" data-en="✅ What helps">✅ Das hilft</h3>
+      <div class="dd-list">
+        <div class="dd-item"><span class="dd-icon">✔️</span><div><span data-de="Altersgerecht ehrlich sein" data-en="Be age-appropriately honest">Altersgerecht ehrlich sein</span><span class="dd-why" data-de="&#8222;Wir können uns das gerade nicht leisten&#8220; ist okay." data-en="&#8222;We can't afford that right now&#8220; is okay.">&#8222;Wir können uns das gerade nicht leisten&#8220; ist okay.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✔️</span><div><span data-de="Alltagssituationen nutzen" data-en="Use everyday situations">Alltagssituationen nutzen</span><span class="dd-why" data-de="Kasse, Taschengeld, Einkauf – Geld passiert täglich." data-en="Checkout, pocket money, shopping – money happens daily.">Kasse, Taschengeld, Einkauf – Geld passiert täglich.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✔️</span><div><span data-de="Eigene Fehler zugeben" data-en="Admit your own mistakes">Eigene Fehler zugeben</span><span class="dd-why" data-de="&#8222;Ich hab früher auch zu viel ausgegeben&#8220; baut Vertrauen." data-en="&#8222;I used to overspend too&#8220; builds trust.">&#8222;Ich hab früher auch zu viel ausgegeben&#8220; baut Vertrauen.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✔️</span><div><span data-de="Entscheidungen miterleben lassen" data-en="Let them experience decisions">Entscheidungen miterleben lassen</span><span class="dd-why" data-de="Echte Wahlmöglichkeiten mit echten Konsequenzen." data-en="Real choices with real consequences.">Echte Wahlmöglichkeiten mit echten Konsequenzen.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✔️</span><div><span data-de="Neugier belohnen" data-en="Reward curiosity">Neugier belohnen</span><span class="dd-why" data-de="Jede Frage zum Thema Geld verdient eine echte Antwort." data-en="Every question about money deserves a real answer.">Jede Frage zum Thema Geld verdient eine echte Antwort.</span></div></div>
+      </div>
+    </div>
+    <div class="donts-card">
+      <h3 data-de="❌ Das schadet" data-en="❌ What doesn't help">❌ Das schadet</h3>
+      <div class="dd-list">
+        <div class="dd-item"><span class="dd-icon">✖️</span><div><span data-de="Geld als Tabu behandeln" data-en="Treating money as taboo">Geld als Tabu behandeln</span><span class="dd-why" data-de="Kinder füllen Wissenslücken mit Angst oder falschen Ideen." data-en="Children fill knowledge gaps with fear or wrong ideas.">Kinder füllen Wissenslücken mit Angst oder falschen Ideen.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✖️</span><div><span data-de="Geld als Belohnung einsetzen" data-en="Using money as a reward">Geld als Belohnung einsetzen</span><span class="dd-why" data-de="&#8222;5 € für gute Noten&#8220; verknüpft Leistung mit externem Wert." data-en="&#8222;€5 for good grades&#8220; links performance to external value.">&#8222;5 € für gute Noten&#8220; verknüpft Leistung mit externem Wert.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✖️</span><div><span data-de="Vor Kindern über Geld streiten" data-en="Arguing about money in front of kids">Vor Kindern über Geld streiten</span><span class="dd-why" data-de="Elterliche Geldkonflikte erzeugen Angst und Schuldgefühle." data-en="Parental money conflicts cause anxiety and guilt.">Elterliche Geldkonflikte erzeugen Angst und Schuldgefühle.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✖️</span><div><span data-de="Taschengeld als Druckmittel" data-en="Using pocket money as leverage">Taschengeld als Druckmittel</span><span class="dd-why" data-de="Einbehalten als Strafe untergräbt das Lernprinzip." data-en="Withholding as punishment undermines the learning principle.">Einbehalten als Strafe untergräbt das Lernprinzip.</span></div></div>
+        <div class="dd-item"><span class="dd-icon">✖️</span><div><span data-de="Vergleiche mit anderen Familien" data-en="Comparing with other families">Vergleiche mit anderen Familien</span><span class="dd-why" data-de="&#8222;Die können sich das leisten, wir nicht&#8220; löst Scham aus." data-en="&#8222;They can afford it, we can't&#8220; triggers shame.">&#8222;Die können sich das leisten, wir nicht&#8220; löst Scham aus.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 3 TYPISCHE FEHLER -->
+  <h2 class="section-title" data-de="3 typische Fehler" data-en="3 common mistakes">3 typische Fehler</h2>
+
+  <div class="info-box">
+    <h3 data-de="Die häufigsten Stolperstellen" data-en="The most common pitfalls">Die häufigsten Stolperstellen</h3>
+    <p data-de="1️⃣ Geld nur sagen – nicht zeigen: Viele Eltern erklären Geld theoretisch, aber Kinder lernen vor allem durch Beobachtung. Kommentiert laut, was ihr tut – beim Preisvergleich, beim Sparen, beim bewussten Verzicht." data-en="1️⃣ Talking about money – but not showing it: Many parents explain money theoretically, but children learn primarily through observation. Comment out loud on what you do – when comparing prices, saving, or consciously deciding against a purchase.">1️⃣ Geld nur sagen – nicht zeigen: Viele Eltern erklären Geld theoretisch, aber Kinder lernen vor allem durch Beobachtung. Kommentiert laut, was ihr tut – beim Preisvergleich, beim Sparen, beim bewussten Verzicht.</p>
+    <p style="margin-top:12px" data-de="2️⃣ Wünsche immer sofort erfüllen: Wenn Wünsche immer sofort erfüllt werden, lernen Kinder nicht zu warten. Sparen bedeutet Zeit – und genau dieses Gefühl ist wichtig." data-en="2️⃣ Always fulfilling wishes immediately: When wishes are always fulfilled immediately, children don't learn to wait. Saving means time – and that feeling is exactly what matters.">2️⃣ Wünsche immer sofort erfüllen: Wenn Wünsche immer sofort erfüllt werden, lernen Kinder nicht zu warten. Sparen bedeutet Zeit – und genau dieses Gefühl ist wichtig.</p>
+    <p style="margin-top:12px" data-de="3️⃣ Kinder vor Geldproblemen schützen wollen: Kinder müssen nicht alles wissen, aber sie dürfen verstehen, dass Geld Entscheidungen bedeutet. Ehrlichkeit schafft Sicherheit – Schweigen erzeugt Fantasie." data-en="3️⃣ Trying to shield children from money problems: Children don't need to know everything, but they can understand that money means making decisions. Honesty creates security – silence creates imagination.">3️⃣ Kinder vor Geldproblemen schützen wollen: Kinder müssen nicht alles wissen, aber sie dürfen verstehen, dass Geld Entscheidungen bedeutet. Ehrlichkeit schafft Sicherheit – Schweigen erzeugt Fantasie.</p>
+  </div>
+
+  <!-- 8. ABSCHLUSSBOX -->
+  <div class="fun-fact" style="border-color:var(--green)">
+    <h3 data-de="🌱 Das Wichtigste zum Schluss" data-en="🌱 The most important thing last">🌱 Das Wichtigste zum Schluss</h3>
+    <p data-de="Kinder müssen nicht alles über Geld wissen. Aber sie sollten erleben, dass Geld ein Werkzeug ist – kein Tabu, kein Stress, kein Geheimnis." data-en="Children don't need to know everything about money. But they should experience that money is a tool – not a taboo, not a stress, not a secret.">Kinder müssen nicht alles über Geld wissen. Aber sie sollten erleben, dass Geld ein Werkzeug ist – kein Tabu, kein Stress, kein Geheimnis.</p>
+    <p style="margin-top:10px" data-de="Ihr werdet nicht immer die perfekte Antwort haben – und das ist völlig in Ordnung. Kinder lernen nicht durch perfekte Eltern, sondern durch ehrliche. Wenn ihr eine Frage nicht beantworten könnt, sagt es einfach: &#8222;Das weiß ich auch nicht genau, lass uns das zusammen herausfinden.&#8220;" data-en="You won't always have the perfect answer – and that's fine. If you can't answer a question, just say: 'I'm not sure either, let's find out together.'">Ihr werdet nicht immer die perfekte Antwort haben – und das ist völlig in Ordnung. Kinder lernen nicht durch perfekte Eltern, sondern durch ehrliche. Wenn ihr eine Frage nicht beantworten könnt, sagt es einfach: &#8222;Das weiß ich auch nicht genau, lass uns das zusammen herausfinden.&#8220;</p>
+    <p style="margin-top:10px" data-de="Das Wichtigste ist nicht die perfekte Erklärung, sondern dass ihr überhaupt darüber sprecht." data-en="The most important thing is not the perfect explanation, but that you talk about it at all.">Das Wichtigste ist nicht die perfekte Erklärung, sondern dass ihr überhaupt darüber sprecht.</p>
+  </div>
+
+  <!-- BACK BUTTON -->
+  <div style="text-align:center;margin-top:32px">
+    <a class="back-btn" href="elternbereich.html" data-de="← Zurück zum Elternbereich" data-en="← Back to parents' area">← Zurück zum Elternbereich</a>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-brand">Piggyplant</span>
+      <span class="footer-copy">© 2026 Piggyplant. Alle Rechte vorbehalten.</span>
+    </div>
+    <div class="footer-links">
+      <a href="../index.html" data-de="← Startseite" data-en="← Home">← Startseite</a>
+      <span class="footer-divider">·</span>
+      <a href="../impressum.html" data-de="Impressum" data-en="Imprint">Impressum</a>
+      <span class="footer-divider">·</span>
+      <a href="../datenschutz.html" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
+      <span class="footer-divider">·</span>
+      <a href="#" data-de="Kontakt" data-en="Contact">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const _dark = localStorage.getItem('piggyplant-dark');
+  if (_dark === 'true') { document.body.classList.add('dark'); updateDarkLabel(true); }
+  function toggleDark() {
+    const on = document.body.classList.toggle('dark');
+    localStorage.setItem('piggyplant-dark', on);
+    updateDarkLabel(on);
+  }
+  function updateDarkLabel(on) {
+    const el = document.getElementById('dark-label');
+    if (el) el.textContent = on ? 'Dunkel' : 'Hell';
+  }
+
+  let lang = localStorage.getItem('piggyplant-lang') || 'de';
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('piggyplant-lang', l);
+    applyLang();
+  }
+  function applyLang() {
+    document.querySelectorAll('[data-de]').forEach(el => {
+      el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.de;
+    });
+    document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+  applyLang();
+
+  function switchTab(n) {
+    document.querySelectorAll('.age-tab').forEach((t,i) => t.classList.toggle('active', i+1===n));
+    document.querySelectorAll('.age-panel').forEach(p => p.classList.toggle('active', parseInt(p.dataset.panel)===n));
+    applyLang();
+  }
+</script>
+</body>
+</html>
