@@ -1,5 +1,5 @@
 // Piggyplant Service Worker
-const CACHE = 'piggyplant-v3';
+const CACHE = 'piggyplant-v4';
 const ASSETS = [
   '/',
   '/index.html',
@@ -102,7 +102,7 @@ const ASSETS = [
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/PommesICON.webp',
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/PommesNo.webp',
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/PommesP.webp',
-  'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/Reis2.webp',
+  'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/Reis4.webp',
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/SalatdressingICON.webp',
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/SalatdressingNo.webp',
   'https://cdn.jsdelivr.net/gh/KlotzOne/piggyplant@main/public/images/Icons/SalatdressingP.webp',
